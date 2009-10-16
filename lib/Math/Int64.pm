@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.04';
+    our $VERSION = '0.05';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -20,7 +20,6 @@ our @EXPORT_OK = qw(int64
                     uint64_to_number
                     net_to_uint64 uint64_to_net
                     native_to_uint64 uint64_to_native);
-
 
 use overload ( '+' => \&_add,
                '+=' => \&_add,

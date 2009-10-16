@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.05  16 Oct, 2009
+        - some bit operations were broken (bug report Adam Woodworth)
+
 0.04  10 Sep, 2009
         - make it work under Strawberry Perl and probably other perl
           Windows ports! (bug report and patch by Sisyphus)

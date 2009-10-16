@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::More tests => 40;
+use Test::More tests => 42;
 
 use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
@@ -107,3 +107,6 @@ $n = pack(NN => 0x01020304, 0x05060708);
 
 ok (net_to_int64($n) == ((int64(0x01020304) << 32) + 0x05060708));
 
+ok ((($i | $j) & 1) != 0);
+
+ok ((($i & $j) & 1) == 0);

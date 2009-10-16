@@ -2,7 +2,6 @@ Changes
 Int64.xs
 Makefile.PL
 MANIFEST
-META.yml
 ppport.h
 README
 t/Math-Int64.t

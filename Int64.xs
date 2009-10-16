@@ -677,7 +677,7 @@ SV *
 mi64_or(self, other, rev)
     SV *self
     SV *other
-    SV *rev = NO_INIT
+    SV *rev
 CODE:
     if (SvOK(rev))
         RETVAL = newSVi64(aTHX_ SvI64x(self) | SvI64(aTHX_ other));
@@ -693,7 +693,7 @@ SV *
 mi64_xor(self, other, rev)
     SV *self
     SV *other
-    SV *rev = NO_INIT
+    SV *rev
 CODE:
     if (SvOK(rev))
         RETVAL = newSVi64(aTHX_ SvI64x(self) ^ SvI64(aTHX_ other));
@@ -1086,7 +1086,7 @@ SV *
 mu64_or(self, other, rev)
     SV *self
     SV *other
-    SV *rev = NO_INIT
+    SV *rev
 CODE:
     if (SvOK(rev))
         RETVAL = newSVu64(aTHX_ SvU64x(self) | SvU64(aTHX_ other));
@@ -1102,7 +1102,7 @@ SV *
 mu64_xor(self, other, rev)
     SV *self
     SV *other
-    SV *rev = NO_INIT
+    SV *rev
 CODE:
     if (SvOK(rev))
         RETVAL = newSVu64(aTHX_ SvU64x(self) ^ SvU64(aTHX_ other));
