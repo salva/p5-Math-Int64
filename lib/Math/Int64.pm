@@ -194,6 +194,9 @@ compiler. Also, it doesn't take any advantage of perls with 64 bit IVs.
 For bug reports, feature requests or just help using this module, use
 the RT system at L<http://rt.cpan.org> or send my and email or both!
 
+The source code of this module is hosted at GitHub:
+L<http://github.com/salva/p5-Math-Int64>.
+
 =head1 SEE ALSO
 
 Other modules that allow Perl to support larger integers or numbers
