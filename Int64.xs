@@ -46,10 +46,12 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #if defined(INT64_BACKEND_NV)
+#  define BACKEND "NV"
 #  define SvI64Y SvNVX
 #  define SvI64_onY SvNOK_on
 #  define SVt_I64 SVt_NV
 #elif defined(INT64_BACKEND_IV)
+#  define BACKEND "IV"
 #  define SvI64Y SvIVX
 #  define SvI64_onY SvIOK_on
 #  define SVt_I64 SVt_IV
@@ -170,10 +172,9 @@ SvU64(pTHX_ SV *sv) {
     return atoull(SvPV_nolen(sv));
 }
 
-
 SV *
 si64_to_number(pTHX_ SV *sv) {
-    int64_t i64 = SvI64x(sv);
+    int64_t i64 = SvI64(aTHX_ sv);
     IV iv;
     UV uv;
     uv = i64;
@@ -187,7 +188,7 @@ si64_to_number(pTHX_ SV *sv) {
 
 SV *
 su64_to_number(pTHX_ SV *sv) {
-    uint64_t u64 = SvU64x(sv);
+    uint64_t u64 = SvU64(aTHX_ sv);
     IV iv;
     UV uv;
     uv = u64;
@@ -206,6 +207,13 @@ PROTOTYPES: DISABLE
 BOOT:
 package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), 1);
 package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), 1);
+
+char *
+miu64__backend()
+CODE:
+    RETVAL = BACKEND;
+OUTPUT:
+    RETVAL
 
 SV *
 miu64_int64(value=&PL_sv_undef)
@@ -352,11 +360,12 @@ PREINIT:
     char *pv;
     int64_t i64 = SvI64(aTHX_ self);
 CODE:
-    RETVAL = newSV(8);
+    RETVAL = newSV(9);
     SvPOK_on(RETVAL);
     SvCUR_set(RETVAL, 8);
     pv = SvPVX(RETVAL);
     Copy(&i64, pv, 8, char);
+    pv[8] = '\0';
 OUTPUT:
     RETVAL
 
@@ -367,11 +376,12 @@ PREINIT:
     char *pv;
     uint64_t u64 = SvU64(aTHX_ self);
 CODE:
-    RETVAL = newSV(8);
+    RETVAL = newSV(9);
     SvPOK_on(RETVAL);
     SvCUR_set(RETVAL, 8);
     pv = SvPVX(RETVAL);
     Copy(&u64, pv, 8, char);
+    pv[8] = '\0';
 OUTPUT:
     RETVAL
 
@@ -1193,11 +1203,88 @@ CODE:
 OUTPUT:
     RETVAL
 
+MODULE = Math::Int64		PACKAGE = Math::Int64::Native         PREFIX = miu64n_
+PROTOTYPES: DISABLE
 
+IV
+miu64n_native_to_int64(native)
+    SV *native
+PREINIT:
+    STRLEN len;
+    char *pv = SvPV(native, len);
+CODE:
+    if (len != sizeof(RETVAL))
+	Perl_croak(aTHX_ "Invalid length for int64");
+    Copy(pv, &RETVAL, sizeof(RETVAL), char);
+OUTPUT:
+    RETVAL
 
+UV
+miu64n_native_to_uint64(native)
+    SV *native
+PREINIT:
+    STRLEN len;
+    char *pv = SvPV(native, len);
+CODE:
+    if (len != sizeof(RETVAL))
+	Perl_croak(aTHX_ "Invalid length for int64");
+    Copy(pv, &RETVAL, sizeof(RETVAL), char);
+OUTPUT:
+    RETVAL
 
+IV
+miu64n_int64(iv)
+    IV iv
+CODE:
+    RETVAL = iv;
+OUTPUT:
+    RETVAL
 
+UV
+miu64n_uint64(uv)
+    UV uv
+CODE:
+    RETVAL = uv;
+OUTPUT:
+    RETVAL
 
+IV
+miu64n_net_to_int64(net)
+    SV *net;
+PREINIT:
+    STRLEN len;
+    unsigned char *pv = (unsigned char *)SvPV(net, len);
+CODE:
+    if (len != 8)
+        Perl_croak(aTHX_ "Invalid length for int64");
+    RETVAL = (((((((((((((((IV)pv[0]) << 8)
+			 + (IV)pv[1]) << 8)
+		         + (IV)pv[2]) << 8)
+		         + (IV)pv[3]) << 8)
+		         + (IV)pv[4]) << 8)
+		         + (IV)pv[5]) << 8)
+	                 + (IV)pv[6]) << 8)
+	                 + (IV)pv[7];
+OUTPUT:
+    RETVAL
 
+UV
+miu64n_net_to_uint64(net)
+    SV *net;
+PREINIT:
+    STRLEN len;
+    unsigned char *pv = (unsigned char *)SvPV(net, len);
+CODE:
+    if (len != 8)
+        Perl_croak(aTHX_ "Invalid length for uint64");
+    RETVAL = (((((((((((((((UV)pv[0]) << 8)
+			 + (UV)pv[1]) << 8)
+		         + (UV)pv[2]) << 8)
+		         + (UV)pv[3]) << 8)
+		         + (UV)pv[4]) << 8)
+		         + (UV)pv[5]) << 8)
+	                 + (UV)pv[6]) << 8)
+	                 + (UV)pv[7];
+OUTPUT:
+    RETVAL
 
-    

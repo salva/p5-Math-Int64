@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.07';
+    our $VERSION = '0.08';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -20,6 +20,17 @@ our @EXPORT_OK = qw(int64
                     uint64_to_number
                     net_to_uint64 uint64_to_net
                     native_to_uint64 uint64_to_native);
+
+sub import {
+    my $pkg = shift;
+    my @subs = grep { $_ ne ':native_if_available'} @_;
+    if (@subs != @_ and _backend eq 'IV') {
+	Math::Int64::Native->export_to_level(1, $pkg, @subs);
+    }
+    else {
+	__PACKAGE__->export_to_level(1, $pkg, @subs);
+    }
+}
 
 use overload ( '+' => \&_add,
                '+=' => \&_add,
@@ -88,6 +99,22 @@ use overload ( '+' => \&_add,
                '=' => \&_clone,
                fallback => 1 );
 
+package Math::Int64::Native;
+
+use Carp;
+
+require Exporter;
+our @ISA = qw(Exporter);
+our @EXPORT_OK = @Math::Int64::EXPORT_OK;
+
+*int64_to_number = \&Math::Int64::int64_to_number;
+*int64_to_net = \&Math::Int64::int64_to_net;
+*int64_to_native = \&Math::Int64::int64_to_native;
+
+*uint64_to_number = \&Math::Int64::int64_to_number;
+*uint64_to_net = \&Math::Int64::uint64_to_net;
+*uint64_to_native = \&Math::Int64::uint64_to_native;
+
 1;
 
 __END__
@@ -111,7 +138,7 @@ Math::Int64 - Manipulate 64 bits integers in Perl
 This module adds support for 64 bit integers, signed and unsigned, to
 Perl.
 
-=head2 EXPORTABLE FUNCTIONS
+=head2 Exportable functions
 
 =over 4
 
@@ -158,7 +185,7 @@ order.
 =item int64_to_number($int64)
 
 returns the optimum representation of the int64 value using Perl
-internal types (IV, UV or NV). Precision could be lost.
+internal types (IV, UV or NV). Precision may be lost.
 
 For instance:
 
@@ -186,10 +213,31 @@ manipulate 64 bit unsigned integers.
 
 =back
 
+=head2 Fallback to native 64bit support if available
+
+If the tag C<:native_if_available> is added to the import list and the
+version of perl used has native support for 64bit integers, the
+functions exported by the module to create 64bit intgers will return
+regular perl scalars.
+
+Usage example:
+
+  use Math::Int64 qw( :native_if_available int64 );
+
+
+This feature is not enabled by default because the semantics for perl
+scalars and for 64 bit integers as implemented in this module are not
+identical. Perl is prone to coerze integers into floats while this
+module keeps then always as 64bit integers. Specifically, the division
+operation and overflows are the most problematic cases.
+
+Besides that, in most situations it is safe to use the native fallback.
+
 =head1 BUGS AND SUPPORT
 
-At this moment, this module requires int64 support from the C
-compiler. Also, it doesn't take any advantage of perls with 64 bit IVs.
+The fallback to native 64bit integers feature is experimental.
+
+This module requires int64 support from the C compiler.
 
 For bug reports, feature requests or just help using this module, use
 the RT system at L<http://rt.cpan.org> or send my and email or both!

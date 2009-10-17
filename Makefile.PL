@@ -5,7 +5,10 @@ use Config;
 
 my $backend;
 
-if ($Config::Config{ivsize} >= 8) {
+if (defined $ENV{MATH_INT64_BACKEND}) {
+    $backend = $ENV{MATH_INT64_BACKEND}
+}
+elsif ($Config::Config{ivsize} >= 8) {
     $backend = 'IV';
 }
 elsif ($Config::Config{doublesize} >= 8) {

@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.08  17 Oct, 2009
+        - Fallback to native 64bit support if available feature added
+
 0.07  17 Oct, 2009
         - IV backend for computers with native 64bit IVs
 
