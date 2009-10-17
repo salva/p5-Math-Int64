@@ -21,7 +21,7 @@ static HV *package_uint64_stash;
 #include <stdlib.h>
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-#define INT64_HAS__ATOI64;
+#define INT64_HAS__ATOI64
 
 #define atoll _atoi64
 #define strtoull _strtoui64
