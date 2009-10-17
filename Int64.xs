@@ -45,13 +45,23 @@ typedef unsigned __int64 uint64_t;
 #  endif
 #endif
 
-#if defined(INT64_BACKEND_DOUBLE)
+#if defined(INT64_BACKEND_NV)
+#  define SvI64Y SvNVX
+#  define SvI64_onY SvNOK_on
+#  define SVt_I64 SVt_NV
+#elif defined(INT64_BACKEND_IV)
+#  define SvI64Y SvIVX
+#  define SvI64_onY SvIOK_on
+#  define SVt_I64 SVt_IV
+#else
+#  error "unsupported backend"
+#endif
 
 int
 SvI64OK(pTHX_ SV *sv) {
     if (SvROK(sv)) {
         SV *si64 = SvRV(sv);
-        return (si64 && (SvTYPE(si64) == SVt_PVMG) && sv_isa(sv, "Math::Int64"));
+        return (si64 && (SvTYPE(si64) >= SVt_I64) && sv_isa(sv, "Math::Int64"));
     }
     return 0;
 }
@@ -60,7 +70,7 @@ int
 SvU64OK(pTHX_ SV *sv) {
     if (SvROK(sv)) {
         SV *su64 = SvRV(sv);
-        return (su64 && (SvTYPE(su64) == SVt_PVMG) && sv_isa(sv, "Math::UInt64"));
+        return (su64 && (SvTYPE(su64) >= SVt_I64) && sv_isa(sv, "Math::UInt64"));
     }
     return 0;
 }
@@ -69,8 +79,9 @@ SV *
 newSVi64(pTHX_ int64_t i64) {
     SV *sv;
     SV *si64 = newSV(0);
-    SvUPGRADE(si64, SVt_PVMG);
-    *(int64_t*)(&(SvNVX(si64))) = i64;
+    SvUPGRADE(si64, SVt_I64);
+    *(int64_t*)(&(SvI64Y(si64))) = i64;
+    SvI64_onY(si64);
     sv = newRV_noinc(si64);
     sv_bless(sv, package_int64_stash);
     return sv;
@@ -80,22 +91,22 @@ SV *
 newSVu64(pTHX_ uint64_t u64) {
     SV *sv;
     SV *su64 = newSV(0);
-    SvUPGRADE(su64, SVt_PVMG);
-    *(int64_t*)(&(SvNVX(su64))) = u64;
+    SvUPGRADE(su64, SVt_I64);
+    *(int64_t*)(&(SvI64Y(su64))) = u64;
+    SvI64_onY(su64);
     sv = newRV_noinc(su64);
     sv_bless(sv, package_uint64_stash);
     return sv;
 }
 
-#define SvI64X(sv) (*(int64_t*)(&(SvNVX(SvRV(sv)))))
-
-#define SvU64X(sv) (*(uint64_t*)(&(SvNVX(SvRV(sv)))))
+#define SvI64X(sv) (*(int64_t*)(&(SvI64Y(SvRV(sv)))))
+#define SvU64X(sv) (*(uint64_t*)(&(SvI64Y(SvRV(sv)))))
 
 SV *
 SvSI64(pTHX_ SV *sv) {
     if (SvRV(sv)) {
         SV *si64 = SvRV(sv);
-        if (si64 && (SvTYPE(si64) == SVt_PVMG))
+        if (si64 && (SvTYPE(si64) >= SVt_I64))
             return si64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
@@ -105,15 +116,14 @@ SV *
 SvSU64(pTHX_ SV *sv) {
     if (SvRV(sv)) {
         SV *su64 = SvRV(sv);
-        if (su64 && (SvTYPE(su64) == SVt_PVMG))
+        if (su64 && (SvTYPE(su64) >= SVt_I64))
             return su64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
 }
 
-#define SvI64x(sv) (*(int64_t*)(&(SvNVX(SvSI64(aTHX_ sv)))))
-
-#define SvU64x(sv) (*(uint64_t*)(&(SvNVX(SvSU64(aTHX_ sv)))))
+#define SvI64x(sv) (*(int64_t*)(&(SvI64Y(SvSI64(aTHX_ sv)))))
+#define SvU64x(sv) (*(uint64_t*)(&(SvI64Y(SvSU64(aTHX_ sv)))))
 
 int64_t
 SvI64(pTHX_ SV *sv) {
@@ -131,8 +141,8 @@ SvI64(pTHX_ SV *sv) {
     }
     if (SvROK(sv)) {
         SV *si64 = SvRV(sv);
-        if (si64 && (SvTYPE(si64) == SVt_PVMG) && (sv_isa(sv, "Math::Int64") || sv_isa(sv, "Math::UInt64"))) {
-            return *(int64_t*)(&(SvNVX(si64)));
+        if (si64 && (SvTYPE(si64) >= SVt_I64) && (sv_isa(sv, "Math::Int64") || sv_isa(sv, "Math::UInt64"))) {
+            return *(int64_t*)(&(SvI64Y(si64)));
         }
     }
     return atoll(SvPV_nolen(sv));
@@ -154,11 +164,12 @@ SvU64(pTHX_ SV *sv) {
     }
     if (SvROK(sv)) {
         SV *su64 = SvRV(sv);
-        if (su64 && (SvTYPE(su64) == SVt_PVMG) && (sv_isa(sv, "Math::UInt64")) || sv_isa(sv, "Math::Int64"))
-            return *(uint64_t*)(&(SvNVX(su64)));
+        if (su64 && (SvTYPE(su64) >= SVt_I64) && (sv_isa(sv, "Math::UInt64")) || sv_isa(sv, "Math::Int64"))
+            return *(uint64_t*)(&(SvI64Y(su64)));
     }
     return atoull(SvPV_nolen(sv));
 }
+
 
 SV *
 si64_to_number(pTHX_ SV *sv) {
@@ -187,12 +198,6 @@ su64_to_number(pTHX_ SV *sv) {
         return newSViv(iv);
     return newSVnv(u64);
 }
-
-#elif defined(INT64_BACKEND_STRING)
-
-#elif defined(INT64_BACKEND_NATIVE)
-
-#endif
 
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_

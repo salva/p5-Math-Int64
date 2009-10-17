@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.07  17 Oct, 2009
+        - IV backend for computers with native 64bit IVs
+
 0.06  17 Oct, 2009
         - syntax error was broken compilation with MS compiler (bug
           report by Taro Nishino)

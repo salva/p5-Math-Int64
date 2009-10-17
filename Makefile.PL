@@ -5,18 +5,18 @@ use Config;
 
 my $backend;
 
-if ($Config::Config{ivsize} == 8) {
-    $backend = 'NATIVE';
+if ($Config::Config{ivsize} >= 8) {
+    $backend = 'IV';
 }
-elsif ($Config::Config{doublesize} == 8) {
-    $backend = 'DOUBLE';
+elsif ($Config::Config{doublesize} >= 8) {
+    $backend = 'NV';
 }
 else {
-    $backend = 'STRING';
+    # $backend = 'STRING';
+    die "unable to find a suitable backend for your platform";
 }
 
-# we force the DOUBLE backend for the moment...
-$backend = 'DOUBLE';
+print "Using $backend backend\n";
 
 unless ($Config{i64type} and
         $Config{i64size} == 8 and
