@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+0.10  8 Feb, 2011
+        - solved bug in uint64_to_number
+        - replace sprintf by our for int64 to string conversion
+
 0.09  23 Oct, 2009
         - native backend was failing due to different semantics under
           perls compiled with long double support

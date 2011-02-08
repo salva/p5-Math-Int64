@@ -175,31 +175,56 @@ SvU64(pTHX_ SV *sv) {
 SV *
 si64_to_number(pTHX_ SV *sv) {
     int64_t i64 = SvI64(aTHX_ sv);
-    IV iv;
-    UV uv;
-    uv = i64;
-    if (uv == i64)
-        return newSVuv(uv);
-    iv = i64;
-    if (iv == i64)
-        return newSViv(iv);
+    if (i64 < 0) {
+        IV iv = i64;
+        if (iv == i64)
+            return newSViv(iv);
+    }
+    else {
+        UV uv = i64;
+        if (uv == i64)
+            return newSVuv(uv);
+    }
     return newSVnv(i64);
 }
 
 SV *
 su64_to_number(pTHX_ SV *sv) {
     uint64_t u64 = SvU64(aTHX_ sv);
-    IV iv;
-    UV uv;
-    uv = u64;
+    UV uv = u64;
     if (uv == u64)
         return newSVuv(uv);
-    iv = u64;
-    if (iv == u64)
-        return newSViv(iv);
     return newSVnv(u64);
 }
 
+#define I64STRLEN 23
+
+STRLEN
+u64_to_string(uint64_t u64, char *to) {
+    char str[I64STRLEN];
+    int i, len = 0;
+    while (u64) {
+        str[len++] = '0' + u64 % 10;
+        u64 /= 10;
+    }
+    if (len) {
+        for (i = len; i--;) *(to++) = str[i];
+        return len;
+    }
+    else {
+        to[0] = '0';
+        return 1;
+    }
+}
+
+STRLEN
+i64_to_string(int64_t i64, char *to) {
+    if (i64 < 0) {
+        *(to++) = '-';
+        return u64_to_string(-i64, to) + 1;
+    }
+    return u64_to_string(i64, to);
+}
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
@@ -788,9 +813,9 @@ mi64_string(self, other, rev)
 PREINIT:
     STRLEN len;
 CODE:
-    RETVAL = newSV(22);
+    RETVAL = newSV(I64LEN);
     SvPOK_on(RETVAL);
-    SvCUR_set(RETVAL, sprintf(SvPVX(RETVAL), "%lli", SvI64x(self)));
+    SvCUR_set(RETVAL, i64_to_string(SvI64x(self), SvPVX(RETVAL)));
 OUTPUT:
     RETVAL
 
@@ -1197,9 +1222,9 @@ mu64_string(self, other, rev)
 PREINIT:
     STRLEN len;
 CODE:
-    RETVAL = newSV(22);
+    RETVAL = newSV(I64STRLEN);
     SvPOK_on(RETVAL);
-    SvCUR_set(RETVAL, sprintf(SvPVX(RETVAL), "%llu", SvU64x(self)));
+    SvCUR_set(RETVAL, u64_to_string(SvU64x(self), SvPVX(RETVAL)));
 OUTPUT:
     RETVAL
 
