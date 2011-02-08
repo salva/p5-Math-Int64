@@ -813,7 +813,7 @@ mi64_string(self, other, rev)
 PREINIT:
     STRLEN len;
 CODE:
-    RETVAL = newSV(I64LEN);
+    RETVAL = newSV(I64STRLEN);
     SvPOK_on(RETVAL);
     SvCUR_set(RETVAL, i64_to_string(SvI64x(self), SvPVX(RETVAL)));
 OUTPUT:
