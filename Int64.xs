@@ -10,6 +10,7 @@
 
 static HV *package_int64_stash;
 static HV *package_uint64_stash;
+static HV *capi_hash;
 
 #ifdef __MINGW32__
 #include <stdint.h>
@@ -230,8 +231,16 @@ MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
 BOOT:
-package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), 1);
-package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), 1);
+package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), TRUE);
+package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), TRUE);
+capi_hash = get_hv("Math::Int64::C_API", TRUE|GV_ADDMULTI);
+hv_stores(capi_hash, "version", newSViv(1));
+hv_stores(capi_hash, "newSVi64", newSViv(PTR2IV(&newSVi64)));
+hv_stores(capi_hash, "newSVu64", newSViv(PTR2IV(&newSVu64)));
+hv_stores(capi_hash, "SvI64", newSViv(PTR2IV(&SvI64)));
+hv_stores(capi_hash, "SvU64", newSViv(PTR2IV(&SvU64)));
+hv_stores(capi_hash, "SvI64OK", newSViv(PTR2IV(&SvI64OK)));
+hv_stores(capi_hash, "SvU64OK", newSViv(PTR2IV(&SvU64OK)));
 
 char *
 miu64__backend()

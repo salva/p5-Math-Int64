@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.10';
+    our $VERSION = '0.11';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -195,7 +195,6 @@ For instance:
     print "int64:$i => perl:$n\n";
   }
 
-
 =item uint64
 
 =item uint64_to_number
@@ -217,7 +216,7 @@ manipulate 64 bit unsigned integers.
 
 If the tag C<:native_if_available> is added to the import list and the
 version of perl used has native support for 64bit integers, the
-functions exported by the module to create 64bit intgers will return
+functions exported by the module to create 64bit integers will return
 regular perl scalars.
 
 Usage example:
@@ -233,7 +232,111 @@ operation and overflows are the most problematic cases.
 
 Besides that, in most situations it is safe to use the native fallback.
 
+=head2 C API
+
+This module incorporates a native C API that can be used to create and
+read Math::Int64int64 and uint64 SVs from your own XS modules.
+
+In order to use it you need to follow these steps:
+
+=over 4
+
+=item *
+
+Import the files C<perl_math_int64.c>, C<perl_math_int64.h> and
+optionally C<typemaps> from Math::Int64 C<c_api> directory into your
+project directory.
+
+=item *
+
+Include the file C<perl_math_int64.h> in the C or XS source files
+where you want to convert 64bit integers to/from Perl SVs.
+
+Note that this file requires the types int64_t and uint64_t to be
+defined beforehand.
+
+=item *
+
+Add the file C<perl_math_int64.c> to your compilation targets (see the
+sample Makefile.PL below).
+
+=item *
+
+Add a call to the macro C<MATH_INT64_BOOT> to the C<BOOT> section of
+your XS file.
+
+=back
+
+For instance:
+
+ --- Foo64.xs ---------
+
+  #include "EXTERN.h"
+  #include "perl.h"
+  #include "XSUB.h"
+  #include "ppport.h"
+  
+  /* #define MATH_INT64_NATIVE_IF_AVAILABLE */
+  #include "math_int64.h"
+  
+  MODULE = Foo64		PACKAGE = Foo64
+  BOOT:
+      MATH_INT64_BOOT;
+  
+  SV *
+  some_int64()
+  CODE:
+      RETVAL = newSVi64(42);
+  OUTPUT:
+      RETVAL
+
+
+  --- Makefile.PL -----
+
+  use ExtUtils::MakeMaker;
+  WriteMakefile( NAME         => 'Foo64',
+                 VERSION_FROM => 'lib/Foo64.pm',
+                 OBJECT       => '$(O_FILES)' );
+
+
+If the macro C<MATH_INT64_NATIVE_IF_AVAILABLE> is defined before
+including C<perl_math_int64.h> and the perl interpreter is compiled
+with mative 64bit integer support, IVs will be used to represent 64bit
+integers instead of the object representation provided by Math::Int64.
+
+These are the C macros available from Math::Int64 C API:
+
+=over 4
+
+=item SV *newSVi64(int64_t i64)
+
+Returns an SV representing the given int64_t value.
+
+=item SV *newSVu64(uint64_t 64)
+
+Returns an SV representing the given uint64_t value.
+
+=item int64_t SvI64(SV *sv)
+
+Extracts the int64_t value from the given SV.
+
+=item uint64_t SvU64(SV *sv)
+
+Extracts the uint64_t value from the given SV.
+
+=item int SvI64OK(SV *sv)
+
+Returns true is the given SV contains a valid int64_t value.
+
+=item int SvU64OK(SV *sv)
+
+Returns true is the given SV contains a valid uint64_t value.
+
+=back
+
 =head1 BUGS AND SUPPORT
+
+The C API feature is experimental.
 
 The fallback to native 64bit integers feature is experimental.
 
