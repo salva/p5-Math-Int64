@@ -234,8 +234,8 @@ Besides that, in most situations it is safe to use the native fallback.
 
 =head2 C API
 
-This module incorporates a native C API that can be used to create and
-read Math::Int64int64 and uint64 SVs from your own XS modules.
+This module provides a native C API that can be used to create and
+read Math::Int64 int64 and uint64 SVs from your own XS modules.
 
 In order to use it you need to follow these steps:
 
@@ -252,8 +252,8 @@ project directory.
 Include the file C<perl_math_int64.h> in the C or XS source files
 where you want to convert 64bit integers to/from Perl SVs.
 
-Note that this file requires the types int64_t and uint64_t to be
-defined beforehand.
+Note that this header file requires the types int64_t and uint64_t to
+be defined beforehand.
 
 =item *
 
@@ -283,14 +283,14 @@ For instance:
   BOOT:
       MATH_INT64_BOOT;
   
-  SV *
+  int64_t
   some_int64()
   CODE:
-      RETVAL = newSVi64(42);
+      RETVAL = -42;
   OUTPUT:
       RETVAL
-
-
+  
+  
   --- Makefile.PL -----
 
   use ExtUtils::MakeMaker;
@@ -349,6 +349,8 @@ The source code of this module is hosted at GitHub:
 L<http://github.com/salva/p5-Math-Int64>.
 
 =head1 SEE ALSO
+
+The C API usage sample module L<Math::Int64::C_API::Sample>.
 
 Other modules that allow Perl to support larger integers or numbers
 are L<Math::BigInt>, L<Math::BigRat> and L<Math::Big>,
