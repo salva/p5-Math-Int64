@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.14
+        - selectively import subs from Math::Int64 or from ...::Native
+
 0.13  26 May, 2011
        - there were a couple of bugs on the str to int64 conversion
          code

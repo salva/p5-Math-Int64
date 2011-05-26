@@ -24,6 +24,7 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #include "strtoint64.h"
+#include "isaac64.c"
 
 #if defined(INT64_BACKEND_NV)
 #  define BACKEND "NV"
@@ -218,16 +219,17 @@ MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
 BOOT:
-package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), TRUE);
-package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), TRUE);
-capi_hash = get_hv("Math::Int64::C_API", TRUE|GV_ADDMULTI);
-hv_stores(capi_hash, "version", newSViv(1));
-hv_stores(capi_hash, "newSVi64", newSViv(PTR2IV(&newSVi64)));
-hv_stores(capi_hash, "newSVu64", newSViv(PTR2IV(&newSVu64)));
-hv_stores(capi_hash, "SvI64", newSViv(PTR2IV(&SvI64)));
-hv_stores(capi_hash, "SvU64", newSViv(PTR2IV(&SvU64)));
-hv_stores(capi_hash, "SvI64OK", newSViv(PTR2IV(&SvI64OK)));
-hv_stores(capi_hash, "SvU64OK", newSViv(PTR2IV(&SvU64OK)));
+    package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), TRUE);
+    package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), TRUE);
+    capi_hash = get_hv("Math::Int64::C_API", TRUE|GV_ADDMULTI);
+    hv_stores(capi_hash, "version", newSViv(1));
+    hv_stores(capi_hash, "newSVi64", newSViv(PTR2IV(&newSVi64)));
+    hv_stores(capi_hash, "newSVu64", newSViv(PTR2IV(&newSVu64)));
+    hv_stores(capi_hash, "SvI64", newSViv(PTR2IV(&SvI64)));
+    hv_stores(capi_hash, "SvU64", newSViv(PTR2IV(&SvU64)));
+    hv_stores(capi_hash, "SvI64OK", newSViv(PTR2IV(&SvI64OK)));
+    hv_stores(capi_hash, "SvU64OK", newSViv(PTR2IV(&SvU64OK)));
+    randinit(0);
 
 char *
 miu64__backend()
@@ -474,6 +476,20 @@ CODE:
 OUTPUT:
     RETVAL
 
+
+SV *
+miu64_int64_rand()
+CODE:
+    RETVAL = newSVi64(aTHX_ rand64());
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_uint64_rand()
+CODE:
+    RETVAL = newSVu64(aTHX_ rand64());
+OUTPUT:
+    RETVAL
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=mi64
 PROTOTYPES: DISABLE

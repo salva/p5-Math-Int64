@@ -18,22 +18,27 @@ our @EXPORT_OK = qw(int64
                     native_to_int64 int64_to_native
                     string_to_int64 hex_to_int64
                     int64_to_string int64_to_hex
+                    int64_rand
+                    int64_srand
                     uint64
                     uint64_to_number
                     net_to_uint64 uint64_to_net
                     native_to_uint64 uint64_to_native
                     string_to_uint64 hex_to_uint64
-                    uint64_to_string uint64_to_hex);
+                    uint64_to_string uint64_to_hex
+                    uint64_rand
+                  );
 
 sub import {
     my $pkg = shift;
     my @subs = grep { $_ ne ':native_if_available'} @_;
+    my %native;
     if (@subs != @_ and _backend eq 'IV') {
-	Math::Int64::Native->export_to_level(1, $pkg, @subs);
+        $native{$_} = 1 for grep Math::Int64::Native->can($_), @subs;
     }
-    else {
-	__PACKAGE__->export_to_level(1, $pkg, @subs);
-    }
+    # warn "native: ".join(", ", keys %native);
+    Math::Int64::Native->export_to_level(1, $pkg, grep $native{$_}, @subs);
+    Math::Int64->export_to_level(1, $pkg, grep !$native{$_}, @subs);
 }
 
 use overload ( '+' => \&_add,
@@ -107,17 +112,16 @@ package Math::Int64::Native;
 
 use Carp;
 
-require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = @Math::Int64::EXPORT_OK;
 
-*int64_to_number = \&Math::Int64::int64_to_number;
-*int64_to_net = \&Math::Int64::int64_to_net;
-*int64_to_native = \&Math::Int64::int64_to_native;
+#*int64_to_number = \&Math::Int64::int64_to_number;
+#*int64_to_net = \&Math::Int64::int64_to_net;
+#*int64_to_native = \&Math::Int64::int64_to_native;
 
-*uint64_to_number = \&Math::Int64::int64_to_number;
-*uint64_to_net = \&Math::Int64::uint64_to_net;
-*uint64_to_native = \&Math::Int64::uint64_to_native;
+#*uint64_to_number = \&Math::Int64::int64_to_number;
+#*uint64_to_net = \&Math::Int64::uint64_to_net;
+#*uint64_to_native = \&Math::Int64::uint64_to_native;
 
 1;
 
