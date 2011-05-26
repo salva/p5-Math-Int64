@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+0.13  26 May, 2011
+       - there were a couple of bugs on the str to int64 conversion
+         code
+
 0.12  26 May, 2011
         - add support for several string to int64 conversion functions
         - replace usage of strtoll and friends for custom strtoint64
