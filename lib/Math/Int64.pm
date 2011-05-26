@@ -377,6 +377,9 @@ Returns true is the given SV contains a valid uint64_t value.
 
 =back
 
+If you require any other function available through the C API don't
+hesitate to ask for it!
+
 =head1 BUGS AND SUPPORT
 
 The C API feature is experimental.
