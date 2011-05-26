@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 
 use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
@@ -110,3 +110,7 @@ ok (net_to_int64($n) == ((int64(0x01020304) << 32) + 0x05060708));
 ok ((($i | $j) & 1) != 0);
 
 ok ((($i & $j) & 1) == 0);
+
+my $l = int64("1271310319617");
+
+is ("$l", "1271310319617", "string to/from int64 conversion");

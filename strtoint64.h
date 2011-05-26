@@ -72,8 +72,7 @@ strtoint64(const char *s, int base)
 
         /* no out of bounds checks are performed as we wouldn't be
          * able to handle them anyway */
-        while (1) {
-                c = (unsigned char) *s++;
+        for (;; c = (unsigned char) *s++) {
                 if (isdigit(c))
 			c -= '0';
 		else if (isalpha(c))

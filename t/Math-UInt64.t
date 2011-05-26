@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 use Math::Int64 qw(uint64 uint64_to_number
                    net_to_uint64 uint64_to_net
@@ -89,3 +89,7 @@ ok (!($j >= $i));
 ok (int(log(uint64(1)<<50)/log(2)+0.001) == 50);
 
 # 35
+
+my $l = uint64("1271310319617");
+
+is ("$l", "1271310319617", "string to/from int64 conversion");

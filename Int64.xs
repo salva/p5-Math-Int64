@@ -182,18 +182,19 @@ su64_to_number(pTHX_ SV *sv) {
 SV *
 u64_to_string_with_sign(pTHX_ uint64_t u64, int base, int sign) {
     char str[I64STRLEN];
-    int i, len = 0;
+    int len = 0;
     if ((base > 36) || (base < 2))
         Perl_croak(aTHX_ "base %d out of range [2,36]", base);
     while (u64) {
-        char c = u64 % base + '0';
+        char c = u64 % base;
         u64 /= base;
-        str[len++] = c + (c > 9 ? 'A' : '0');
+        str[len++] = c + (c > 9 ? 'A' - 10 : '0');
     }
     if (len) {
+        int i;
         int svlen = len + (sign ? 1 : 0);
         SV *sv = newSV(svlen);
-        char *pv = SvPV_nolen(sv);
+        char *pv = SvPVX(sv);
         SvPOK_on(sv);
         SvCUR_set(sv, svlen);
         if (sign) *(pv++) = '-';
