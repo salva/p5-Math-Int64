@@ -39,7 +39,7 @@ typedef unsigned __int64 uint64_t;
 #  error "unsupported backend"
 #endif
 
-int
+static int
 SvI64OK(pTHX_ SV *sv) {
     if (SvROK(sv)) {
         SV *si64 = SvRV(sv);
@@ -48,7 +48,7 @@ SvI64OK(pTHX_ SV *sv) {
     return 0;
 }
 
-int
+static int
 SvU64OK(pTHX_ SV *sv) {
     if (SvROK(sv)) {
         SV *su64 = SvRV(sv);
@@ -57,7 +57,7 @@ SvU64OK(pTHX_ SV *sv) {
     return 0;
 }
 
-SV *
+static SV *
 newSVi64(pTHX_ int64_t i64) {
     SV *sv;
     SV *si64 = newSV(0);
@@ -69,7 +69,7 @@ newSVi64(pTHX_ int64_t i64) {
     return sv;
 }
 
-SV *
+static SV *
 newSVu64(pTHX_ uint64_t u64) {
     SV *sv;
     SV *su64 = newSV(0);
@@ -84,7 +84,7 @@ newSVu64(pTHX_ uint64_t u64) {
 #define SvI64X(sv) (*(int64_t*)(&(SvI64Y(SvRV(sv)))))
 #define SvU64X(sv) (*(uint64_t*)(&(SvI64Y(SvRV(sv)))))
 
-SV *
+static SV *
 SvSI64(pTHX_ SV *sv) {
     if (SvRV(sv)) {
         SV *si64 = SvRV(sv);
@@ -94,7 +94,7 @@ SvSI64(pTHX_ SV *sv) {
     Perl_croak(aTHX_ "internal error: reference to NV expected");
 }
 
-SV *
+static SV *
 SvSU64(pTHX_ SV *sv) {
     if (SvRV(sv)) {
         SV *su64 = SvRV(sv);
@@ -107,7 +107,7 @@ SvSU64(pTHX_ SV *sv) {
 #define SvI64x(sv) (*(int64_t*)(&(SvI64Y(SvSI64(aTHX_ sv)))))
 #define SvU64x(sv) (*(uint64_t*)(&(SvI64Y(SvSU64(aTHX_ sv)))))
 
-int64_t
+static int64_t
 SvI64(pTHX_ SV *sv) {
     if (!SvOK(sv)) {
         return 0;
@@ -130,7 +130,7 @@ SvI64(pTHX_ SV *sv) {
     return strtoint64(SvPV_nolen(sv), 10);
 }
 
-uint64_t
+static uint64_t
 SvU64(pTHX_ SV *sv) {
     if (!SvOK(sv)) {
         return 0;
@@ -152,7 +152,7 @@ SvU64(pTHX_ SV *sv) {
     return strtoint64(SvPV_nolen(sv), 10);
 }
 
-SV *
+static SV *
 si64_to_number(pTHX_ SV *sv) {
     int64_t i64 = SvI64(aTHX_ sv);
     if (i64 < 0) {
@@ -168,7 +168,7 @@ si64_to_number(pTHX_ SV *sv) {
     return newSVnv(i64);
 }
 
-SV *
+static SV *
 su64_to_number(pTHX_ SV *sv) {
     uint64_t u64 = SvU64(aTHX_ sv);
     UV uv = u64;
@@ -179,7 +179,7 @@ su64_to_number(pTHX_ SV *sv) {
 
 #define I64STRLEN 65
 
-SV *
+static SV *
 u64_to_string_with_sign(pTHX_ uint64_t u64, int base, int sign) {
     char str[I64STRLEN];
     int len = 0;
@@ -206,7 +206,7 @@ u64_to_string_with_sign(pTHX_ uint64_t u64, int base, int sign) {
     }
 }
 
-SV *
+static SV *
 i64_to_string(pTHX_ int64_t i64, int base) {
     if (i64 < 0) {    
         return u64_to_string_with_sign(aTHX_ -i64, base, 1);

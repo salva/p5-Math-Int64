@@ -36,7 +36,7 @@
 #include <ctype.h>
 
 /*
- * Convert a string to a int64_t/uint64_t.
+ * Convert a string to an int64_t/uint64_t.
  */
 
 static uint64_t
