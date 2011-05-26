@@ -15,36 +15,15 @@ static HV *capi_hash;
 #ifdef __MINGW32__
 #include <stdint.h>
 #include <stdlib.h>
-#define INT64_HAS_ATOLL
 #endif
 
 #ifdef _MSC_VER
 #include <stdlib.h>
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-#define INT64_HAS__ATOI64
-
-#define atoll _atoi64
-#define strtoull _strtoui64
 #endif
 
-#if !defined(INT64_HAS_ATOLL)
-#  if defined(INT64_HAS_STRTOLL)
-#    define atoll(x) strtoll((x), NULL, 10)
-#  elif defined(INT64_HAS__ATOI64)
-#    define atoll(x) _atoi64(x)
-#  else
-#    error "no int64 parsing function available from C library"
-#  endif
-#endif
-
-#if !defined(INT64_HAS_ATOULL)
-#  if defined(INT64_HAS_STRTOULL)
-#    define atoull(x) strtoull((x), NULL, 10)
-#  else
-#    define atoull(x) atoll(x)
-#  endif
-#endif
+#include "strtoint64.h"
 
 #if defined(INT64_BACKEND_NV)
 #  define BACKEND "NV"
@@ -148,7 +127,7 @@ SvI64(pTHX_ SV *sv) {
             return *(int64_t*)(&(SvI64Y(si64)));
         }
     }
-    return atoll(SvPV_nolen(sv));
+    return strtoint64(SvPV_nolen(sv), 10);
 }
 
 uint64_t
@@ -170,7 +149,7 @@ SvU64(pTHX_ SV *sv) {
         if (su64 && (SvTYPE(su64) >= SVt_I64) && (sv_isa(sv, "Math::UInt64")) || sv_isa(sv, "Math::Int64"))
             return *(uint64_t*)(&(SvI64Y(su64)));
     }
-    return atoull(SvPV_nolen(sv));
+    return strtoint64(SvPV_nolen(sv), 10);
 }
 
 SV *
@@ -198,33 +177,40 @@ su64_to_number(pTHX_ SV *sv) {
     return newSVnv(u64);
 }
 
-#define I64STRLEN 23
+#define I64STRLEN 65
 
-STRLEN
-u64_to_string(uint64_t u64, char *to) {
+SV *
+u64_to_string_with_sign(pTHX_ uint64_t u64, int base, int sign) {
     char str[I64STRLEN];
     int i, len = 0;
+    if ((base > 36) || (base < 2))
+        Perl_croak(aTHX_ "base %d out of range [2,36]", base);
     while (u64) {
-        str[len++] = '0' + u64 % 10;
-        u64 /= 10;
+        char c = u64 % base + '0';
+        u64 /= base;
+        str[len++] = c + (c > 9 ? 'A' : '0');
     }
     if (len) {
-        for (i = len; i--;) *(to++) = str[i];
-        return len;
+        int svlen = len + (sign ? 1 : 0);
+        SV *sv = newSV(svlen);
+        char *pv = SvPV_nolen(sv);
+        SvPOK_on(sv);
+        SvCUR_set(sv, svlen);
+        if (sign) *(pv++) = '-';
+        for (i = len; i--;) *(pv++) = str[i];
+        return sv;
     }
     else {
-        to[0] = '0';
-        return 1;
+        return newSVpvs("0");
     }
 }
 
-STRLEN
-i64_to_string(int64_t i64, char *to) {
-    if (i64 < 0) {
-        *(to++) = '-';
-        return u64_to_string(-i64, to) + 1;
+SV *
+i64_to_string(pTHX_ int64_t i64, int base) {
+    if (i64 < 0) {    
+        return u64_to_string_with_sign(aTHX_ -i64, base, 1);
     }
-    return u64_to_string(i64, to);
+    return u64_to_string_with_sign(aTHX_ i64, base, 0);
 }
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
@@ -416,6 +402,74 @@ CODE:
     pv = SvPVX(RETVAL);
     Copy(&u64, pv, 8, char);
     pv[8] = '\0';
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_int64_to_string(self, base = 10)
+    SV *self
+    int base
+CODE:
+    RETVAL = i64_to_string(aTHX_ SvI64(aTHX_ self), base);
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_uint64_to_string(self, base = 10)
+    SV *self
+    int base
+CODE:
+    RETVAL = u64_to_string_with_sign(aTHX_ SvU64(aTHX_ self), base, 0);
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_int64_to_hex(self)
+    SV *self
+CODE:
+    RETVAL = i64_to_string(aTHX_ SvI64(aTHX_ self), 16);
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_uint64_to_hex(self)
+    SV *self
+CODE:
+    RETVAL = u64_to_string_with_sign(aTHX_ SvU64(aTHX_ self), 16, 0);
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_string_to_int64(str, base = 0)
+    const char *str;
+    int base;
+CODE:
+    RETVAL = newSVi64(aTHX_ strtoint64(str, base));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_string_to_uint64(str, base = 0)
+    const char *str;
+    int base;
+CODE:
+    RETVAL = newSVu64(aTHX_ strtoint64(str, base));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_hex_to_int64(str)
+    const char *str;
+CODE:
+    RETVAL = newSVi64(aTHX_ strtoint64(str, 16));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_hex_to_uint64(str)
+    const char *str;
+CODE:
+    RETVAL = newSVu64(aTHX_ strtoint64(str, 16));
 OUTPUT:
     RETVAL
 
@@ -819,15 +873,10 @@ mi64_string(self, other, rev)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
-PREINIT:
-    STRLEN len;
 CODE:
-    RETVAL = newSV(I64STRLEN);
-    SvPOK_on(RETVAL);
-    SvCUR_set(RETVAL, i64_to_string(SvI64x(self), SvPVX(RETVAL)));
+    RETVAL = i64_to_string(aTHX_ SvI64x(self), 10);
 OUTPUT:
     RETVAL
-
 
 MODULE = Math::Int64		PACKAGE = Math::UInt64		PREFIX=mu64
 PROTOTYPES: DISABLE
@@ -1228,12 +1277,8 @@ mu64_string(self, other, rev)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
-PREINIT:
-    STRLEN len;
 CODE:
-    RETVAL = newSV(I64STRLEN);
-    SvPOK_on(RETVAL);
-    SvCUR_set(RETVAL, u64_to_string(SvU64x(self), SvPVX(RETVAL)));
+    RETVAL = u64_to_string_with_sign(aTHX_ SvU64x(self), 10, 0);
 OUTPUT:
     RETVAL
 

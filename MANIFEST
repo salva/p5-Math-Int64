@@ -4,6 +4,7 @@ lib/Math/Int64.pm
 Makefile.PL
 MANIFEST
 ppport.h
+strtoint64.h
 README
 t/Math-Int64.t
 t/Math-UInt64.t

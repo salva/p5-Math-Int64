@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.11';
+    our $VERSION = '0.12';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -16,10 +16,14 @@ our @EXPORT_OK = qw(int64
                     int64_to_number
                     net_to_int64 int64_to_net
                     native_to_int64 int64_to_native
+                    string_to_int64 hex_to_int64
+                    int64_to_string int64_to_hex
                     uint64
                     uint64_to_number
                     net_to_uint64 uint64_to_net
-                    native_to_uint64 uint64_to_native);
+                    native_to_uint64 uint64_to_native
+                    string_to_uint64 hex_to_uint64
+                    uint64_to_string uint64_to_hex);
 
 sub import {
     my $pkg = shift;
@@ -195,6 +199,37 @@ For instance:
     print "int64:$i => perl:$n\n";
   }
 
+=item string_to_int64($str, $base)
+
+Converts the string to a int64 value. The conversion is done according
+to the given base, which must be a number between 2 and 36 inclusive
+or the special value 0. C<$base> defaults to 0.
+
+The string may begin with an arbitrary amount of white space followed
+by a single optional C<+> or C<-> sign. If base is zero or 16, the
+string may then include a "0x" prefix, and the number will be read in
+base 16; otherwise, a zero base is taken as 10 (decimal) unless the
+next character is '0', in which case it is taken as 8 (octal).
+
+Underscore characters (C<_>) between the digits are ignored.
+
+No overflow checks are performed by this function.
+
+See also L<strtoll(3)>.
+
+=item hex_to_int64($i64)
+
+Shortcut for string_to_int64($str, 16)
+
+=item int64_to_string($i64, $base)
+
+Converts the int64 value to its string representation in the given
+base (defaults to 10).
+
+=item uint64_to_hex($i64)
+
+Shortcut for C<int64_to_string($i64, 16)>.
+
 =item uint64
 
 =item uint64_to_number
@@ -206,6 +241,14 @@ For instance:
 =item native_to_uint64
 
 =item uint64_to_native
+
+=item string_to_uint64
+
+=item hex_to_uint64
+
+=item uint64_to_string
+
+=item uint64_to_hex
 
 These functions are similar to their int64 counterparts, but
 manipulate 64 bit unsigned integers.

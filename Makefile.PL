@@ -30,11 +30,6 @@ unless ($Config{i64type} and
 
 my @define = ("INT64_BACKEND_" . $backend);
 
-for (qw(strtoll strtoull atoll atoull)) {
-    push @define, "INT64_HAS_" . uc $_
-        if $Config{"d_$_"};
-}
-
 my $define = join (' ', map { "-D$_" } @define);
 
 WriteMakefile( NAME              => 'Math::Int64',
