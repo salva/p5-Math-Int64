@@ -1,53 +1,54 @@
 Revision history for Perl extension Math::Int64.
 
-0.14
-        - selectively import subs from Math::Int64 or from ...::Native
+0.14  May 27, 2011
+      - add support for 64bit random number generation  
+      - selectively import subs from Math::Int64 or from ...::Native
 
-0.13  26 May, 2011
+0.13  May 26, 2011
        - there were a couple of bugs on the str to int64 conversion
          code
 
-0.12  26 May, 2011
+0.12  May 26, 2011
         - add support for several string to int64 conversion functions
         - replace usage of strtoll and friends for custom strtoint64
 
-0.11  25 May, 2011
+0.11  May 25, 2011
         - introduce C API
         - require perl 5.8.x
 
-0.10  8 Feb, 2011
+0.10  Feb 8, 2011
         - solved bug in uint64_to_number
         - replace sprintf by hand crafted int64 to string conversor
 
-0.09  23 Oct, 2009
+0.09  Oct 23, 2009
         - native backend was failing due to different semantics under
           perls compiled with long double support
 
-0.08  17 Oct, 2009
+0.08  Oct 17, 2009
         - Fallback to native 64bit support if available feature added
 
-0.07  17 Oct, 2009
+0.07  Oct 17, 2009
         - IV backend for computers with native 64bit IVs
 
-0.06  17 Oct, 2009
+0.06  Oct 17, 2009
         - syntax error was broken compilation with MS compiler (bug
           report by Taro Nishino)
 
-0.05  16 Oct, 2009
+0.05  Oct 16, 2009
         - some bit operations were broken (bug report by Adam Woodworth)
 
-0.04  10 Sep, 2009
+0.04  Sep 10, 2009
         - make it work under Strawberry Perl and probably other perl
           Windows ports! (bug report and patch by Sisyphus)
 
-0.03  5 Apr, 2007
+0.03  Apr 5, 2007
         - use SvIOK_UV instead of SvUOK (that's not supported in older
           perls)
         - int64_to_net and uint64_to_net were only accepting
           Math::U?Int64 objects
         - some more tests added
 
-0.02  4 Apr, 2007
+0.02  Apr 4, 2007
         - support for uint64 added
         - autodetect strtoll, atoll, etc. support
 
