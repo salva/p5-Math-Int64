@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.15  May 27, 2011
+        - update ppport.h from Devel::PPPort 3.19 as some perlapi
+          functions not available on perls older than 5.10 are now
+          used.
+
 0.14  May 27, 2011
         - add support for 64bit random number generation
         - selectively import subs from Math::Int64 or from ...::Native
