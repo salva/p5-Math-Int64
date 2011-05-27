@@ -1,12 +1,12 @@
 Revision history for Perl extension Math::Int64.
 
 0.14  May 27, 2011
-      - add support for 64bit random number generation  
-      - selectively import subs from Math::Int64 or from ...::Native
+        - add support for 64bit random number generation
+        - selectively import subs from Math::Int64 or from ...::Native
 
 0.13  May 26, 2011
-       - there were a couple of bugs on the str to int64 conversion
-         code
+        - there were a couple of bugs on the str to int64 conversion
+          code
 
 0.12  May 26, 2011
         - add support for several string to int64 conversion functions
