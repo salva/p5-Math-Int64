@@ -24,7 +24,7 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #include "strtoint64.h"
-#include "isaac64.c"
+#include "isaac64.h"
 
 #if defined(INT64_BACKEND_NV)
 #  define BACKEND "NV"
@@ -490,6 +490,31 @@ CODE:
     RETVAL = newSVu64(aTHX_ rand64());
 OUTPUT:
     RETVAL
+
+void
+miu64_int64_srand(seed=&PL_sv_undef)
+    SV *seed
+PREINIT:
+CODE:
+    if (SvOK(seed) && SvCUR(seed)) {
+        STRLEN len;
+        const char *pv = SvPV_const(seed, len);
+        char *shadow = (char*)randrsl;
+        int i;
+        if (len > sizeof(randrsl)) len = sizeof(randrsl);
+        Zero(shadow, sizeof(randrsl), char);
+        Copy(pv, shadow, len, char);
+
+        /* make the seed endianness agnostic */
+        for (i = 0; i < RANDSIZ; i++) {
+            char *p = shadow + i * sizeof(uint64_t);
+            randrsl[i] = (((((((((((((uint64_t)p[0] << 8) + p[1]) << 8) + p[2]) << 8) + p[3]) << 8) +
+                                               p[4] << 8) + p[5]) << 8) + p[6]) << 8) + p[7];
+        }
+        randinit(1);
+    }
+    else
+        randinit(0);
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=mi64
 PROTOTYPES: DISABLE

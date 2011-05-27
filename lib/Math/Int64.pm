@@ -230,9 +230,21 @@ Shortcut for string_to_int64($str, 16)
 Converts the int64 value to its string representation in the given
 base (defaults to 10).
 
-=item uint64_to_hex($i64)
+=item int64_to_hex($i64)
 
 Shortcut for C<int64_to_string($i64, 16)>.
+
+=item int64_rand
+
+Generates a 64 bit random number using ISAAC-64 algorithm.
+
+=item int64_srand($seed)
+
+=item int64_srand()
+
+Sets the seed for the random number generator.
+
+C<$seed>, if given, should be a 2KB long string.
 
 =item uint64
 
