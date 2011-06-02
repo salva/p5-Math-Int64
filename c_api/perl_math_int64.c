@@ -2,11 +2,12 @@
  * perl_math_int64.h - This file is in the public domain
  *
  * Author: Salvador Fandino <sfandino@yahoo.com>
- * Version: 1.0
+ * Version: 1.1
  */
 
 #include "EXTERN.h"
 #include "perl.h"
+#include "ppport.h"
 
 #ifdef _MSC_VER
 #include <stdlib.h>

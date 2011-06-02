@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.16  Jun 2, 2011
+        - include ppport.h in perl_math_int64.c
+
 0.15  May 27, 2011
         - update ppport.h from Devel::PPPort 3.19 as some perlapi
           functions not available on perls older than 5.10 are now
