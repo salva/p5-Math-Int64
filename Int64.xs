@@ -14,7 +14,6 @@ static HV *capi_hash;
 
 #ifdef __MINGW32__
 #include <stdint.h>
-#include <stdlib.h>
 #endif
 
 #ifdef _MSC_VER
