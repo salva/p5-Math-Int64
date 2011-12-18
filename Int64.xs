@@ -27,7 +27,8 @@ typedef unsigned __int64 uint64_t;
 
 static int
 check_die_on_overflow_hint(pTHX) {
-    SV *hint = cop_hints_fetch_pvs(PL_curcop, "Math::Int64::die_on_overflow", 0);
+    const PERL_CONTEXT *cx = caller_cx(0, NULL);
+    SV *hint = cop_hints_fetch_pvs(cx->blk_oldcop, "Math::Int64::die_on_overflow", 0);
     return (hint && SvTRUE(hint));
 }
 
