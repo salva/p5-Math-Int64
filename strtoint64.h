@@ -40,10 +40,12 @@
  */
 
 static uint64_t
-strtoint64(const char *s, int base)
+strtoint64(pTHX_ const char *s, int base, int sign)
 {
 	uint64_t acc = 0;
 	int c, neg, between = 0;
+
+        uint64_t upper_mul_limit;
 
 	/*
 	 * Skip white space and pick up leading +/- sign if any.
@@ -56,6 +58,7 @@ strtoint64(const char *s, int base)
 	if (c == '-') {
  		neg = 1;
 		c = *s++;
+                if (!sign) overflow(aTHX);
 	} else {
 		neg = 0;
 		if (c == '+')
@@ -70,8 +73,8 @@ strtoint64(const char *s, int base)
 	if (base == 0)
 		base = c == '0' ? 8 : 10;
 
-        /* no out of bounds checks are performed as we wouldn't be
-         * able to handle them anyway */
+        if (may_die_on_overflow) upper_mul_limit = UINT64_MAX / base;
+
         for (;; c = (unsigned char) *s++) {
                 if (isdigit(c))
 			c -= '0';
@@ -83,9 +86,20 @@ strtoint64(const char *s, int base)
 			break;
                 if (c >= base)
 			break;
-                acc = acc * base + c;
+                if (may_die_on_overflow) {
+                    if (acc > upper_mul_limit) overflow(aTHX);
+                    acc *= base;
+                    if (UINT64_MAX - acc < c) overflow(aTHX);
+                    acc += c;
+                }
+                else {
+                    acc = acc * base + c;
+                }
                 between = 1;
         }
+        if ( may_die_on_overflow && sign &&
+             ( acc > (neg ? (~(uint64_t)INT64_MIN + 1) : INT64_MAX) ) ) overflow(aTHX);
+
         return (neg ? ~acc + 1 : acc);
 }
 
