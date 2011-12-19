@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.18_02
+        - document die_on_overflow.pm
+
 0.18_01  Dec 19, 2011
         - released to CPAN just for CPAN Testers feedback
         - add support for die_on_overflow feature
