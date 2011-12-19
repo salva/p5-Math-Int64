@@ -29,11 +29,27 @@ our @EXPORT_OK = qw(int64
                     uint64_rand
                   );
 
+my %available_pragmas = map { $_ => 1 } qw(native_if_available
+                                           die_on_overflow);
+
 sub import {
     my $pkg = shift;
-    my @subs = grep { $_ ne ':native_if_available'} @_;
-    my %native;
-    if (@subs != @_ and _backend eq 'IV') {
+    my (%pragmas, @subs, %native);
+    for (@_) {
+        if ($_ =~ /^:(.*)/ and $available_pragmas{$1}) {
+            $pragmas{$1} = 1
+        }
+        else {
+            push @subs, $_;
+        }
+    }
+
+    if ($pragmas{die_on_overflow}) {
+        require Math::Int64::die_on_overflow;
+        Math::Int64::die_on_overflow->import;
+    }
+
+    if ($pragmas{native_if_available} and _backend eq 'IV') {
         $native{$_} = 1 for grep Math::Int64::Native->can($_), @subs;
     }
     # warn "native: ".join(", ", keys %native);
@@ -271,6 +287,29 @@ manipulate 64 bit unsigned integers.
 
 =back
 
+=head2 Die on overflow
+
+The lexical pragma C<Math::Int64::die_on_overflow> configures the
+module to throw an error when some operation results in integer
+overflow.
+
+For instance:
+
+  use Math::Int64 qw(uint64);
+  use Math::Int64::die_on_overflow;
+
+  my $zero = uint64(0);
+  say ($zero - 1);                 # dies as -1 falls outside
+                                   # the uint64_t range
+
+  no Math::Int64::die_on_overflow; # deactivates lexical pragma
+  say ($zero - 1);                 # no error is detected here!
+
+The pragma can also be activated as follows:
+
+  use Math::Int64 ':die_on_overflow';
+
+
 =head2 Fallback to native 64bit support if available
 
 If the tag C<:native_if_available> is added to the import list and the
@@ -281,7 +320,6 @@ regular perl scalars.
 Usage example:
 
   use Math::Int64 qw( :native_if_available int64 );
-
 
 This feature is not enabled by default because the semantics for perl
 scalars and for 64 bit integers as implemented in this module are not
