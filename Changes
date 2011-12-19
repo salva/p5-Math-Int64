@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.17  Jun 8, 2011
+        - add support for MinGW32 compiler on Windows to C API
+
 0.16  Jun 2, 2011
         - include ppport.h in perl_math_int64.c
 

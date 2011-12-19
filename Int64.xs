@@ -16,7 +16,6 @@ static int may_die_on_overflow;
 
 #ifdef __MINGW32__
 #include <stdint.h>
-#include <stdlib.h>
 #endif
 
 #ifdef _MSC_VER
