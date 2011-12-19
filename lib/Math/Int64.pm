@@ -436,6 +436,8 @@ hesitate to ask for it!
 
 =head1 BUGS AND SUPPORT
 
+The die_on_overflow feature is completely experimental.
+
 The C API feature is experimental.
 
 The fallback to native 64bit integers feature is experimental.
