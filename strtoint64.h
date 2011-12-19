@@ -58,7 +58,7 @@ strtoint64(pTHX_ const char *s, int base, int sign)
 	if (c == '-') {
  		neg = 1;
 		c = *s++;
-                if (!sign) overflow(aTHX);
+                if (!sign) overflow(aTHX_ "negative sign found when parsing unsigned number");
 	} else {
 		neg = 0;
 		if (c == '+')
@@ -87,9 +87,9 @@ strtoint64(pTHX_ const char *s, int base, int sign)
                 if (c >= base)
 			break;
                 if (may_die_on_overflow) {
-                    if (acc > upper_mul_limit) overflow(aTHX);
+                    if (acc > upper_mul_limit) overflow(aTHX_ (sign ? out_of_bounds_error_s : out_of_bounds_error_u));
                     acc *= base;
-                    if (UINT64_MAX - acc < c) overflow(aTHX);
+                    if (UINT64_MAX - acc < c) overflow(aTHX_ (sign ? out_of_bounds_error_s : out_of_bounds_error_u));
                     acc += c;
                 }
                 else {
@@ -98,7 +98,7 @@ strtoint64(pTHX_ const char *s, int base, int sign)
                 between = 1;
         }
         if ( may_die_on_overflow && sign &&
-             ( acc > (neg ? (~(uint64_t)INT64_MIN + 1) : INT64_MAX) ) ) overflow(aTHX);
+             ( acc > (neg ? (~(uint64_t)INT64_MIN + 1) : INT64_MAX) ) ) overflow(aTHX_ out_of_bounds_error_s);
 
         return (neg ? ~acc + 1 : acc);
 }

@@ -32,12 +32,13 @@ my @define = ("INT64_BACKEND_" . $backend);
 
 my $define = join (' ', map { "-D$_" } @define);
 
-WriteMakefile( NAME              => 'Math::Int64',
-               VERSION_FROM      => 'lib/Math/Int64.pm',
-               PREREQ_PM         => {},
+WriteMakefile( NAME           => 'Math::Int64',
+               VERSION_FROM   => 'lib/Math/Int64.pm',
+               PREREQ_PM      => {},
                ABSTRACT_FROM  => 'lib/Math/Int64.pm', # retrieve abstract from module
                AUTHOR         => 'Salvador Fandino <sfandino@yahoo.com>',
-               LIBS              => [''], # e.g., '-lm'
-               DEFINE            => $define,
-               INC               => '-I.', # e.g., '-I. -I/usr/include/other'
+               LIBS           => [''], # e.g., '-lm'
+               OPTIMIZE       => '-O0 -g',
+               DEFINE         => $define,
+               INC            => '-I.', # e.g., '-I. -I/usr/include/other'
     );
