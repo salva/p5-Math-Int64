@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.18_01
+        - add support for die_on_overflow feature
+
 0.17  Jun 8, 2011
         - add support for MinGW32 compiler on Windows to C API
 
