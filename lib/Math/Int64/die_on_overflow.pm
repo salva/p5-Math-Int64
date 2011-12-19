@@ -28,9 +28,9 @@ Math::Int64::die_on_overflow - catch overflows when using Math::Int64
   say($number * $number); # overflow error!
 
 
-=head1
+=head1 SEE ALSO
 
-See also L<Math::Int64>.
+L<Math::Int64>.
 
 =head1 COPYRIGHT AND LICENSE
 

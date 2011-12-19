@@ -233,7 +233,8 @@ next character is '0', in which case it is taken as 8 (octal).
 
 Underscore characters (C<_>) between the digits are ignored.
 
-No overflow checks are performed by this function.
+No overflow checks are performed by this function unless the
+C<die_on_overflow> pragma is used (see L</Die on overflow> below).
 
 See also L<strtoll(3)>.
 
@@ -309,6 +310,8 @@ The pragma can also be activated as follows:
 
   use Math::Int64 ':die_on_overflow';
 
+Once this pragma is used, several Math::Int64 operations may become
+slower. Deactivating the pragma will not make them fast again.
 
 =head2 Fallback to native 64bit support if available
 
