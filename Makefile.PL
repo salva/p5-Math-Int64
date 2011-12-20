@@ -38,7 +38,7 @@ WriteMakefile( NAME           => 'Math::Int64',
                ABSTRACT_FROM  => 'lib/Math/Int64.pm', # retrieve abstract from module
                AUTHOR         => 'Salvador Fandino <sfandino@yahoo.com>',
                LIBS           => [''], # e.g., '-lm'
-               OPTIMIZE       => '-O0 -g',
+               # OPTIMIZE       => '-O0 -g',
                DEFINE         => $define,
                INC            => '-I.', # e.g., '-I. -I/usr/include/other'
     );

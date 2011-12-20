@@ -1,6 +1,6 @@
 Revision history for Perl extension Math::Int64.
 
-0.18_02
+0.18_02  Dec 20, 2011
         - several doc corrections
         - document die_on_overflow.pm
 

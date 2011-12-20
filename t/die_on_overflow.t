@@ -93,33 +93,38 @@ test_no_overflow { $s2_0 << 62 } 'overflow - left shift 1 << 62, signed';
 
 no Math::Int64::die_on_overflow;
 
-test_no_overflow { uint64(2**65) } 'no overflow - NV 2_65 -> uint64';
-test_no_overflow { uint64(2**64) } 'no overflow - NV 2_64 -> uint64';
-test_no_overflow { int64(2**65) } 'no overflow - NV 2_65 -> int64';
-test_no_overflow { int64(2**64) } 'no overflow - NV 2_64 -> int64';
-test_no_overflow { int64(2**63) } 'no overflow - NV 2_63 -> int64';
-test_no_overflow { int64(-(2**65)) } 'no overflow - NV -2_65 -> int64';
-test_no_overflow { int64(-(2**64)) } 'no overflow - NV -2_64 -> int64';
-test_no_overflow { uint64(-1) } 'no overflow - SV -1 -> int64';
-test_no_overflow { int64(uint64(1) << 63) } 'no overflow - uint64 2_63 -> int64';
-test_no_overflow { uint64('18446744073709551616') } 'no overflow - "18446744073709551616"-> uint64';
-test_no_overflow { uint64('-18446744073709551616') } 'no overflow - "-18446744073709551616"-> uint64';
-test_no_overflow { uint64('-1') } 'no overflow - "-1" -> uint64';
-test_no_overflow { uint64('20000000000000000000') } 'no overflow - "20000000000000000000"-> uint64';
-test_no_overflow { int64('9223372036854775808') } 'no overflow - "9223372036854775808"-> int64';
-test_no_overflow { int64('-9223372036854775809') } 'no overflow - "-9223372036854775809"-> int64';
-test_no_overflow { int64('20000000000000000000') } 'no overflow - "20000000000000000000"-> int64';
-test_no_overflow { int64('-20000000000000000000') } 'no overflow - "-20000000000000000000"-> int64';
-test_no_overflow { $b = $uint64_max; $b++ } 'no overflow - inc UINT64_MAX';
-test_no_overflow { $b = $int64_max; $b++ } 'no overflow - inc INT64_MAX';
-test_no_overflow { $b = uint64(0); $b-- } 'no overflow - dec 0';
-test_no_overflow { $b = $int64_min; $b-- } 'no overflow - dec INT64_MIN';
-test_no_overflow { $uint64_max + 1 } 'no overflow - UINT64_MAX + 1';
-test_no_overflow { $int64_max + 1 } 'no overflow - INTE64_MAX + 1';
-test_no_overflow { uint64(0) - 1 } 'no overflow - uint64 0 - 1';
-test_no_overflow { $int64_min - 1 } 'no overflow - INT64_MIN - 1';
-test_no_overflow { $u2_32 * $u2_32 } 'no overflow - mul 32x32';
-test_no_overflow { $u2_40 * $u2_30 } 'no overflow - mul 40x30';
-test_no_overflow { $u2_0 << 64 } 'no overflow - left shift 1 << 64';
-test_no_overflow { $s2_0 << 64 } 'no overflow - left shift 1 << 64, signed';
-test_no_overflow { $s2_0 << 63 } 'no overflow - left shift 1 << 63, signed';
+
+SKIP: {
+    skip "lexical pragmas require perl 5.10 or later", 30 if $^V < 5.010;
+
+    test_no_overflow { uint64(2**65) } 'no overflow - NV 2_65 -> uint64';
+    test_no_overflow { uint64(2**64) } 'no overflow - NV 2_64 -> uint64';
+    test_no_overflow { int64(2**65) } 'no overflow - NV 2_65 -> int64';
+    test_no_overflow { int64(2**64) } 'no overflow - NV 2_64 -> int64';
+    test_no_overflow { int64(2**63) } 'no overflow - NV 2_63 -> int64';
+    test_no_overflow { int64(-(2**65)) } 'no overflow - NV -2_65 -> int64';
+    test_no_overflow { int64(-(2**64)) } 'no overflow - NV -2_64 -> int64';
+    test_no_overflow { uint64(-1) } 'no overflow - SV -1 -> int64';
+    test_no_overflow { int64(uint64(1) << 63) } 'no overflow - uint64 2_63 -> int64';
+    test_no_overflow { uint64('18446744073709551616') } 'no overflow - "18446744073709551616"-> uint64';
+    test_no_overflow { uint64('-18446744073709551616') } 'no overflow - "-18446744073709551616"-> uint64';
+    test_no_overflow { uint64('-1') } 'no overflow - "-1" -> uint64';
+    test_no_overflow { uint64('20000000000000000000') } 'no overflow - "20000000000000000000"-> uint64';
+    test_no_overflow { int64('9223372036854775808') } 'no overflow - "9223372036854775808"-> int64';
+    test_no_overflow { int64('-9223372036854775809') } 'no overflow - "-9223372036854775809"-> int64';
+    test_no_overflow { int64('20000000000000000000') } 'no overflow - "20000000000000000000"-> int64';
+    test_no_overflow { int64('-20000000000000000000') } 'no overflow - "-20000000000000000000"-> int64';
+    test_no_overflow { $b = $uint64_max; $b++ } 'no overflow - inc UINT64_MAX';
+    test_no_overflow { $b = $int64_max; $b++ } 'no overflow - inc INT64_MAX';
+    test_no_overflow { $b = uint64(0); $b-- } 'no overflow - dec 0';
+    test_no_overflow { $b = $int64_min; $b-- } 'no overflow - dec INT64_MIN';
+    test_no_overflow { $uint64_max + 1 } 'no overflow - UINT64_MAX + 1';
+    test_no_overflow { $int64_max + 1 } 'no overflow - INTE64_MAX + 1';
+    test_no_overflow { uint64(0) - 1 } 'no overflow - uint64 0 - 1';
+    test_no_overflow { $int64_min - 1 } 'no overflow - INT64_MIN - 1';
+    test_no_overflow { $u2_32 * $u2_32 } 'no overflow - mul 32x32';
+    test_no_overflow { $u2_40 * $u2_30 } 'no overflow - mul 40x30';
+    test_no_overflow { $u2_0 << 64 } 'no overflow - left shift 1 << 64';
+    test_no_overflow { $s2_0 << 64 } 'no overflow - left shift 1 << 64, signed';
+    test_no_overflow { $s2_0 << 63 } 'no overflow - left shift 1 << 63, signed';
+}

@@ -24,15 +24,27 @@ typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #endif
 
+#if (PERL_VERSION >= 10)
+
+#ifndef cop_hints_fetch_pvs
+#define cop_hints_fetch_pvs(cop, key, flags) \
+    Perl_refcounted_he_fetch(aTHX_ (cop)->cop_hints_hash, NULL, STR_WITH_LEN(key), (flags), 0)
+#endif
+
 static int
 check_die_on_overflow_hint(pTHX) {
-    // const PERL_CONTEXT *cx = caller_cx(0, NULL);
-    // SV *hint = cop_hints_fetch_pvs(cx->blk_oldcop, "Math::Int64::die_on_overflow", 0);
     SV *hint = cop_hints_fetch_pvs(PL_curcop, "Math::Int64::die_on_overflow", 0);
     return (hint && SvTRUE(hint));
 }
 
-//#define die_on_overflow if (may_die_on_overflow && check_die_on_overflow_hint(aTHX))
+#else
+
+static int
+check_die_on_overflow_hint(pTHX) {
+    return 1;
+}
+
+#endif
 
 static void
 overflow(pTHX_ char *msg) {
