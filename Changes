@@ -1,6 +1,7 @@
 Revision history for Perl extension Math::Int64.
 
 0.18_02  Dec 20, 2011
+        - make it run in perls 5.8, 5.10 and 5.12
         - several doc corrections
         - document die_on_overflow.pm
 
