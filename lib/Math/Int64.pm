@@ -313,6 +313,9 @@ The pragma can also be activated as follows:
 Once this pragma is used, several Math::Int64 operations may become
 slower. Deactivating the pragma will not make them fast again.
 
+On Perl 5.8.x, as lexical pragmas support is not available, the pragma
+C<die_on_overflow> pragma is global and can not be deactivated.
+
 =head2 Fallback to native 64bit support if available
 
 If the tag C<:native_if_available> is added to the import list and the
