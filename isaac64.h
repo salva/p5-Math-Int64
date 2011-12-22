@@ -61,7 +61,11 @@ void randinit(int flag) {
     int  i;
     uint64_t a,b,c,d,e,f,g,h;
     aa=bb=cc=(uint64_t)0;
-    a=b=c=d=e=f=g=h=0x9e3779b97f4a7c13LL;  /* the golden ratio */
+#ifdef _MSC_VER
+    a=b=c=d=e=f=g=h=0x9e3779b97f4a7c13;     /* the golden ratio */
+#else
+    a=b=c=d=e=f=g=h=0x9e3779b97f4a7c13LLU;  /* the golden ratio */
+#endif
 
     for (i=0; i<4; ++i)                    /* scramble it */
     {
