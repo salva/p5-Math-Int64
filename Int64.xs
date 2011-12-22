@@ -192,10 +192,32 @@ SvI64(pTHX_ SV *sv) {
         if (si64 && (SvTYPE(si64) >= SVt_I64)) {
             if (sv_isa(sv, "Math::Int64"))
                 return *(int64_t*)(&(SvI64Y(si64)));
-            if (sv_isa(sv, "Math::UInt64")) {
+            else if (sv_isa(sv, "Math::UInt64")) {
                 uint64_t u = *(uint64_t*)(&(SvI64Y(si64)));
                 if (may_die_on_overflow && (u > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
                 return u;
+            }
+            else {
+                GV *method = gv_fetchmethod(SvSTASH(si64), "as_int64");
+                if (method) {
+                    SV *result;
+                    int count;
+                    dSP;
+                    ENTER;
+                    SAVETMPS;
+                    PUSHMARK(SP);
+                    XPUSHs(sv);
+                    PUTBACK;
+                    count = perl_call_sv( (SV*)method, G_SCALAR );
+                    SPAGAIN;
+                    if (count != 1)
+                        Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
+                    result = newSVsv(POPs);
+                    PUTBACK;
+                    FREETMPS;
+                    LEAVE;
+                    return SvI64(aTHX_ sv_2mortal(result));
+                }
             }
         }
     }
