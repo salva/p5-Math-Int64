@@ -49,12 +49,12 @@ sub import {
         Math::Int64::die_on_overflow->import;
     }
 
-    if ($pragmas{native_if_available} and _backend eq 'IV') {
-        $native{$_} = 1 for grep Math::Int64::Native->can($_), @subs;
+    if ($pragmas{native_if_available}) {
+        require Math::Int64::native_if_available;
+        Math::Int64::native_if_available->import;
     }
-    # warn "native: ".join(", ", keys %native);
-    Math::Int64::Native->export_to_level(1, $pkg, grep $native{$_}, @subs);
-    Math::Int64->export_to_level(1, $pkg, grep !$native{$_}, @subs);
+
+    Math::Int64->export_to_level(1, $pkg, @subs);
 }
 
 use overload ( '+' => \&_add,
@@ -123,21 +123,6 @@ use overload ( '+' => \&_add,
                '""' => \&_string,
                '=' => \&_clone,
                fallback => 1 );
-
-package Math::Int64::Native;
-
-use Carp;
-
-our @ISA = qw(Exporter);
-our @EXPORT_OK = @Math::Int64::EXPORT_OK;
-
-#*int64_to_number = \&Math::Int64::int64_to_number;
-#*int64_to_net = \&Math::Int64::int64_to_net;
-#*int64_to_native = \&Math::Int64::int64_to_native;
-
-#*uint64_to_number = \&Math::Int64::int64_to_number;
-#*uint64_to_net = \&Math::Int64::uint64_to_net;
-#*uint64_to_native = \&Math::Int64::uint64_to_native;
 
 1;
 
@@ -318,22 +303,38 @@ C<die_on_overflow> pragma is global and can not be deactivated.
 
 =head2 Fallback to native 64bit support if available
 
-If the tag C<:native_if_available> is added to the import list and the
-version of perl used has native support for 64bit integers, the
-functions exported by the module to create 64bit integers will return
-regular perl scalars.
+If the lexical pragma C<Math::Int64::native_if_available> is used in
+your program and the version of perl in use has native support for
+64bit intgers, the functions imported from the module that create
+64bit integers (i.e. C<uint64>, C<int64>, C<string_to_int64>,
+C<native_to_int64>, etc.) will return regular perl scalars.
 
-Usage example:
+For instance:
 
-  use Math::Int64 qw( :native_if_available int64 );
+  use Math::Int64 qw(int64);
+
+  $a = int64(34); # always returns an object of the class Math::Int64
+
+  use Math::Int64::native_if_available;
+  $a = int64(34); # returns a regular scalar on perls compiled with
+                  # 64bit support
 
 This feature is not enabled by default because the semantics for perl
 scalars and for 64 bit integers as implemented in this module are not
-identical. Perl is prone to coerze integers into floats while this
-module keeps then always as 64bit integers. Specifically, the division
-operation and overflows are the most problematic cases.
+identical.
+
+Perl is prone to coerze integers into floats while this module keeps
+then always as 64bit integers. Specifically, the division operation
+and overflows are the most problematic cases.
 
 Besides that, in most situations it is safe to use the native fallback.
+
+As happens with the C<die_on_overflow> pragma, on Perl 5.8.x it is
+global.
+
+The pragma can also be activated as follows:
+
+  use Math::Int64 ':native_if_available';
 
 =head2 C API
 

@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.18_03
+        - make native_if_available a lexical pragma, there is some
+          risk of breaking code using this pragma selectively on 5.8.x
+          perls
+
 0.18_02  Dec 20, 2011
         - make it run in perls 5.8, 5.10 and 5.12
         - several doc corrections
