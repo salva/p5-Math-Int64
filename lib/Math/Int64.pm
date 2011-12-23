@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.18_02';
+    our $VERSION = '0.18_03';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -335,6 +335,16 @@ global.
 The pragma can also be activated as follows:
 
   use Math::Int64 ':native_if_available';
+
+=head2 Transparent conversion of objects to int64/uint64
+
+When in some operation involving int64/uint64 numbers, a blessed
+object is passed as an operand, the module would try to coerce the
+object into an int64/uint64 number calling the methods
+C<as_int64>/C<as_uint64> respectively.
+
+If the corresponding method is not implemented, the object will be
+stringified and then parsed as a base 10 number.
 
 =head2 C API
 

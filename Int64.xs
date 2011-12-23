@@ -188,37 +188,36 @@ SvI64(pTHX_ SV *sv) {
         return nv;
     }
     if (SvROK(sv)) {
+        GV *method;
         SV *si64 = SvRV(sv);
         if (si64 && (SvTYPE(si64) >= SVt_I64)) {
             if (sv_isa(sv, "Math::Int64"))
                 return *(int64_t*)(&(SvI64Y(si64)));
-            else if (sv_isa(sv, "Math::UInt64")) {
+            if (sv_isa(sv, "Math::UInt64")) {
                 uint64_t u = *(uint64_t*)(&(SvI64Y(si64)));
                 if (may_die_on_overflow && (u > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
                 return u;
             }
-            else {
-                GV *method = gv_fetchmethod(SvSTASH(si64), "as_int64");
-                if (method) {
-                    SV *result;
-                    int count;
-                    dSP;
-                    ENTER;
-                    SAVETMPS;
-                    PUSHMARK(SP);
-                    XPUSHs(sv);
-                    PUTBACK;
-                    count = perl_call_sv( (SV*)method, G_SCALAR );
-                    SPAGAIN;
-                    if (count != 1)
-                        Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
-                    result = newSVsv(POPs);
-                    PUTBACK;
-                    FREETMPS;
-                    LEAVE;
-                    return SvI64(aTHX_ sv_2mortal(result));
-                }
-            }
+        }
+        method = gv_fetchmethod(SvSTASH(si64), "as_int64");
+        if (method) {
+            SV *result;
+            int count;
+            dSP;
+            ENTER;
+            SAVETMPS;
+            PUSHMARK(SP);
+            XPUSHs(sv);
+            PUTBACK;
+            count = perl_call_sv( (SV*)method, G_SCALAR );
+            SPAGAIN;
+            if (count != 1)
+                Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
+            result = newSVsv(POPs);
+            PUTBACK;
+            FREETMPS;
+            LEAVE;
+            return SvI64(aTHX_ sv_2mortal(result));
         }
     }
     return strtoint64(aTHX_ SvPV_nolen(sv), 10, 1);
@@ -246,6 +245,7 @@ SvU64(pTHX_ SV *sv) {
         return nv;
     }
     if (SvROK(sv)) {
+        GV *method;
         SV *su64 = SvRV(sv);
         if (su64 && (SvTYPE(su64) >= SVt_I64)) {
             if (sv_isa(sv, "Math::UInt64"))
@@ -255,6 +255,26 @@ SvU64(pTHX_ SV *sv) {
                 if (may_die_on_overflow && (i < 0)) overflow(aTHX_ out_of_bounds_error_u);
                 return i;
             }
+        }
+        method = gv_fetchmethod(SvSTASH(su64), "as_uint64");
+        if (method) {
+            SV *result;
+            int count;
+            dSP;
+            ENTER;
+            SAVETMPS;
+            PUSHMARK(SP);
+            XPUSHs(sv);
+            PUTBACK;
+            count = perl_call_sv( (SV*)method, G_SCALAR );
+            SPAGAIN;
+            if (count != 1)
+                Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
+            result = newSVsv(POPs);
+            PUTBACK;
+            FREETMPS;
+            LEAVE;
+            return SvU64(aTHX_ sv_2mortal(result));
         }
     }
     return strtoint64(aTHX_ SvPV_nolen(sv), 10, 0);
@@ -1218,8 +1238,8 @@ mu64_mul(self, other, rev)
     SV *other
     SV *rev
 CODE:
-    int64_t a = SvI64x(self);
-    int64_t b = SvI64(aTHX_ other);
+    int64_t a = SvU64x(self);
+    int64_t b = SvU64(aTHX_ other);
     if (may_die_on_overflow) {
         if (a < b) {
             uint64_t tmp = a;
@@ -1317,11 +1337,11 @@ CODE:
     uint64_t a;
     uint64_t b;
     if (SvTRUE(rev)) {
-        a = SvI64(aTHX_ other);
+        a = SvU64(aTHX_ other);
         b = SvU64x(self);
     }
     else {
-        a = SvI64x(self);
+        a = SvU64x(self);
         b = SvU64(aTHX_ other);
     }
     if (may_die_on_overflow) {
@@ -1346,11 +1366,11 @@ CODE:
     uint64_t a;
     uint64_t b;
     if (SvTRUE(rev)) {
-        a = SvI64(aTHX_ other);
+        a = SvU64(aTHX_ other);
         b = SvU64x(self);
     }
     else {
-        a = SvI64x(self);
+        a = SvU64x(self);
         b = SvU64(aTHX_ other);
     }
     if ( may_die_on_overflow && (b > 64)) overflow(aTHX_ right_b_error);

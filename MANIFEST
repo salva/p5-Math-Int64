@@ -14,6 +14,7 @@ t/Math-Int64.t
 t/Math-UInt64-Native.t
 t/Math-UInt64.t
 t/pods.t
+t/as_int64.t
 t/die_on_overflow.t
 c_api/perl_math_int64.c
 c_api/perl_math_int64.h
