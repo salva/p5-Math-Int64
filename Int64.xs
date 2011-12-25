@@ -204,13 +204,14 @@ SvI64(pTHX_ SV *sv) {
         }
     }
     else {
-        if (SvIOK_UV(sv)) {
-            UV uv = SvUV(sv);
-            if (may_die_on_overflow &&
-                (uv > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
-            return uv;
-        }
+        SvGETMAGIC(sv);
         if (SvIOK(sv)) {
+            if (SvIOK_UV(sv)) {
+                UV uv = SvUV(sv);
+                if (may_die_on_overflow &&
+                    (uv > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
+                return uv;
+            }
             return SvIV(sv);
         }
         if (SvNOK(sv)) {
@@ -262,14 +263,17 @@ SvU64(pTHX_ SV *sv) {
         }
     }
     else {
-        if (SvIOK_UV(sv)) {
-            return SvUV(sv);
-        }
+        SvGETMAGIC(sv);
         if (SvIOK(sv)) {
-            IV iv = SvIV(sv);
-            if (may_die_on_overflow &&
-                (iv < 0) ) overflow(aTHX_ out_of_bounds_error_u);
-            return SvIV(sv);
+            if (SvIOK_UV(sv)) {
+                return SvUV(sv);
+            }
+            else {
+                IV iv = SvIV(sv);
+                if (may_die_on_overflow &&
+                    (iv < 0) ) overflow(aTHX_ out_of_bounds_error_u);
+                return SvIV(sv);
+            }
         }
         if (SvNOK(sv)) {
             NV nv = SvNV(sv);
