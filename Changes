@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.18_05
+        - add limits constants
+
 0.18_04  Dec 25, 2011
         - optimize SV to int64/uint64 conversions
         - switch perl stack before calling as_int64/as_uint64 methods
