@@ -206,6 +206,7 @@ SvI64(pTHX_ SV *sv) {
             dSP;
             ENTER;
             SAVETMPS;
+            PUSHSTACKi(PERLSI_MAGIC);
             PUSHMARK(SP);
             XPUSHs(sv);
             PUTBACK;
@@ -215,6 +216,8 @@ SvI64(pTHX_ SV *sv) {
                 Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
             result = newSVsv(POPs);
             PUTBACK;
+            POPSTACK;
+            SPAGAIN;
             FREETMPS;
             LEAVE;
             return SvI64(aTHX_ sv_2mortal(result));
@@ -263,6 +266,7 @@ SvU64(pTHX_ SV *sv) {
             dSP;
             ENTER;
             SAVETMPS;
+            PUSHSTACKi(PERLSI_MAGIC);
             PUSHMARK(SP);
             XPUSHs(sv);
             PUTBACK;
@@ -272,6 +276,8 @@ SvU64(pTHX_ SV *sv) {
                 Perl_croak(aTHX_ "internal error: method call returned %d values, 1 expected", count);
             result = newSVsv(POPs);
             PUTBACK;
+            POPSTACK;
+            SPAGAIN;
             FREETMPS;
             LEAVE;
             return SvU64(aTHX_ sv_2mortal(result));
