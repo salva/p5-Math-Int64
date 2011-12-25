@@ -167,24 +167,6 @@ SvSU64(pTHX_ SV *sv) {
 
 static int64_t
 SvI64(pTHX_ SV *sv) {
-    if (!SvOK(sv)) {
-        return 0;
-    }
-    if (SvIOK_UV(sv)) {
-        UV uv = SvUV(sv);
-        if (may_die_on_overflow &&
-            (uv > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
-        return uv;
-    }
-    if (SvIOK(sv)) {
-        return SvIV(sv);
-    }
-    if (SvNOK(sv)) {
-        NV nv = SvNV(sv);
-        if (may_die_on_overflow &&
-            ((nv >= 0x1p63) || (nv < -0x1p63))) overflow(aTHX_ out_of_bounds_error_s);
-        return nv;
-    }
     if (SvROK(sv)) {
         GV *method;
         SV *si64 = SvRV(sv);
@@ -221,30 +203,28 @@ SvI64(pTHX_ SV *sv) {
             return SvI64(aTHX_ sv_2mortal(result));
         }
     }
+    else {
+        if (SvIOK_UV(sv)) {
+            UV uv = SvUV(sv);
+            if (may_die_on_overflow &&
+                (uv > INT64_MAX)) overflow(aTHX_ out_of_bounds_error_s);
+            return uv;
+        }
+        if (SvIOK(sv)) {
+            return SvIV(sv);
+        }
+        if (SvNOK(sv)) {
+            NV nv = SvNV(sv);
+            if (may_die_on_overflow &&
+                ((nv >= 0x1p63) || (nv < -0x1p63))) overflow(aTHX_ out_of_bounds_error_s);
+            return nv;
+        }
+    }
     return strtoint64(aTHX_ SvPV_nolen(sv), 10, 1);
 }
 
 static uint64_t
 SvU64(pTHX_ SV *sv) {
-    if (!SvOK(sv)) {
-        return 0;
-    }
-    if (SvIOK_UV(sv)) {
-        return SvUV(sv);
-    }
-    if (SvIOK(sv)) {
-        IV iv = SvIV(sv);
-        if (may_die_on_overflow &&
-            (iv < 0) ) overflow(aTHX_ out_of_bounds_error_u);
-        return SvIV(sv);
-    }
-    if (SvNOK(sv)) {
-        NV nv = SvNV(sv);
-        // fprintf(stderr, "        nv: %15f\nuint64_max: %15f\n", nv, (NV)UINT64_MAX);
-        if (may_die_on_overflow &&
-            ( (nv < 0) || (nv >= 0x1p64) ) ) overflow(aTHX_ out_of_bounds_error_u);
-        return nv;
-    }
     if (SvROK(sv)) {
         GV *method;
         SV *su64 = SvRV(sv);
@@ -279,6 +259,24 @@ SvU64(pTHX_ SV *sv) {
             FREETMPS;
             LEAVE;
             return SvU64(aTHX_ sv_2mortal(result));
+        }
+    }
+    else {
+        if (SvIOK_UV(sv)) {
+            return SvUV(sv);
+        }
+        if (SvIOK(sv)) {
+            IV iv = SvIV(sv);
+            if (may_die_on_overflow &&
+                (iv < 0) ) overflow(aTHX_ out_of_bounds_error_u);
+            return SvIV(sv);
+        }
+        if (SvNOK(sv)) {
+            NV nv = SvNV(sv);
+            // fprintf(stderr, "        nv: %15f\nuint64_max: %15f\n", nv, (NV)UINT64_MAX);
+            if (may_die_on_overflow &&
+                ( (nv < 0) || (nv >= 0x1p64) ) ) overflow(aTHX_ out_of_bounds_error_u);
+            return nv;
         }
     }
     return strtoint64(aTHX_ SvPV_nolen(sv), 10, 0);
