@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.18_04
+        - switch perl stack before calling as_int64/as_uint64 methods
+
 0.18_03  Dec 23, 2011
         - uint64 multiplication and shift operations were broken,
           corrected
