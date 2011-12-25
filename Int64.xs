@@ -8,8 +8,6 @@
 
 #include "ppport.h"
 
-static HV *package_int64_stash;
-static HV *package_uint64_stash;
 static HV *capi_hash;
 
 static int may_die_on_overflow;
@@ -125,7 +123,7 @@ newSVi64(pTHX_ int64_t i64) {
     *(int64_t*)(&(SvI64Y(si64))) = i64;
     SvI64_onY(si64);
     sv = newRV_noinc(si64);
-    sv_bless(sv, package_int64_stash);
+    sv_bless(sv, gv_stashpvs("Math::Int64", TRUE));
     return sv;
 }
 
@@ -137,7 +135,7 @@ newSVu64(pTHX_ uint64_t u64) {
     *(int64_t*)(&(SvI64Y(su64))) = u64;
     SvI64_onY(su64);
     sv = newRV_noinc(su64);
-    sv_bless(sv, package_uint64_stash);
+    sv_bless(sv, gv_stashpvs("Math::UInt64", TRUE));
     return sv;
 }
 
@@ -351,12 +349,9 @@ i64_to_string(pTHX_ int64_t i64, int base) {
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
-
 BOOT:
     may_die_on_overflow = 0;
     may_use_native = 0;
-    package_int64_stash = gv_stashsv(newSVpv("Math::Int64", 0), TRUE);
-    package_uint64_stash = gv_stashsv(newSVpv("Math::UInt64", 0), TRUE);
     capi_hash = get_hv("Math::Int64::C_API", TRUE|GV_ADDMULTI);
     hv_stores(capi_hash, "version", newSViv(1));
     hv_stores(capi_hash, "newSVi64", newSViv(PTR2IV(&newSVi64)));
