@@ -10,7 +10,7 @@
 
 #define MATH_INT64_VERSION 1
 
-#if (defined(MATH_INT64_NATIVE_IF_AVAILABLE) && (IVSIZE >= 8))
+#if (defined(MATH_INT64_NATIVE_IF_AVAILABLE) && (IVSIZE == 8))
 #define MATH_INT64_NATIVE 1
 #endif
 
