@@ -1,6 +1,7 @@
 Revision history for Perl extension Math::Int64.
 
-0.18_05
+0.19  Jun 1, 2012
+        - do not overflow on shifts
         - add limits constants
 
 0.18_04  Dec 25, 2011

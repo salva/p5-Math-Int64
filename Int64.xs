@@ -944,7 +944,7 @@ CODE:
         RETVAL = newSVi64(aTHX_ (b > 64 ? 0 : (a << b)));
     else {
         RETVAL = SvREFCNT_inc(self);
-        SvI64x(self) = (b > 64 ? 0 : (a << b)));
+        SvI64x(self) = (b > 64 ? 0 : (a << b));
     }
 OUTPUT:
     RETVAL

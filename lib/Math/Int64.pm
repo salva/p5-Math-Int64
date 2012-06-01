@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.18_04';
+    our $VERSION = '0.19';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -483,7 +483,7 @@ L<Math::BigInt::GMP>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright E<copy> 2007, 2009, 2011 by Salvador FandiE<ntilde>o
+Copyright E<copy> 2007, 2009, 2011, 2012 by Salvador FandiE<ntilde>o
 (sfandino@yahoo.com)
 
 This library is free software; you can redistribute it and/or modify

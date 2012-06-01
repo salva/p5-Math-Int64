@@ -84,9 +84,9 @@ test_no_overflow { $u2_31 * $u2_32 } 'overflow - mul 31x32';
 test_overflow { $u2_32 * $u2_32 } 'overflow - mul 32x32';
 test_overflow { $u2_40 * $u2_30 } 'overflow - mul 40x30';
 
-test_overflow { $u2_0 << 64 } 'overflow - left shift 1 << 64';
-test_overflow { $s2_0 << 64 } 'overflow - left shift 1 << 64, signed';
-test_overflow { $s2_0 << 63 } 'overflow - left shift 1 << 63, signed';
+test_no_overflow { $u2_0 << 64 } 'overflow - left shift 1 << 64';
+test_no_overflow { $s2_0 << 64 } 'overflow - left shift 1 << 64, signed';
+test_no_overflow { $s2_0 << 63 } 'overflow - left shift 1 << 63, signed';
 test_no_overflow { $s2_0 << 62 } 'overflow - left shift 1 << 62, signed';
 
 
