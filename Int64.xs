@@ -250,10 +250,10 @@ SvI64(pTHX_ SV *sv) {
             NV nv = SvNV(sv);
             if (may_die_on_overflow) {
 #ifdef _MSC_VER
-	      int64_t i64 = nv;
-	      if ((NV)i64 != nv) overflow(aTHX_ out_of_bounds_error_s);
+                int64_t i64 = nv;
+                if ((NV)i64 != nv) overflow(aTHX_ out_of_bounds_error_s);
 #else
-	      if ((nv >= 0x1p63) || (nv < -0x1p63)) overflow(aTHX_ out_of_bounds_error_s);
+                if ((nv >= 0x1p63) || (nv < -0x1p63)) overflow(aTHX_ out_of_bounds_error_s);
 #endif
 	    }
             return nv;
@@ -752,9 +752,9 @@ CODE:
         /* make the seed endianness agnostic */
         for (i = 0; i < RANDSIZ; i++) {
             char *p = shadow + i * sizeof(uint64_t);
-            randrsl[i] = (((((((((((((uint64_t)p[0] << 8) + p[1]) << 8) + p[2]) << 8) + p[3]) << 8) +
-                                               p[4] << 8) + p[5]) << 8) + p[6]) << 8) + p[7];
-        }
+            randrsl[i] = (((((((((((((((uint64_t)p[0]) << 8) + p[1]) << 8) + p[2]) << 8) + p[3]) << 8) +
+                               p[4]) << 8) + p[5]) << 8) + p[6]) << 8) + p[7];
+    }
         randinit(1);
     }
     else
@@ -1604,7 +1604,7 @@ mu64_neg(self, other, rev)
     SV *other = NO_INIT
     SV *rev = NO_INIT
 CODE:
-    RETVAL = newSVu64(aTHX_ -SvU64x(self));
+    RETVAL = newSVu64(aTHX_ ~(SvU64x(self)-1));
 OUTPUT:
     RETVAL
 
