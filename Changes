@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.20  Jun 3, 2012
+        - several fixes for MS compiler (bug reports and testing by
+          bulk88 at PerlMonks)
+        - native_to_uint64 was broken
+
 0.19  Jun 1, 2012
         - do not overflow on shifts
         - add limits constants
