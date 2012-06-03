@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::More tests => 35;
+use Test::More tests => 47;
 
 use Math::Int64 qw(uint64 uint64_to_number
                    net_to_uint64 uint64_to_net
@@ -93,3 +93,31 @@ ok (int(log(uint64(1)<<50)/log(2)+0.001) == 50);
 my $l = uint64("1271310319617");
 
 is ("$l", "1271310319617", "string to/from int64 conversion");
+
+ok (native_to_uint64(uint64_to_native(1)) == 1);
+
+ok (native_to_uint64(uint64_to_native(0)) == 0);
+
+ok (native_to_uint64(uint64_to_native(12343)) == 12343);
+
+ok (native_to_uint64(uint64_to_native($l)) == $l);
+
+# 40
+
+ok (native_to_uint64(uint64_to_native($j)) == $j);
+
+ok (native_to_uint64(uint64_to_native($i)) == $i);
+
+ok (net_to_uint64(uint64_to_net(1)) == 1);
+
+ok (net_to_uint64(uint64_to_net(0)) == 0);
+
+ok (net_to_uint64(uint64_to_net(12343)) == 12343);
+
+# 45
+
+ok (net_to_uint64(uint64_to_net($l)) == $l);
+
+ok (net_to_uint64(uint64_to_net($j)) == $j);
+
+ok (net_to_uint64(uint64_to_net($i)) == $i);

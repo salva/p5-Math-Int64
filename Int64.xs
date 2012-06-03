@@ -598,7 +598,7 @@ CODE:
         Copy(pv, &(SvUVX(RETVAL)), 8, char);
     }
     else {
-        newSVu64(aTHX_ 0);
+        RETVAL = newSVu64(aTHX_ 0);
         Copy(pv, &(SvU64X(RETVAL)), 8, char);
     }
 OUTPUT:
