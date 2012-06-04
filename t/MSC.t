@@ -12,4 +12,4 @@ my $nv = uint64_to_number($u);
 
 ok($nv > 0, "uint64 to NV conversion");
 ok($nv == (0xff00 * 0x10000 * 0x10000 * 0x10000), "uint64 to NV conversion 2");
-ok($nv == $u, "uint64 to NV conversion 3");
+ok($nv == $u, "uint64 to NV conversion 3") or diag ("nv converts to uint64 as " . uint64($nv) . ", expected: $u");
