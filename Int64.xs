@@ -790,7 +790,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_add(self, other, rev)
+mi64_add(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -813,7 +813,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_sub(self, other, rev)
+mi64_sub(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -840,7 +840,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_mul(self, other, rev)
+mi64_mul(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -884,7 +884,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_div(self, other, rev)
+mi64_div(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -917,7 +917,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_rest(self, other, rev)
+mi64_rest(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -949,7 +949,7 @@ CODE:
 OUTPUT:
     RETVAL
 
-SV *mi64_left(self, other, rev)
+SV *mi64_left(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -975,7 +975,7 @@ CODE:
 OUTPUT:
     RETVAL
 
-SV *mi64_right(self, other, rev)
+SV *mi64_right(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1001,7 +1001,7 @@ OUTPUT:
     RETVAL
 
 int
-mi64_spaceship(self, other, rev)
+mi64_spaceship(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1046,7 +1046,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_gtn(self, other, rev)
+mi64_gtn(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1059,7 +1059,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_ltn(self, other, rev)
+mi64_ltn(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1072,7 +1072,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_gen(self, other, rev)
+mi64_gen(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1085,7 +1085,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_len(self, other, rev)
+mi64_len(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1098,7 +1098,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_and(self, other, rev)
+mi64_and(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1114,7 +1114,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_or(self, other, rev)
+mi64_or(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1130,7 +1130,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_xor(self, other, rev)
+mi64_xor(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1243,7 +1243,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_add(self, other, rev)
+mu64_add(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1262,7 +1262,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_sub(self, other, rev)
+mu64_sub(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1288,7 +1288,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_mul(self, other, rev)
+mu64_mul(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1318,7 +1318,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_div(self, other, rev)
+mu64_div(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1351,7 +1351,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_rest(self, other, rev)
+mu64_rest(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1383,7 +1383,7 @@ CODE:
 OUTPUT:
     RETVAL
 
-SV *mu64_left(self, other, rev)
+SV *mu64_left(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1408,7 +1408,7 @@ CODE:
 OUTPUT:
     RETVAL
 
-SV *mu64_right(self, other, rev)
+SV *mu64_right(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1434,7 +1434,7 @@ OUTPUT:
     RETVAL
 
 int
-mu64_spaceship(self, other, rev)
+mu64_spaceship(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1479,7 +1479,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_gtn(self, other, rev)
+mu64_gtn(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1492,7 +1492,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_ltn(self, other, rev)
+mu64_ltn(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1505,7 +1505,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_gen(self, other, rev)
+mu64_gen(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1518,7 +1518,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_len(self, other, rev)
+mu64_len(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1531,7 +1531,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_and(self, other, rev)
+mu64_and(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1547,7 +1547,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_or(self, other, rev)
+mu64_or(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
@@ -1563,7 +1563,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_xor(self, other, rev)
+mu64_xor(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
