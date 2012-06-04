@@ -330,7 +330,6 @@ SvU64(pTHX_ SV *sv) {
         }
         if (SvNOK(sv)) {
             NV nv = SvNV(sv);
-            // fprintf(stderr, "        nv: %15f\nuint64_max: %15f\n", nv, (NV)UINT64_MAX);
             if (may_die_on_overflow &&
                 ( (nv < 0) || (nv >= NV_0x1p64)) ) overflow(aTHX_ out_of_bounds_error_u);
             return nv;
@@ -970,9 +969,10 @@ SV *mi64_right(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
-CODE:
+PREINIT:
     int64_t a;
     uint64_t b;
+CODE:
     if (SvTRUE(rev)) {
         a = SvI64(aTHX_ other);
         b = SvU64x(self);
@@ -1238,9 +1238,11 @@ mu64_add(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
+PREINIT:
+    uint64_t a, b;
 CODE:
-    uint64_t a = SvU64x(self);
-    uint64_t b = SvU64(aTHX_ other);
+    a = SvU64x(self);
+    b = SvU64(aTHX_ other);
     if (may_die_on_overflow && (UINT64_MAX - a < b)) overflow(aTHX_ add_error);
     if (SvOK(rev)) 
         RETVAL = newSVu64(aTHX_ a + b);
@@ -1283,9 +1285,11 @@ mu64_mul(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
+PREINIT:
+    uint64_t a, b;
 CODE:
-    int64_t a = SvU64x(self);
-    int64_t b = SvU64(aTHX_ other);
+    a = SvU64x(self);
+    b = SvU64(aTHX_ other);
     if (may_die_on_overflow) {
         if (a < b) {
             uint64_t tmp = a;
@@ -1314,8 +1318,7 @@ mu64_div(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    uint64_t up;
-    uint64_t down;
+    uint64_t up, down;
 CODE:
     if (SvOK(rev)) {
         if (SvTRUE(rev)) {
@@ -1378,9 +1381,9 @@ SV *mu64_left(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
+PREINIT:
+    uint64_t a, b;
 CODE:
-    uint64_t a;
-    uint64_t b;
     if (SvTRUE(rev)) {
         a = SvU64(aTHX_ other);
         b = SvU64x(self);
@@ -1403,9 +1406,9 @@ SV *mu64_right(self, other, rev = &PL_sv_no)
     SV *self
     SV *other
     SV *rev
+PREINIT:
+    uint64_t a, b;
 CODE:
-    uint64_t a;
-    uint64_t b;
     if (SvTRUE(rev)) {
         a = SvU64(aTHX_ other);
         b = SvU64x(self);

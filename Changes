@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.23  Jun 4, 2012
+       - multiplication of uint64 values was broken for very large
+         operands
+       - place local variables inside PREINIT blocks in XS code
+
 0.22  Jun 4, 2012
        - more fixes for MS compiler
        - test for uint64 to NV conversions added
