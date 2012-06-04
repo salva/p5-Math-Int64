@@ -764,7 +764,7 @@ MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=mi64
 PROTOTYPES: DISABLE
 
 SV *
-mi64_inc(self, other, rev)
+mi64_inc(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -777,7 +777,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_dec(self, other, rev)
+mi64_dec(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1022,7 +1022,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_eqn(self, other, rev)
+mi64_eqn(self, other, rev = NULL)
     SV *self
     SV *other
     SV *rev = NO_INIT
@@ -1034,7 +1034,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_nen(self, other, rev)
+mi64_nen(self, other, rev = NULL)
     SV *self
     SV *other
     SV *rev = NO_INIT
@@ -1146,7 +1146,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_not(self, other, rev)
+mi64_not(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1156,7 +1156,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_bnot(self, other, rev)
+mi64_bnot(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1166,7 +1166,7 @@ OUTPUT:
     RETVAL    
 
 SV *
-mi64_neg(self, other, rev)
+mi64_neg(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1176,7 +1176,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_bool(self, other, rev)
+mi64_bool(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1186,7 +1186,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_number(self, other, rev)
+mi64_number(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1196,7 +1196,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_clone(self, other, rev)
+mi64_clone(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1206,7 +1206,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mi64_string(self, other, rev)
+mi64_string(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1219,7 +1219,7 @@ MODULE = Math::Int64		PACKAGE = Math::UInt64		PREFIX=mu64
 PROTOTYPES: DISABLE
 
 SV *
-mu64_inc(self, other, rev)
+mu64_inc(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1231,7 +1231,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_dec(self, other, rev)
+mu64_dec(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1455,7 +1455,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_eqn(self, other, rev)
+mu64_eqn(self, other, rev = NULL)
     SV *self
     SV *other
     SV *rev = NO_INIT
@@ -1467,7 +1467,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_nen(self, other, rev)
+mu64_nen(self, other, rev = NULL)
     SV *self
     SV *other
     SV *rev = NO_INIT
@@ -1579,7 +1579,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_not(self, other, rev)
+mu64_not(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1589,7 +1589,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_bnot(self, other, rev)
+mu64_bnot(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1599,7 +1599,7 @@ OUTPUT:
     RETVAL    
 
 SV *
-mu64_neg(self, other, rev)
+mu64_neg(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1609,7 +1609,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_bool(self, other, rev)
+mu64_bool(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1619,7 +1619,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_number(self, other, rev)
+mu64_number(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1629,7 +1629,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_clone(self, other, rev)
+mu64_clone(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
@@ -1639,7 +1639,7 @@ OUTPUT:
     RETVAL
 
 SV *
-mu64_string(self, other, rev)
+mu64_string(self, other = NULL, rev = NULL)
     SV *self
     SV *other = NO_INIT
     SV *rev = NO_INIT
