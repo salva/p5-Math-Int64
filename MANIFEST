@@ -19,3 +19,4 @@ t/die_on_overflow.t
 c_api/perl_math_int64.c
 c_api/perl_math_int64.h
 c_api/typemap
+t/MSC.t

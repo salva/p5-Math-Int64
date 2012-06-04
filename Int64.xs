@@ -37,6 +37,11 @@ typedef unsigned __int64 uint64_t;
 
 #endif
 
+#define NV_0x1p31 ((NV)2147483648)
+#define NV_0x1p32 ((NV)4294967296)
+#define NV_0x1p63 (NV_0x1p32 * NV_0x1p31)
+#define NV_0x1p64 (NV_0x1p32 * NV_0x1p32)
+
 #if (PERL_VERSION >= 10)
 
 #ifndef cop_hints_fetch_pvs
@@ -73,8 +78,6 @@ check_use_native_hint(pTHX) {
 #define use_native may_use_native
 
 #endif
-
-
 
 static void
 overflow(pTHX_ char *msg) {
@@ -248,14 +251,8 @@ SvI64(pTHX_ SV *sv) {
         }
         if (SvNOK(sv)) {
             NV nv = SvNV(sv);
-            if (may_die_on_overflow) {
-#ifdef _MSC_VER
-                int64_t i64 = nv;
-                if ((NV)i64 != nv) overflow(aTHX_ out_of_bounds_error_s);
-#else
-                if ((nv >= 0x1p63) || (nv < -0x1p63)) overflow(aTHX_ out_of_bounds_error_s);
-#endif
-	    }
+            if ( may_die_on_overflow &&
+                 ((nv >= NV_0x1p63) || (nv < -NV_0x1p63)) ) overflow(aTHX_ out_of_bounds_error_s);
             return nv;
         }
     }
@@ -334,14 +331,8 @@ SvU64(pTHX_ SV *sv) {
         if (SvNOK(sv)) {
             NV nv = SvNV(sv);
             // fprintf(stderr, "        nv: %15f\nuint64_max: %15f\n", nv, (NV)UINT64_MAX);
-            if (may_die_on_overflow) {
-#ifdef _MSC_VER
-	      uint64_t u64 = nv;
-	      if ((NV)u64 != nv) overflow(aTHX_ out_of_bounds_error_u);
-#else
-	      if ((nv < 0) || (nv >= 0x1p64)) overflow(aTHX_ out_of_bounds_error_u);
-#endif
-	    }
+            if (may_die_on_overflow &&
+                ( (nv < 0) || (nv >= NV_0x1p64)) ) overflow(aTHX_ out_of_bounds_error_u);
             return nv;
         }
     }

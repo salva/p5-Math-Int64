@@ -1,5 +1,13 @@
 Revision history for Perl extension Math::Int64.
 
+0.22  Jun 4, 2012
+       - more fixes for MS compiler
+       - test for uint64 to NV conversions added
+
+0.21  Jun 4, 2012 
+       - make other and rev arguments optional for overloading methods
+         when possible so that they can be called directly
+
 0.20  Jun 3, 2012
         - several fixes for MS compiler (bug reports and testing by
           bulk88 at PerlMonks)
