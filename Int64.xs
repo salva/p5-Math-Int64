@@ -42,7 +42,7 @@ typedef unsigned __int64 uint64_t;
 
 #endif
 
-#if ((defined _MSV_VER) || (defined INT64_MY_NV2U64))
+#if ((defined _MSC_VER) || (defined INT64_MY_NV2U64))
 
 /* Old MS compilers do not implement the double->uint64 conversion and
  * silently do a double->int64 conversion instead. See
