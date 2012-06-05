@@ -1,6 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
-0.24 Jun 5, 2012
+0.25  Jun 5, 2012
+       - typo in preprocessor conditional solved.
+
+0.24  Jun 5, 2012
        - workaround bug on old MS compilers not implementing
          NV->uint64_t conversions and silently using NV->int64_t
          instead
