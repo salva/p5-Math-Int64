@@ -58,9 +58,9 @@ typedef unsigned __int64 uint64_t;
 static uint64_t
 nv2u64(NV nv) {
     if ((nv > 0.0) && (nv < NV_0x1p64)) {
-        unsigned long h = nv * NV_0x1p_32;
-        unsigned long l = nv - (NV)h * NV_0x1p32;
-        return (((uint64_t)h << 32) + l);
+        uint64_t h = nv * NV_0x1p_32;
+        uint64_t l = nv - (NV)h * NV_0x1p32;
+        return ((h << 32) + l);
     }
     return 0;
 }
