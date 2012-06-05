@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Math::Int64 qw(string_to_uint64 uint64_to_number);
+use Math::Int64 qw(string_to_uint64 uint64_to_number uint64);
 
 use Test::More tests => 3;
 

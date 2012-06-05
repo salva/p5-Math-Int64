@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.24
+       - workaround bug on old MS compilers not implementing
+         NV->uint64_t conversions and silently using NV->int64_t
+         instead
+
 0.23  Jun 4, 2012
        - multiplication of uint64 values was broken for very large
          operands

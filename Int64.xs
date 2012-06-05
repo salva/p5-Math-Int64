@@ -17,6 +17,11 @@ static int may_use_native;
 #include <stdint.h>
 #endif
 
+#define NV_0x1p31 ((NV)2147483648)
+#define NV_0x1p32 ((NV)4294967296)
+#define NV_0x1p63 (NV_0x1p32 * NV_0x1p31)
+#define NV_0x1p64 (NV_0x1p32 * NV_0x1p32)
+
 #ifdef _MSC_VER
 #include <stdlib.h>
 typedef __int64 int64_t;
@@ -37,10 +42,33 @@ typedef unsigned __int64 uint64_t;
 
 #endif
 
-#define NV_0x1p31 ((NV)2147483648)
-#define NV_0x1p32 ((NV)4294967296)
-#define NV_0x1p63 (NV_0x1p32 * NV_0x1p31)
-#define NV_0x1p64 (NV_0x1p32 * NV_0x1p32)
+#if ((defined _MSV_VER) || (defined INT64_MY_NV2U64))
+
+/* Old MS compilers do not implement the double->uint64 conversion and
+ * silently do a double->int64 conversion instead. See
+ * http://connect.microsoft.com/VisualStudio/feedback/details/270762/error-in-converting-double-to-unsigned-long-long */
+
+/* I don't trust atof, so I generate 2**-32 from simpler constants and
+ * hope the optimizer will do its work properly */
+
+#define NV_0x1p_4 ((NV)0.0625)
+#define NV_0x1p_16 (NV_0x1p_4 * NV_0x1p_4 * NV_0x1p_4 * NV_0x1p_4)
+#define NV_0x1p_32 (NV_0x1p_16 * NV_0x1p_16)
+
+static uint64_t
+nv2u64(NV nv) {
+    if ((nv > 0.0) && (nv < NV_0x1p64)) {
+        unsigned long h = nv * NV_0x1p_32;
+        unsigned long l = nv - (NV)h * NV_0x1p32;
+        return (((uint64_t)h << 32) + l);
+    }
+    return 0;
+}
+#define NV2U64(nv) nv2u64(nv)
+
+#else
+#define NV2U64(nv) ((uint64_t)(nv))
+#endif
 
 #if (PERL_VERSION >= 10)
 
@@ -332,7 +360,7 @@ SvU64(pTHX_ SV *sv) {
             NV nv = SvNV(sv);
             if (may_die_on_overflow &&
                 ( (nv < 0) || (nv >= NV_0x1p64)) ) overflow(aTHX_ out_of_bounds_error_u);
-            return nv;
+            return NV2U64(nv);
         }
     }
     return strtoint64(aTHX_ SvPV_nolen(sv), 10, 0);
