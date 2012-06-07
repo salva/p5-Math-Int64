@@ -59,15 +59,24 @@ static uint64_t
 nv2u64(NV nv) {
     if ((nv > 0.0) && (nv < NV_0x1p64)) {
         uint64_t h = nv * NV_0x1p_32;
-        uint64_t l = nv - (NV)h * NV_0x1p32;
+        uint64_t l = nv - (NV)(int64_t)h * NV_0x1p32;
         return ((h << 32) + l);
     }
     return 0;
 }
 #define NV2U64(nv) nv2u64(nv)
 
+static NV
+u642nv(uint64_t u64) {
+    unsigned long h = u64 >> 32;
+    unsigned long l = u64 & 0xffffffff;
+    return (NV_0x1p32 * h) + (NV)l;
+}
+# define U642NV(nv) u642nv(nv)
+
 #else
 #define NV2U64(nv) ((uint64_t)(nv))
+#define U642NV(u64) ((NV)(u64))
 #endif
 
 #if (PERL_VERSION >= 10)
@@ -388,7 +397,7 @@ su64_to_number(pTHX_ SV *sv) {
     UV uv = u64;
     if (uv == u64)
         return newSVuv(uv);
-    return newSVnv(u64);
+    return newSVnv(U642NV(u64));
 }
 
 #define I64STRLEN 65

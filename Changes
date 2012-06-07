@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+0.26  Jun 7, 2012
+       - solve another uint64->double conversion not supported by MS
+         compiler issue
+
 0.25  Jun 5, 2012
        - typo in preprocessor conditional solved.
 
