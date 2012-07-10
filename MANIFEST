@@ -20,3 +20,7 @@ c_api/perl_math_int64.c
 c_api/perl_math_int64.h
 c_api/typemap
 t/MSC.t
+c_api.decl
+c_api.h
+templates/module_c.temp
+templates/module_h.temp

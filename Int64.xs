@@ -8,8 +8,6 @@
 
 #include "ppport.h"
 
-static HV *capi_hash;
-
 static int may_die_on_overflow;
 static int may_use_native;
 
@@ -434,21 +432,16 @@ i64_to_string(pTHX_ int64_t i64, int base) {
     return u64_to_string_with_sign(aTHX_ i64, base, 0);
 }
 
+#include "c_api.h"
+
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
 BOOT:
     may_die_on_overflow = 0;
     may_use_native = 0;
-    capi_hash = get_hv("Math::Int64::C_API", TRUE|GV_ADDMULTI);
-    hv_stores(capi_hash, "version", newSViv(1));
-    hv_stores(capi_hash, "newSVi64", newSViv(PTR2IV(&newSVi64)));
-    hv_stores(capi_hash, "newSVu64", newSViv(PTR2IV(&newSVu64)));
-    hv_stores(capi_hash, "SvI64", newSViv(PTR2IV(&SvI64)));
-    hv_stores(capi_hash, "SvU64", newSViv(PTR2IV(&SvU64)));
-    hv_stores(capi_hash, "SvI64OK", newSViv(PTR2IV(&SvI64OK)));
-    hv_stores(capi_hash, "SvU64OK", newSViv(PTR2IV(&SvU64OK)));
     randinit(0);
+    INIT_C_API;
 
 char *
 miu64__backend()

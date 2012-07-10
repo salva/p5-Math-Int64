@@ -1,6 +1,7 @@
 Revision history for Perl extension Math::Int64.
 
 0.27_01
+       - generate C API using Module::CAPIMaker
        - do not overflow on shift operations
 
 0.26  Jun 7, 2012

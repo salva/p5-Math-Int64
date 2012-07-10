@@ -1,0 +1,13 @@
+
+module_version = 2
+required_version = 1
+
+module_h_template_filename = templates/module_h.temp
+module_c_template_filename = templates/module_c.temp
+
+SV *     newSVi64 (pTHX_ int64_t)
+SV *     newSVu64 (pTHX_ uint64_t)
+int64_t  SvI64    (pTHX_ SV*)
+uint64_t SvU64    (pTHX_ SV*)
+int      SvI64OK  (pTHX_ SV*)
+int      SvU64OK  (pTHX_ SV*)
