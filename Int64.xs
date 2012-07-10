@@ -122,17 +122,14 @@ overflow(pTHX_ char *msg) {
         Perl_croak(aTHX_ "Math::Int64 overflow: %s", msg);
 }
 
-static char *out_of_bounds_error_s = "number is out of bounds for int64_t conversion";
-static char *out_of_bounds_error_u = "number is out of bounds for uint64_t conversion";
-static char *mul_error            = "multiplication overflows";
-static char *add_error            = "addition overflows";
-static char *sub_error            = "subtraction overflows";
-static char *inc_error            = "increment operation wraps";
-static char *dec_error            = "decrement operation wraps";
-static char *left_b_error         = "left-shift right operand is out of bounds";
-static char *left_error           = "left shift overflows";
-static char *right_b_error        = "right-shift right operand is out of bounds";
-static char *right_error          = "right shift overflows";
+static char *out_of_bounds_error_s = "Number is out of bounds for int64_t conversion";
+static char *out_of_bounds_error_u = "Number is out of bounds for uint64_t conversion";
+static char *mul_error             = "Multiplication overflows";
+static char *add_error             = "Addition overflows";
+static char *sub_error             = "Subtraction overflows";
+static char *inc_error             = "Increment operation wraps";
+static char *dec_error             = "Decrement operation wraps";
+static char *div_by_0_error        = "Illegal division by zero";
 
 #include "strtoint64.h"
 #include "isaac64.h"
@@ -929,13 +926,13 @@ CODE:
             down = SvI64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = newSVi64(aTHX_ up/down);
     }
     else {
         down = SvI64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvI64x(self) /= down;
@@ -962,13 +959,13 @@ CODE:
             down = SvI64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = newSVi64(aTHX_ up % down);
     }
     else {
         down = SvI64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvI64x(self) %= down;
@@ -981,7 +978,7 @@ SV *mi64_left(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    int64_t a;
+    int64_t a, r;
     uint64_t b;
 CODE:
     if (SvTRUE(rev)) {
@@ -992,12 +989,12 @@ CODE:
         a = SvI64x(self);
         b = SvU64(aTHX_ other);
     }
-    if (may_die_on_overflow && (b > 64)) overflow(aTHX_ left_error);
+    r = (b > 63 ? 0 : a << b);
     if (SvOK(rev))
-        RETVAL = newSVi64(aTHX_ (b > 64 ? 0 : (a << b)));
+        RETVAL = newSVi64(aTHX_ r);
     else {
         RETVAL = SvREFCNT_inc(self);
-        SvI64x(self) = (b > 64 ? 0 : (a << b));
+        SvI64x(self) = r;
     }
 OUTPUT:
     RETVAL
@@ -1007,7 +1004,7 @@ SV *mi64_right(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    int64_t a;
+    int64_t a, r;
     uint64_t b;
 CODE:
     if (SvTRUE(rev)) {
@@ -1018,12 +1015,12 @@ CODE:
         a = SvI64x(self);
         b = SvU64(aTHX_ other);
     }
-    if (may_die_on_overflow && (b > 64)) overflow(aTHX_ right_error);
+    r = (b > 63 ? (a < 0 ? -1 : 0) : a >> b);
     if (SvOK(rev))
-        RETVAL = newSVi64(aTHX_ a >> b);
+        RETVAL = newSVi64(aTHX_ r);
     else {
         RETVAL = SvREFCNT_inc(self);
-        SvI64x(self) = (a >> b);
+        SvI64x(self) = r;
     }
 OUTPUT:
     RETVAL
@@ -1367,13 +1364,13 @@ CODE:
             down = SvU64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = newSVu64(aTHX_ up/down);
     }
     else {
         down = SvU64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvU64x(self) /= down;
@@ -1400,13 +1397,13 @@ CODE:
             down = SvU64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = newSVu64(aTHX_ up % down);
     }
     else {
         down = SvU64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ "Illegal division by zero");
+            Perl_croak(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvU64x(self) %= down;
@@ -1419,7 +1416,7 @@ SV *mu64_left(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    uint64_t a, b;
+    uint64_t a, b, r;
 CODE:
     if (SvTRUE(rev)) {
         a = SvU64(aTHX_ other);
@@ -1429,12 +1426,12 @@ CODE:
         a = SvU64x(self);
         b = SvU64(aTHX_ other);
     }
-    if (may_die_on_overflow && (b > 64)) overflow(aTHX_ left_b_error);
+    r = (b > 63 ? 0 : a << b);
     if (SvOK(rev))
-        RETVAL = newSVu64(aTHX_ a << b);
+        RETVAL = newSVu64(aTHX_ r);
     else {
         RETVAL = SvREFCNT_inc(self);
-        SvU64x(self) = (a << b);
+        SvU64x(self) = r;
     }
 OUTPUT:
     RETVAL
@@ -1444,7 +1441,7 @@ SV *mu64_right(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    uint64_t a, b;
+    uint64_t a, b, r;
 CODE:
     if (SvTRUE(rev)) {
         a = SvU64(aTHX_ other);
@@ -1454,12 +1451,12 @@ CODE:
         a = SvU64x(self);
         b = SvU64(aTHX_ other);
     }
-    if ( may_die_on_overflow && (b > 64)) overflow(aTHX_ right_b_error);
+    r = (b > 63 ? 0 : a >> b);
     if (SvOK(rev))
-        RETVAL = newSVu64(aTHX_ a >> b);
+        RETVAL = newSVu64(aTHX_ r);
     else {
         RETVAL = SvREFCNT_inc(self);
-        SvU64x(self) = (a >> b);
+        SvU64x(self) = r;
     }
 OUTPUT:
     RETVAL
