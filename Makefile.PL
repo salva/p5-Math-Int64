@@ -42,3 +42,12 @@ WriteMakefile( NAME           => 'Math::Int64',
                DEFINE         => $define,
                INC            => '-I.', # e.g., '-I. -I/usr/include/other'
     );
+
+sub MY::postamble {
+    return <<'MAKE_FRAG'
+
+c_api.h: c_api.decl
+	make_perl_module_c_api module_name=$(NAME) module_version=$(VERSION)
+MAKE_FRAG
+
+}
