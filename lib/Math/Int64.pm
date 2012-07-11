@@ -476,8 +476,8 @@ L<http://github.com/salva/p5-Math-Int64>.
 
 The C API usage sample module L<Math::Int64::C_API::Sample>.
 
-Other modules that allow to use larger integers or numbers from Perl
-are L<Math::BigInt>, L<Math::BigRat> and L<Math::Big>,
+Other modules providing support for larger integers or numbers are
+L<Math::BigInt>, L<Math::BigRat> and L<Math::Big>,
 L<Math::BigInt::BitVect>, L<Math::BigInt::Pari> and
 L<Math::BigInt::GMP>.
 
