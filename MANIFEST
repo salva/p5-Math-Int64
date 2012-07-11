@@ -24,3 +24,4 @@ c_api.decl
 c_api.h
 templates/module_c.temp
 templates/module_h.temp
+examples/rand64.pl
