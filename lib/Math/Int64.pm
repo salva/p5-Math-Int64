@@ -381,7 +381,7 @@ sample Makefile.PL below).
 
 =item *
 
-Add a call to the macro C<MATH_INT64_BOOT> to the C<BOOT> section of
+Add a call to the macro C<PERL_MATH_INT64_LOAD> to the C<BOOT> section of
 your XS file.
 
 =back
@@ -400,7 +400,7 @@ For instance:
   
   MODULE = Foo64		PACKAGE = Foo64
   BOOT:
-      MATH_INT64_BOOT;
+      PERL_MATH_INT64_LOAD;
   
   int64_t
   some_int64()
@@ -420,7 +420,7 @@ For instance:
 
 If the macro C<MATH_INT64_NATIVE_IF_AVAILABLE> is defined before
 including C<perl_math_int64.h> and the perl interpreter is compiled
-with mative 64bit integer support, IVs will be used to represent 64bit
+with native 64bit integer support, IVs will be used to represent 64bit
 integers instead of the object representation provided by Math::Int64.
 
 These are the C macros available from Math::Int64 C API:
@@ -476,7 +476,7 @@ L<http://github.com/salva/p5-Math-Int64>.
 
 The C API usage sample module L<Math::Int64::C_API::Sample>.
 
-Other modules that allow Perl to support larger integers or numbers
+Other modules that allow to use larger integers or numbers from Perl
 are L<Math::BigInt>, L<Math::BigRat> and L<Math::Big>,
 L<Math::BigInt::BitVect>, L<Math::BigInt::Pari> and
 L<Math::BigInt::GMP>.

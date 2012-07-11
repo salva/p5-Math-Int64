@@ -132,6 +132,12 @@ static char *div_by_0_error        = "Illegal division by zero";
 #include "strtoint64.h"
 #include "isaac64.h"
 
+#define MY_CXT_KEY "Math::Int64::isaac64_state" XS_VERSION
+typedef struct {
+    isaac64_state_t is;
+} my_cxt_t;
+START_MY_CXT
+
 #if defined(INT64_BACKEND_NV)
 #  define BACKEND "NV"
 #  define SvI64Y SvNVX
@@ -438,9 +444,10 @@ MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
 BOOT:
+    MY_CXT_INIT;
+    randinit(&(MY_CXT.is), 0);
     may_die_on_overflow = 0;
     may_use_native = 0;
-    randinit(0);
     INIT_C_API;
 
 char *
@@ -733,7 +740,8 @@ OUTPUT:
 SV *
 miu64_int64_rand()
 PREINIT:
-    int64_t i64 = rand64();
+    dMY_CXT;
+    int64_t i64 = rand64(&(MY_CXT.is));
 CODE:
     RETVAL = ( use_native
                ? newSViv(i64)
@@ -744,7 +752,8 @@ OUTPUT:
 SV *
 miu64_uint64_rand()
 PREINIT:
-    uint64_t u64 = rand64();
+    dMY_CXT;
+    uint64_t u64 = rand64(&(MY_CXT.is));
 CODE:
     RETVAL = ( use_native
                ? newSViv(u64)
@@ -756,26 +765,29 @@ void
 miu64_int64_srand(seed=&PL_sv_undef)
     SV *seed
 PREINIT:
+    dMY_CXT;
+    isaac64_state_t *is;
 CODE:
+    is = &(MY_CXT.is);
     if (SvOK(seed) && SvCUR(seed)) {
         STRLEN len;
         const char *pv = SvPV_const(seed, len);
-        char *shadow = (char*)randrsl;
+        char *shadow = (char*)is->randrsl;
         int i;
-        if (len > sizeof(randrsl)) len = sizeof(randrsl);
-        Zero(shadow, sizeof(randrsl), char);
+        if (len > sizeof(is->randrsl)) len = sizeof(is->randrsl);
+        Zero(shadow, sizeof(is->randrsl), char);
         Copy(pv, shadow, len, char);
 
         /* make the seed endianness agnostic */
         for (i = 0; i < RANDSIZ; i++) {
             char *p = shadow + i * sizeof(uint64_t);
-            randrsl[i] = (((((((((((((((uint64_t)p[0]) << 8) + p[1]) << 8) + p[2]) << 8) + p[3]) << 8) +
-                               p[4]) << 8) + p[5]) << 8) + p[6]) << 8) + p[7];
+            is->randrsl[i] = (((((((((((((((uint64_t)p[0]) << 8) + p[1]) << 8) + p[2]) << 8) + p[3]) << 8) +
+                                   p[4]) << 8) + p[5]) << 8) + p[6]) << 8) + p[7];
     }
-        randinit(1);
+        randinit(is, 1);
     }
     else
-        randinit(0);
+        randinit(is, 0);
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=mi64
 PROTOTYPES: DISABLE

@@ -11,9 +11,13 @@ See http://burtleburtle.net/bob/rand/isaacafa.html
 #define RANDSIZL   (8)
 #define RANDSIZ    (1<<RANDSIZL)
 
-static    uint64_t randrsl[RANDSIZ], randcnt;
-static    uint64_t mm[RANDSIZ];
-static    uint64_t aa=0, bb=0, cc=0;
+struct isaac64_state {
+    uint64_t randrsl[RANDSIZ], randcnt;
+    uint64_t mm[RANDSIZ];
+    uint64_t aa, bb, cc;
+};
+
+typedef struct isaac64_state isaac64_state_t;
 
 #define ind(mm,x)  (*(uint64_t *)((unsigned char *)(mm) + ((x) & ((RANDSIZ-1)<<3))))
 #define rngstep(mix,a,b,mm,m,m2,r,x)            \
@@ -24,25 +28,25 @@ static    uint64_t aa=0, bb=0, cc=0;
         *(r++) = b = ind(mm,y>>RANDSIZL) + x;   \
     }
 
-void isaac64() {
+void isaac64(isaac64_state_t *is) {
     uint64_t a,b,x,y,*m,*m2,*r,*mend;
-    m=mm; r=randrsl;
-    a = aa; b = bb + (++cc);
-    for (m = mm, mend = m2 = m+(RANDSIZ/2); m<mend; )
+    m=is->mm; r=is->randrsl;
+    a = is->aa; b = is->bb + (++is->cc);
+    for (m = is->mm, mend = m2 = m+(RANDSIZ/2); m<mend; )
     {
-        rngstep(~(a^(a<<21)), a, b, mm, m, m2, r, x);
-        rngstep(  a^(a>>5)  , a, b, mm, m, m2, r, x);
-        rngstep(  a^(a<<12) , a, b, mm, m, m2, r, x);
-        rngstep(  a^(a>>33) , a, b, mm, m, m2, r, x);
+        rngstep(~(a^(a<<21)), a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a>>5)  , a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a<<12) , a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a>>33) , a, b, is->mm, m, m2, r, x);
     }
-    for (m2 = mm; m2<mend; )
+    for (m2 = is->mm; m2<mend; )
     {
-        rngstep(~(a^(a<<21)), a, b, mm, m, m2, r, x);
-        rngstep(  a^(a>>5)  , a, b, mm, m, m2, r, x);
-        rngstep(  a^(a<<12) , a, b, mm, m, m2, r, x);
-        rngstep(  a^(a>>33) , a, b, mm, m, m2, r, x);
+        rngstep(~(a^(a<<21)), a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a>>5)  , a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a<<12) , a, b, is->mm, m, m2, r, x);
+        rngstep(  a^(a>>33) , a, b, is->mm, m, m2, r, x);
     }
-    bb = b; aa = a;
+    is->bb = b; is->aa = a;
 }
 
 #define mix(a,b,c,d,e,f,g,h)                    \
@@ -57,10 +61,10 @@ void isaac64() {
         h-=d; e^=g<<14; g+=h;                   \
     }
 
-void randinit(int flag) {
+void randinit(isaac64_state_t *is, int flag) {
     int  i;
     uint64_t a,b,c,d,e,f,g,h;
-    aa=bb=cc=(uint64_t)0;
+    is->aa=is->bb=is->cc=(uint64_t)0;
 #ifdef _MSC_VER
     a=b=c=d=e=f=g=h=0x9e3779b97f4a7c13;     /* the golden ratio */
 #else
@@ -76,30 +80,35 @@ void randinit(int flag) {
     {
         if (flag)                  /* use all the information in the seed */
         {
-            a+=randrsl[i  ]; b+=randrsl[i+1]; c+=randrsl[i+2]; d+=randrsl[i+3];
-            e+=randrsl[i+4]; f+=randrsl[i+5]; g+=randrsl[i+6]; h+=randrsl[i+7];
+            a+=is->randrsl[i  ]; b+=is->randrsl[i+1]; c+=is->randrsl[i+2]; d+=is->randrsl[i+3];
+            e+=is->randrsl[i+4]; f+=is->randrsl[i+5]; g+=is->randrsl[i+6]; h+=is->randrsl[i+7];
         }
         mix(a,b,c,d,e,f,g,h);
-        mm[i  ]=a; mm[i+1]=b; mm[i+2]=c; mm[i+3]=d;
-        mm[i+4]=e; mm[i+5]=f; mm[i+6]=g; mm[i+7]=h;
+        is->mm[i  ]=a; is->mm[i+1]=b; is->mm[i+2]=c; is->mm[i+3]=d;
+        is->mm[i+4]=e; is->mm[i+5]=f; is->mm[i+6]=g; is->mm[i+7]=h;
     }
     
     if (flag) 
     {        /* do a second pass to make all of the seed affect all of mm */
         for (i=0; i<RANDSIZ; i+=8)
         {
-            a+=mm[i  ]; b+=mm[i+1]; c+=mm[i+2]; d+=mm[i+3];
-            e+=mm[i+4]; f+=mm[i+5]; g+=mm[i+6]; h+=mm[i+7];
+            a+=is->mm[i  ]; b+=is->mm[i+1]; c+=is->mm[i+2]; d+=is->mm[i+3];
+            e+=is->mm[i+4]; f+=is->mm[i+5]; g+=is->mm[i+6]; h+=is->mm[i+7];
             mix(a,b,c,d,e,f,g,h);
-            mm[i  ]=a; mm[i+1]=b; mm[i+2]=c; mm[i+3]=d;
-            mm[i+4]=e; mm[i+5]=f; mm[i+6]=g; mm[i+7]=h;
+            is->mm[i  ]=a; is->mm[i+1]=b; is->mm[i+2]=c; is->mm[i+3]=d;
+            is->mm[i+4]=e; is->mm[i+5]=f; is->mm[i+6]=g; is->mm[i+7]=h;
         }
     }
 
-    isaac64();          /* fill in the first set of results */
-    randcnt=RANDSIZ;    /* prepare to use the first set of results */
+    isaac64(is);     /* fill in the first set of results */
+    is->randcnt=RANDSIZ; /* prepare to use the first set of results */
 }
 
-#define rand64()                                                        \
-    (!randcnt-- ? (isaac64(), randcnt=RANDSIZ-1, randrsl[randcnt]) :    \
-     randrsl[randcnt])
+static uint64_t
+rand64(isaac64_state_t *is) {
+    if( ! is->randcnt--) {
+        isaac64(is);
+        is->randcnt = RANDSIZ-1;
+    }
+    return is->randrsl[is->randcnt];
+}
