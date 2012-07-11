@@ -228,7 +228,7 @@ SvI64(pTHX_ SV *sv) {
             GV *method;
             HV *stash = SvSTASH(si64);
             char const * classname = HvNAME_get(stash);
-            if (strncmp(classname, "Math::", 6) == 0) {
+            if (memcmp(classname, "Math::", 6) == 0) {
                 int u;
                 if (classname[6] == 'U') {
                     u = 1;
@@ -238,7 +238,7 @@ SvI64(pTHX_ SV *sv) {
                     u = 0;
                     classname += 6;
                 }
-                if (strcmp(classname, "Int64") == 0) {
+                if (memcmp(classname, "Int64", 6) == 0) {
                     if (SvTYPE(si64) < SVt_I64)
                         Perl_croak(aTHX_ "Wrong internal representation for %s object", HvNAME_get(stash));
                     if (u) {
@@ -305,7 +305,7 @@ SvU64(pTHX_ SV *sv) {
             GV *method;
             HV *stash = SvSTASH(su64);
             char const * classname = HvNAME_get(stash);
-            if (strncmp(classname, "Math::", 6) == 0) {
+            if (memcmp(classname, "Math::", 6) == 0) {
                 int u;
                 if (classname[6] == 'U') {
                     u = 1;
@@ -315,7 +315,7 @@ SvU64(pTHX_ SV *sv) {
                     u = 0;
                     classname += 6;
                 }
-                if (strcmp(classname, "Int64") == 0) {
+                if (memcmp(classname, "Int64", 6) == 0) {
                     if (SvTYPE(su64) < SVt_I64)
                         Perl_croak(aTHX_ "Wrong internal representation for %s object", HvNAME_get(stash));
                     if (u) {
@@ -436,6 +436,12 @@ i64_to_string(pTHX_ int64_t i64, int base) {
         return u64_to_string_with_sign(aTHX_ -i64, base, 1);
     }
     return u64_to_string_with_sign(aTHX_ i64, base, 0);
+}
+
+static uint64_t
+randU64(pTHX) {
+    dMY_CXT;
+    return rand64(&(MY_CXT.is));
 }
 
 #include "c_api.h"

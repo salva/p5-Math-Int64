@@ -451,6 +451,10 @@ Returns true is the given SV contains a valid int64_t value.
 
 Returns true is the given SV contains a valid uint64_t value.
 
+=item uint64_t randU64(void)
+
+Returns a random 64 bits unsigned integer.
+
 =back
 
 If you require any other function available through the C API don't
