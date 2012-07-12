@@ -43,11 +43,25 @@ WriteMakefile( NAME           => 'Math::Int64',
                INC            => '-I.', # e.g., '-I. -I/usr/include/other'
     );
 
-sub MY::postamble {
-    return <<'MAKE_FRAG'
+
+package MY;
+
+sub postamble {
+    my $self = shift;
+    my $author = $self->{AUTHOR};
+    $author = join(', ', @$author) if ref $author;
+    $author =~ s/'/'\''/g;
+
+    return <<MAKE_FRAG
 
 c_api.h: c_api.decl
-	make_perl_module_c_api module_name=$(NAME) module_version=$(VERSION)
+	make_perl_module_c_api module_name=\$(NAME) module_version=\$(VERSION) author='$author'
 MAKE_FRAG
 
+}
+
+sub init_dirscan {
+    my $self = shift;
+    $self->SUPER::init_dirscan(@_);
+    push @{$self->{H}}, 'c_api.h' unless grep $_ eq 'c_api.h', @{$self->{H}};
 }
