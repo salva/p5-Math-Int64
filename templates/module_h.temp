@@ -14,10 +14,13 @@
 #define MATH_INT64_C_API_REQUIRED_VERSION <% $max_version %>
 #define MATH_INT64_VERSION MATH_INT64_C_API_REQUIRED_VERSION
 
-void perl_math_int64_load(int required_version);
+int perl_math_int64_load(int required_version);
 
 #define PERL_MATH_INT64_LOAD perl_math_int64_load(MATH_INT64_C_API_REQUIRED_VERSION)
-#define MATH_INT64_BOOT PERL_MATH_INT64_LOAD
+#define PERL_<% uc $c_module_name %>_LOAD_OR_CROAK \
+    if (PERL_<% uc $c_module_name %>_LOAD);        \
+    else croak(NULL);
+#define MATH_INT64_BOOT PERL_MATH_INT64_LOAD_OR_CROAK
 
 extern HV *math_int64_c_api_hash;
 extern int math_int64_c_api_min_version;
