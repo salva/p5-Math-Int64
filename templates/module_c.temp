@@ -33,44 +33,58 @@ int <% $c_module_name %>_c_api_max_version;
         $OUT .= "$f->{type} (*${c_module_name}_c_api_$n)($f->{args});\n";
     }
 %>
-void
+int
 perl_<% $c_module_name %>_load(int required_version) {
     dTHX;
     SV **svp;
     eval_pv("require <% $module_name %>", TRUE);
-    if (SvTRUE(ERRSV))
-        Perl_croak(aTHX_ "Unable to load <% $module_name %>: %s", SvPV_nolen(ERRSV));
+    if (SvTRUE(ERRSV)) return 0;
 
-    <% $c_module_name %>_c_api_hash = get_hv("<% $module_name %>::C_API", 0);
-    if (!<% $c_module_name %>_c_api_hash) Perl_croak(aTHX_ "Unable to load <% $module_name %> C API");
+   <% $c_module_name %>_c_api_hash = get_hv("<% $module_name %>::C_API", 0);
+    if (!<% $c_module_name %>_c_api_hash) {
+        sv_setpv_mg(ERRSV, "Unable to load <% $module_name %> C API");
+        return 0;
+    }
 
     svp = hv_fetch(<% $c_module_name %>_c_api_hash, "min_version", <% length "min_version" %>, 0);
     if (!svp) svp = hv_fetch(<% $c_module_name %>_c_api_hash, "version", <% length "version" %>, 1);
-    if (!svp) Perl_croak(aTHX_ "unable to retrieve C API version for <% $module_name %>");
+    if (!svp || !*svp) {
+        sv_setpv_mg(ERRSV, "Unable to retrieve C API version for <% $module_name %>");
+        return 0;
+    }
     <% $c_module_name %>_c_api_min_version = SvIV(*svp);
 
     svp = hv_fetch(<% $c_module_name %>_c_api_hash, "max_version", <% length "max_version" %>, 0);
     if (!svp) svp = hv_fetch(<% $c_module_name %>_c_api_hash, "version", <% length "version" %>, 1);
-    if (!svp) Perl_croak(aTHX_ "unable to retrieve C API version for <% $module_name %>");
+    if (!svp || !*svp) {
+        sv_setpv_mg(ERRSV, "Unable to retrieve C API version for <% $module_name %>");
+        return 0;
+    }
     <% $c_module_name %>_c_api_max_version = SvIV(*svp);
 
     if ((required_version < <% $c_module_name %>_c_api_min_version) ||
-        (required_version > <% $c_module_name %>_c_api_max_version))
-        Perl_croak(aTHX_
-                   "<% $module_name %> C API version mismatch. "
-                   "The installed module supports versions %d to %d but %d is required",
-                   <% $c_module_name %>_c_api_min_version,
-                   <% $c_module_name %>_c_api_max_version,
-                   required_version);
+        (required_version > <% $c_module_name %>_c_api_max_version)) {
+        sv_setpvf_mg(ERRSV,
+                     "<% $module_name %> C API version mismatch. "
+                     "The installed module supports versions %d to %d but %d is required",
+                     <% $c_module_name %>_c_api_min_version,
+                     <% $c_module_name %>_c_api_max_version,
+                     required_version);
+        return 0;
+    }
 
 <%
     for my $n (sort keys %function) {
         my $len = length $n;
         $OUT .= <<EOC
     svp = hv_fetch(${c_module_name}_c_api_hash, "$n", $len, 0);
-    if (!svp || !*svp) Perl_croak(aTHX_ "Unable to fetch pointer for '$n' function");
+    if (!svp || !*svp) {
+        sv_setpv_mg(ERRSV, "Unable to fetch pointer '$n' C function from $module_name");
+        return 0;
+    }
     ${c_module_name}_c_api_$n = INT2PTR(void *, SvIV(*svp));
 EOC
     }
 %>
+    return 1;
 }
