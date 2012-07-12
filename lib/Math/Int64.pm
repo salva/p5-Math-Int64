@@ -381,8 +381,8 @@ sample Makefile.PL below).
 
 =item *
 
-Add a call to the macro C<PERL_MATH_INT64_LOAD> to the C<BOOT> section of
-your XS file.
+Add a call to the macro C<PERL_MATH_INT64_LOAD_OR_CROAK> into the
+C<BOOT> section of your XS file.
 
 =back
 
@@ -400,7 +400,7 @@ For instance:
   
   MODULE = Foo64		PACKAGE = Foo64
   BOOT:
-      PERL_MATH_INT64_LOAD;
+      PERL_MATH_INT64_LOAD_OR_CROAK;
   
   int64_t
   some_int64()
