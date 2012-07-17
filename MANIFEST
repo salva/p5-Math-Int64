@@ -16,9 +16,9 @@ t/Math-UInt64.t
 t/pods.t
 t/as_int64.t
 t/die_on_overflow.t
-c_api/perl_math_int64.c
-c_api/perl_math_int64.h
-c_api/typemap
+c_api_client/perl_math_int64.c
+c_api_client/perl_math_int64.h
+c_api_client/typemap
 t/MSC.t
 c_api.decl
 c_api.h

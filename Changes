@@ -1,8 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
-0.27_01
-       - make isaac64 methods thread friendly
+0.27_01  Jul 17, 2012
        - generate C API using Module::CAPIMaker
+       - make isaac64 methods thread friendly
        - do not overflow on shift operations
 
 0.26  Jun 7, 2012
