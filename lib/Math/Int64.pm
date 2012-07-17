@@ -363,8 +363,8 @@ In order to use it you need to follow these steps:
 =item *
 
 Import the files C<perl_math_int64.c>, C<perl_math_int64.h> and
-optionally C<typemaps> from Math::Int64 C<c_api> directory into your
-project directory.
+optionally C<typemaps> from Math::Int64 C<c_api_client> directory into
+your project directory.
 
 =item *
 
