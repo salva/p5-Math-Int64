@@ -470,11 +470,17 @@ The fallback to native 64bit integers feature is experimental.
 
 This module requires int64 support from the C compiler.
 
-For bug reports, feature requests or just help using this module, use
-the RT system at L<http://rt.cpan.org> or send my and email or both!
+In order to report bugs you can send me and email to the address that
+appears below or use the CPAN RT bugtracking system available at
+L<http://rt.cpan.org>.
 
-The source code of this module is hosted at GitHub:
-L<http://github.com/salva/p5-Math-Int64>.
+The source for the development version of the module is hosted at
+GitHub: L<https://github.com/salva/p5-Math-Int64>.
+
+=head2 My wishlist
+
+If you like this module and you're feeling generous, take a look at my
+Amazon Wish List: L<http://amzn.com/w/1WU1P6IR5QZ42>
 
 =head1 SEE ALSO
 
