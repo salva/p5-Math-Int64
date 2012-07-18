@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.27_01';
+    our $VERSION = '0.27_02';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
@@ -139,13 +139,13 @@ Math::Int64 - Manipulate 64 bits integers in Perl
 
 =head1 SYNOPSIS
 
-  use Math::Int64 qw(int64);
+  use Math::Int64 qw(int64 uint64);
 
   my $i = int64(1);
   my $j = $i << 40;
-  my $k = int64("12345678901234567890");
   print($i + $j * 1000000);
 
+  my $k = uint64("12345678901234567890");
 
 =head1 DESCRIPTION
 
