@@ -121,3 +121,4 @@ ok (net_to_uint64(uint64_to_net($l)) == $l);
 ok (net_to_uint64(uint64_to_net($j)) == $j);
 
 ok (net_to_uint64(uint64_to_net($i)) == $i);
+

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 74;
+use Test::More tests => 78;
 
 use Math::Int64 qw(int64 uint64 string_to_int64 string_to_uint64);
 use Math::Int64::die_on_overflow;
@@ -89,7 +89,11 @@ test_no_overflow { $s2_0 << 64 } 'overflow - left shift 1 << 64, signed';
 test_no_overflow { $s2_0 << 63 } 'overflow - left shift 1 << 63, signed';
 test_no_overflow { $s2_0 << 62 } 'overflow - left shift 1 << 62, signed';
 
+test_overflow { uint64(2) ** 64 } 'overflow - 2 ** 64';
+test_overflow { int64(2) ** 63 } ' overflow - signed 2 ** 63';
 
+test_overflow { uint64(2642246) ** 3 } 'overflow - 2642246 ** 3';
+test_no_overflow { uint64(2642245) ** 3 } 'no overflow - 2642245 ** 3';
 
 no Math::Int64::die_on_overflow;
 

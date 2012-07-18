@@ -16,10 +16,11 @@ t/Math-UInt64.t
 t/pods.t
 t/as_int64.t
 t/die_on_overflow.t
+t/pow.t
+t/MSC.t
 c_api_client/perl_math_int64.c
 c_api_client/perl_math_int64.h
 c_api_client/typemap
-t/MSC.t
 c_api.decl
 c_api.h
 templates/module_c.temp
