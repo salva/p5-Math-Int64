@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.27_03  Jul 19, 2012
+       - require version 2 of the C API on the client support files
+
 0.27_02  Jul 18, 2012
        - add support for exponentiation operators (** **=)
        - correct several errors on the C API support files

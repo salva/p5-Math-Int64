@@ -5,7 +5,7 @@
  *
  * Generated on: <% $now %>
  * <% $module_name %> version: <% $module_version %>
- *
+ * Module::CAPIMaker version: <% $module_capimaker_version %>
  */
 
 #if !defined (PERL_MATH_INT64_H_INCLUDED)
