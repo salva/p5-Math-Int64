@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.27_04  Jul 20, 2012
+        - version declaration mismatch in c_api.decl corrected
+
 0.27_03  Jul 19, 2012
        - require version 2 of the C API on the client support files
 

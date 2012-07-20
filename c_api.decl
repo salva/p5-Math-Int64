@@ -1,6 +1,5 @@
 
-module_version = 2
-required_version = 2
+max_version = 2
 
 module_h_template_filename = templates/module_h.temp
 module_c_template_filename = templates/module_c.temp
