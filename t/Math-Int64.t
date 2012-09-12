@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 
 use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
-                   native_to_int64 int64_to_native);
+                   native_to_int64 int64_to_native
+                   int64_to_BER BER_to_int64
+                 );
 
 my $i = int64('1234567890123456789');
 my $j = $i + 1;
@@ -115,3 +117,5 @@ my $l = int64("1271310319617");
 
 is ("$l", "1271310319617", "string to/from int64 conversion");
 
+
+is(BER_to_int64(int64_to_BER($l)). "", "1271310319617");

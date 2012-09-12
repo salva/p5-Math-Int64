@@ -21,6 +21,7 @@ our @EXPORT_OK = qw(int64
                     net_to_int64 int64_to_net
                     native_to_int64 int64_to_native
                     string_to_int64 hex_to_int64
+                    BER_to_int64 int64_to_BER
                     int64_to_string int64_to_hex
                     int64_rand
                     int64_srand
@@ -29,8 +30,10 @@ our @EXPORT_OK = qw(int64
                     net_to_uint64 uint64_to_net
                     native_to_uint64 uint64_to_native
                     string_to_uint64 hex_to_uint64
+                    BER_to_uint64 uint64_to_BER
                     uint64_to_string uint64_to_hex
                     uint64_rand
+                    BER_length
                     MAX_INT64 MIN_INT64 MAX_UINT64
                   );
 

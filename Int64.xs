@@ -120,15 +120,18 @@ overflow(pTHX_ const char *msg) {
         Perl_croak(aTHX_ "Math::Int64 overflow: %s", msg);
 }
 
-static char *out_of_bounds_error_s = "Number is out of bounds for int64_t conversion";
-static char *out_of_bounds_error_u = "Number is out of bounds for uint64_t conversion";
-static char *mul_error             = "Multiplication overflows";
-static char *add_error             = "Addition overflows";
-static char *sub_error             = "Subtraction overflows";
-static char *inc_error             = "Increment operation wraps";
-static char *dec_error             = "Decrement operation wraps";
-static char *div_by_0_error        = "Illegal division by zero";
-static char *pow_error             = "Exponentiation overflows";
+static char *out_of_bounds_error_s  = "Number is out of bounds for int64_t conversion";
+static char *out_of_bounds_error_u  = "Number is out of bounds for uint64_t conversion";
+static char *mul_error              = "Multiplication overflows";
+static char *add_error              = "Addition overflows";
+static char *sub_error              = "Subtraction overflows";
+static char *inc_error              = "Increment operation wraps";
+static char *dec_error              = "Decrement operation wraps";
+static char *div_by_0_error         = "Illegal division by zero";
+static char *pow_error              = "Exponentiation overflows";
+static char *invalid_length_error_s = "Invalid length for int64";
+static char *invalid_length_error_u = "Invalid length for uint64";
+static char *invalid_BER_error      = "Invalid BER encoding";
 
 #include "strtoint64.h"
 #include "isaac64.h"
@@ -507,6 +510,61 @@ powU64(pTHX_ uint64_t a, uint64_t b) {
     return r;
 }
 
+static SV *
+uint64_to_BER(pTHX_ uint64_t a) {
+    unsigned char buffer[6];
+    unsigned char *top = buffer + sizeof(buffer);
+    unsigned char *p = top;
+    *(--p) = (a & 0x7f);
+    while ((a >>= 7))
+        *(--p) = (a & 0x7f) | 0x80;
+    return newSVpvn(p, top - p);
+}
+
+static SV *
+int64_to_BER(pTHX_ int64_t a) {
+    return uint64_to_BER(aTHX_
+                         a < 0
+                         ? ( ( ( ~(uint64_t)a) << 1 ) | 1 )
+                         : ( ( (  (uint64_t)a) << 1 ) | 0 ) );
+}
+
+static uint64_t
+BER_to_uint64(pTHX_ SV *sv) {
+    STRLEN len;
+    unsigned char *pv = SvPVbyte(sv, len);
+    uint64_t a;
+    IV i;
+    for (i = 0, a = 0; i < len; i++) {
+        if (may_die_on_overflow && (a > (((uint64_t)1) << (63 - 7))))
+            overflow(aTHX_ out_of_bounds_error_u);
+        a = (a << 7) | (pv[i] & 0x7f);
+        if ((pv[i] & 0x80) == 0) {
+            if (i + 1 != len) Perl_croak(aTHX_ invalid_BER_error);
+            return a;
+        }
+    }
+    Perl_croak(aTHX_ invalid_BER_error);
+}
+
+static int64_t
+BER_to_int64(pTHX_ SV *sv) {
+    uint64_t a = BER_to_uint64(aTHX_ sv);
+    int64_t b = (int64_t)(a >> 1);
+    return (a & 1 ? -b : b);
+}
+
+static IV
+BER_length(pTHX_ SV *sv) {
+    STRLEN len;
+    unsigned char *pv = SvPVbyte(sv, len);
+    IV i;
+    for (i = 0; i < len; i++) {
+        if (pv[i] & 0x80 == 0) return i + 1;
+    }
+    return -1;
+}
+
 #include "c_api.h"
 
 MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
@@ -579,10 +637,10 @@ miu64_net_to_int64(net)
     SV *net;
 PREINIT:
     STRLEN len;
-    unsigned char *pv = (unsigned char *)SvPV(net, len);
+    unsigned char *pv = (unsigned char *)SvPVbyte(net, len);
     int64_t i64;
 CODE:
-    if (len != 8) Perl_croak(aTHX_ "Invalid length for int64");
+    if (len != 8) Perl_croak(aTHX_ invalid_length_error_s);
     i64 = (((((((((((((((int64_t)pv[0]) << 8)
                       + (int64_t)pv[1]) << 8)
                     + (int64_t)pv[2]) << 8)
@@ -602,11 +660,11 @@ miu64_net_to_uint64(net)
     SV *net;
 PREINIT:
     STRLEN len;
-    unsigned char *pv = (unsigned char *)SvPV(net, len);
+    unsigned char *pv = (unsigned char *)SvPVbyte(net, len);
     uint64_t u64;
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ "Invalid length for uint64");
+        Perl_croak(aTHX_ invalid_length_error_u);
     u64 = (((((((((((((((uint64_t)pv[0]) << 8)
                       + (uint64_t)pv[1]) << 8)
                     + (uint64_t)pv[2]) << 8)
@@ -658,14 +716,46 @@ OUTPUT:
     RETVAL
 
 SV *
+miu64_BER_to_int64(ber)
+    SV *ber
+CODE:
+    RETVAL = newSVi64(aTHX_ BER_to_int64(aTHX_ ber));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_BER_to_uint64(ber)
+    SV *ber
+CODE:
+    RETVAL = newSVu64(aTHX_ BER_to_uint64(aTHX_ ber));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_int64_to_BER(self)
+    SV *self
+CODE:
+    RETVAL = int64_to_BER(aTHX_ SvI64(aTHX_ self));
+OUTPUT:
+    RETVAL
+
+SV *
+miu64_uint64_to_BER(self)
+    SV *self
+CODE:
+    RETVAL = uint64_to_BER(aTHX_ SvU64(aTHX_ self));
+OUTPUT:
+    RETVAL
+
+SV *
 miu64_native_to_int64(native)
     SV *native
 PREINIT:
     STRLEN len;
-    char *pv = SvPV(native, len);
+    char *pv = SvPVbyte(native, len);
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ "Invalid length for int64");
+        Perl_croak(aTHX_ invalid_length_error_s);
     if (use_native) {
         RETVAL = newSViv(0);
         Copy(pv, &(SvIVX(RETVAL)), 8, char);
@@ -678,14 +768,25 @@ OUTPUT:
     RETVAL
 
 SV *
+BER_length(sv)
+    SV *sv
+PREINIT:
+    IV len;
+CODE:
+    len = BER_length(sv);
+    RETVAL = (len < 0 ? &PL_sv_undef : newSViv(len));
+OUTPUT:
+    RETVAL
+
+SV *
 miu64_native_to_uint64(native)
     SV *native
 PREINIT:
     STRLEN len;
-    char *pv = SvPV(native, len);
+    char *pv = SvPVbyte(native, len);
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ "Invalid length for uint64");
+        Perl_croak(aTHX_ invalid_length_error_u);
     if (use_native) {
         RETVAL = newSVuv(0);
         Copy(pv, &(SvUVX(RETVAL)), 8, char);
