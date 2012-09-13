@@ -427,6 +427,7 @@ u64_to_string_with_sign(pTHX_ uint64_t u64, int base, int sign) {
         SvCUR_set(sv, svlen);
         if (sign) *(pv++) = '-';
         for (i = len; i--;) *(pv++) = str[i];
+        *pv = '\0';
         return sv;
     }
     else {
@@ -512,12 +513,14 @@ powU64(pTHX_ uint64_t a, uint64_t b) {
 
 static SV *
 uint64_to_BER(pTHX_ uint64_t a) {
-    unsigned char buffer[6];
+    unsigned char buffer[10];
     unsigned char *top = buffer + sizeof(buffer);
     unsigned char *p = top;
     *(--p) = (a & 0x7f);
-    while ((a >>= 7))
+    while ((a >>= 7)) {
         *(--p) = (a & 0x7f) | 0x80;
+
+    }
     return newSVpvn(p, top - p);
 }
 
@@ -551,7 +554,7 @@ static int64_t
 BER_to_int64(pTHX_ SV *sv) {
     uint64_t a = BER_to_uint64(aTHX_ sv);
     int64_t b = (int64_t)(a >> 1);
-    return (a & 1 ? -b : b);
+    return (a & 1 ? ~b : b);
 }
 
 static IV
@@ -773,7 +776,7 @@ BER_length(sv)
 PREINIT:
     IV len;
 CODE:
-    len = BER_length(sv);
+    len = BER_length(aTHX_ sv);
     RETVAL = (len < 0 ? &PL_sv_undef : newSViv(len));
 OUTPUT:
     RETVAL
