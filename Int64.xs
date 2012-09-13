@@ -1460,6 +1460,23 @@ CODE:
 OUTPUT:
     RETVAL
 
+void
+mi64STORABLE_thaw(self, cloning, serialized, ...)
+    SV *self
+    SV *clonning = NO_INIT
+    SV *serialized
+CODE:
+    sv_setsv(self, sv_2mortal(newSVi64(aTHX_ BER_to_int64(aTHX_ serialized))));
+
+SV *
+mi64STORABLE_freeze(self, cloning = NULL)
+    SV *self
+    SV *cloning = NO_INIT
+CODE:
+    RETVAL = int64_to_BER(aTHX_ SvI64x(self));
+OUTPUT:
+    RETVAL
+
 MODULE = Math::Int64		PACKAGE = Math::UInt64		PREFIX=mu64
 PROTOTYPES: DISABLE
 
@@ -1912,3 +1929,21 @@ CODE:
     RETVAL = u64_to_string_with_sign(aTHX_ SvU64x(self), 10, 0);
 OUTPUT:
     RETVAL
+
+void
+mu64STORABLE_thaw(self, cloning, serialized, ...)
+    SV *self
+    SV *clonning = NO_INIT
+    SV *serialized
+CODE:
+    sv_setsv(self, sv_2mortal(newSVu64(aTHX_ BER_to_uint64(aTHX_ serialized))));
+
+SV *
+mu64STORABLE_freeze(self, cloning = NULL)
+    SV *self
+    SV *cloning = NO_INIT
+CODE:
+    RETVAL = uint64_to_BER(aTHX_ SvU64x(self));
+OUTPUT:
+    RETVAL
+

@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 0.27_05
+        - solve nasty bug on int64 <=> string conversions not setting
+          the '\0' byte at the end of the string
         - add support for BER encoding/decoding (see perlfunc/pack).
 
 0.27_04  Jul 20, 2012
