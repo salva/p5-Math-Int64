@@ -1466,7 +1466,14 @@ mi64STORABLE_thaw(self, cloning, serialized, ...)
     SV *clonning = NO_INIT
     SV *serialized
 CODE:
-    sv_setsv(self, sv_2mortal(newSVi64(aTHX_ BER_to_int64(aTHX_ serialized))));
+    if (SvROK(self) && sv_isa(self, "Math::Int64")) {
+        SV *target = SvRV(self);
+        SV *tmp = sv_2mortal(newSVu64(aTHX_ BER_to_int64(aTHX_ serialized)));
+        sv_setsv(target, SvRV(tmp));
+        // SvREADONLY_on(target);
+    }
+    else
+        Perl_croak(aTHX_ "Bad object for Math::Int64::STORABLE_thaw call");
 
 SV *
 mi64STORABLE_freeze(self, cloning = NULL)
@@ -1936,7 +1943,14 @@ mu64STORABLE_thaw(self, cloning, serialized, ...)
     SV *clonning = NO_INIT
     SV *serialized
 CODE:
-    sv_setsv(self, sv_2mortal(newSVu64(aTHX_ BER_to_uint64(aTHX_ serialized))));
+    if (SvROK(self) && sv_isa(self, "Math::UInt64")) {
+        SV *target = SvRV(self);
+        SV *tmp = sv_2mortal(newSVu64(aTHX_ BER_to_uint64(aTHX_ serialized)));
+        sv_setsv(target, SvRV(tmp));
+        // SvREADONLY_on(target);
+    }
+    else
+        Perl_croak(aTHX_ "Bad object for Math::UInt64::STORABLE_thaw call");
 
 SV *
 mu64STORABLE_freeze(self, cloning = NULL)
