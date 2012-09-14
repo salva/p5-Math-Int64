@@ -1,10 +1,17 @@
 Revision history for Perl extension Math::Int64.
 
+0.27_06  Sep 14, 2012
+        - make internal SV read only so can not be changed from the
+          Perl side.
+        - bug on internal C functions SvSU64 and SvSI64 corrected
+        - remove C++ style comments from XS
+
 0.27_05  Sep 14, 2012
         - add support for Storable freeze/thaw (feature request by
           Don Armstrong)
         - solve nasty bug on int64 <=> string conversions not setting
           the '\0' byte at the end of the string
+        - on the string to int64 conversions, force byte encoding first
         - add support for BER encoding/decoding (see perlfunc/pack)
         - more tests added
 
