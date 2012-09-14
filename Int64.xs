@@ -183,6 +183,7 @@ newSVi64(pTHX_ int64_t i64) {
     SvI64_onY(si64);
     sv = newRV_noinc(si64);
     sv_bless(sv, gv_stashpvs("Math::Int64", TRUE));
+    SvREADONLY_on(si64);
     return sv;
 }
 
@@ -195,6 +196,7 @@ newSVu64(pTHX_ uint64_t u64) {
     SvI64_onY(su64);
     sv = newRV_noinc(su64);
     sv_bless(sv, gv_stashpvs("Math::UInt64", TRUE));
+    SvREADONLY_on(su64);
     return sv;
 }
 
@@ -1470,7 +1472,7 @@ CODE:
         SV *target = SvRV(self);
         SV *tmp = sv_2mortal(newSVu64(aTHX_ BER_to_int64(aTHX_ serialized)));
         sv_setsv(target, SvRV(tmp));
-        // SvREADONLY_on(target);
+        SvREADONLY_on(target);
     }
     else
         Perl_croak(aTHX_ "Bad object for Math::Int64::STORABLE_thaw call");
@@ -1947,7 +1949,7 @@ CODE:
         SV *target = SvRV(self);
         SV *tmp = sv_2mortal(newSVu64(aTHX_ BER_to_uint64(aTHX_ serialized)));
         sv_setsv(target, SvRV(tmp));
-        // SvREADONLY_on(target);
+        SvREADONLY_on(target);
     }
     else
         Perl_croak(aTHX_ "Bad object for Math::UInt64::STORABLE_thaw call");
