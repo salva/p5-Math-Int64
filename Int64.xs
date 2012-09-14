@@ -203,7 +203,7 @@ newSVu64(pTHX_ uint64_t u64) {
 
 static SV *
 SvSI64(pTHX_ SV *sv) {
-    if (SvRV(sv)) {
+    if (SvROK(sv)) {
         SV *si64 = SvRV(sv);
         if (si64 && (SvTYPE(si64) >= SVt_I64))
             return si64;
@@ -213,7 +213,7 @@ SvSI64(pTHX_ SV *sv) {
 
 static SV *
 SvSU64(pTHX_ SV *sv) {
-    if (SvRV(sv)) {
+    if (SvROK(sv)) {
         SV *su64 = SvRV(sv);
         if (su64 && (SvTYPE(su64) >= SVt_I64))
             return su64;
