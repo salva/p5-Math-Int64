@@ -130,7 +130,7 @@ is(int64_to_BER($nu), uint64_to_BER($nu << 1));
 
 for (1..50) {
     my $n = int64_rand;
-    $n = int64("8420970171052099265");
+    # $n = int64("8420970171052099265");
     my $hex = int64_to_hex($n);
     ok($n == int64("$n"));
     ok($n == string_to_int64(int64_to_string($n)), "int64->string->int64 n: $n hex: $hex");

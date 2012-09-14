@@ -1,10 +1,14 @@
 #!/usr/bin/perl
 
-use Test::More tests => 47;
+use Test::More tests => 597;
 
 use Math::Int64 qw(uint64 uint64_to_number
                    net_to_uint64 uint64_to_net
-                   native_to_uint64 uint64_to_native);
+                   native_to_uint64 uint64_to_native
+                   uint64_to_hex hex_to_uint64
+                   uint64_to_string string_to_uint64
+                   uint64_to_BER BER_to_uint64
+                   uint64_rand );
 
 my $i = uint64('1234567890123456789');
 my $j = $i + 1;
@@ -122,3 +126,20 @@ ok (net_to_uint64(uint64_to_net($j)) == $j);
 
 ok (net_to_uint64(uint64_to_net($i)) == $i);
 
+
+for (1..50) {
+    my $n = uint64_rand;
+    # $n = uint64("8420970171052099265");
+    my $hex = uint64_to_hex($n);
+    ok($n == uint64("$n"));
+    ok($n == string_to_uint64(uint64_to_string($n)), "uint64->string->uint64 n: $n hex: $hex");
+    ok(uint64_to_hex($n) eq uint64_to_hex(string_to_uint64(uint64_to_string($n))));
+    ok($n == hex_to_uint64(uint64_to_hex($n)));
+    is("$n", string_to_uint64(uint64_to_string($n)));
+    is("$n", string_to_uint64(uint64_to_string($n, 25), 25));
+    is("$n", string_to_uint64(uint64_to_string($n, 36), 36));
+    is("$n", string_to_uint64(uint64_to_string($n, 2), 2));
+    is("$n", native_to_uint64(uint64_to_native($n)));
+    is("$n", net_to_uint64(uint64_to_net($n)));
+    is("$n", BER_to_uint64(uint64_to_BER($n)));
+}
