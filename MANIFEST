@@ -7,6 +7,7 @@ ppport.h
 isaac64.h
 strtoint64.h
 lib/Math/Int64.pm
+lib/Math/UInt64.pm
 lib/Math/Int64/die_on_overflow.pm
 lib/Math/Int64/native_if_available.pm
 t/Math-Int64-Native.t
@@ -18,6 +19,7 @@ t/as_int64.t
 t/die_on_overflow.t
 t/pow.t
 t/MSC.t
+t/storable.t
 c_api_client/perl_math_int64.c
 c_api_client/perl_math_int64.h
 c_api_client/typemap
