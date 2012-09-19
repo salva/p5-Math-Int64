@@ -211,6 +211,7 @@ SvSI64(pTHX_ SV *sv) {
             return si64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
+    return NULL;
 }
 
 static SV *
@@ -221,6 +222,7 @@ SvSU64(pTHX_ SV *sv) {
             return su64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
+    return NULL;
 }
 
 #define SvI64x(sv) (*(int64_t*)(&(SvI64Y(SvSI64(aTHX_ sv)))))
@@ -470,21 +472,15 @@ static uint64_t
 powU64(pTHX_ uint64_t a, uint64_t b) {
     uint64_t r;
     int mdoo = may_die_on_overflow;
-    switch (b) {
-    case 0:
-        return 1;
-    case 1:
-        return a;
-    case 2:
+    if (b == 0) return 1;
+    if (b == 1) return a;
+    if (b == 2) {
         if (mdoo && (a > UINT32_MAX)) overflow(aTHX_ pow_error);
         return a*a;
     }
-    switch(a) {
-    case 0:
-        return 0;
-    case 1:
-        return 1;
-    case 2:
+    if (a == 0) return 0;
+    if (a == 1) return 1;
+    if (a == 2) {
         if (b > 63) {
             if (mdoo) overflow(aTHX_ pow_error);
             return 0;
@@ -550,6 +546,7 @@ BER_to_uint64(pTHX_ SV *sv) {
         }
     }
     Perl_croak(aTHX_ invalid_BER_error);
+    return 0;
 }
 
 static int64_t
@@ -576,11 +573,13 @@ MODULE = Math::Int64		PACKAGE = Math::Int64		PREFIX=miu64_
 PROTOTYPES: DISABLE
 
 BOOT:
+{
     MY_CXT_INIT;
     randinit(&(MY_CXT.is), 0);
     may_die_on_overflow = 0;
     may_use_native = 0;
     INIT_C_API;
+}
 
 char *
 miu64__backend()
@@ -1221,16 +1220,9 @@ CODE:
     }
     else sign = 1;
     if (b < 0) {
-        switch(a) {
-        case 0:
-            Perl_croak(aTHX_ div_by_0_error);
-        case 1:
-            r = sign;
-            break;
-        default:
-            r = 0;
-            break;
-        }        
+        if      (a == 0) Perl_croak(aTHX_ div_by_0_error);
+        else if (a == 1) r = sign;
+        else             r = 0;
     }
     else {
         uint64_t u = powU64(aTHX_ a, b);

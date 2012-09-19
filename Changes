@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+0.27_07  Sep 19, 2012
+        - add support for OpenWatcom compiler (patch contributed by
+          NormW)
+
 0.27_06  Sep 14, 2012
         - make internal SV read only so can not be changed from the
           Perl side.
