@@ -211,7 +211,7 @@ SvSI64(pTHX_ SV *sv) {
             return si64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
-    return NULL;
+    return NULL; /* this dead code is a workaround for OpenWatcom */
 }
 
 static SV *
@@ -222,7 +222,7 @@ SvSU64(pTHX_ SV *sv) {
             return su64;
     }
     Perl_croak(aTHX_ "internal error: reference to NV expected");
-    return NULL;
+    return NULL; /* this dead code is a workaround for OpenWatcom */
 }
 
 #define SvI64x(sv) (*(int64_t*)(&(SvI64Y(SvSI64(aTHX_ sv)))))
@@ -546,7 +546,7 @@ BER_to_uint64(pTHX_ SV *sv) {
         }
     }
     Perl_croak(aTHX_ invalid_BER_error);
-    return 0;
+    return 0; /* this dead code is a workaround for OpenWatcom */
 }
 
 static int64_t
