@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.27_07';
+    our $VERSION = '0.28';
 
     require XSLoader;
     XSLoader::load('Math::Int64', $VERSION);
