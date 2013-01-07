@@ -1,4 +1,5 @@
 Makefile.PL
+c_api.h
 Changes
 README
 MANIFEST
@@ -27,4 +28,5 @@ c_api.decl
 c_api.h
 templates/module_c.temp
 templates/module_h.temp
+typemap
 examples/rand64.pl
