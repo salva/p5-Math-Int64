@@ -1,11 +1,18 @@
 #!/usr/bin/perl
 
-use Test::More tests => 200;
+
 
 use strict;
 use warnings;
 
-use Storable;
+use Test::More;
+
+unless (eval { require Storable; 1}) {
+    plan skip_all => 'Storable not installed';
+    exit;
+}
+
+plan tests => 200;
 
 use Math::Int64 qw(int64_rand uint64_rand);
 
