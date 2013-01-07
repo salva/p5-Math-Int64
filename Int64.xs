@@ -6,6 +6,8 @@
 #include "perl.h"
 #include "XSUB.h"
 
+#define NEED_sv_2pvbyte
+#define NEED_sv_2pv_flags
 #include "ppport.h"
 
 static int may_die_on_overflow;
