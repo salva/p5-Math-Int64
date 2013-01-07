@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.29  Jan 7, 2013
+        - support perl 5.6 (patch by bulk88)
+
 0.28  Dec 10, 2012
         - rerelease as stable
 
