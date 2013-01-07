@@ -6,6 +6,7 @@ Int64.xs
 ppport.h
 isaac64.h
 strtoint64.h
+typemap
 lib/Math/Int64.pm
 lib/Math/UInt64.pm
 lib/Math/Int64/die_on_overflow.pm
