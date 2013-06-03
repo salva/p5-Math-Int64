@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+0.30  Jun 3, 2013
+        - fix compilation error/warning when compiling with GCC
+          format-security feature enabled (bug report by Jerome Quelin)
+
 0.29  Jan 7, 2013
         - support perl 5.6 (patch by bulk88)
 
