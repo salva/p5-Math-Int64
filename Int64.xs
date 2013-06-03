@@ -17,8 +17,10 @@ static int may_use_native;
 #include <stdint.h>
 #endif
 
-#define NV_0x1p31 ((NV)2147483648)
-#define NV_0x1p32 ((NV)4294967296)
+#define NV_0x1p15 ((NV)32768)
+#define NV_0x1p16 ((NV)65536)
+#define NV_0x1p31 (NV_0x1p16 * NV_0x1p15)
+#define NV_0x1p32 (NV_0x1p16 * NV_0x1p16)
 #define NV_0x1p63 (NV_0x1p32 * NV_0x1p31)
 #define NV_0x1p64 (NV_0x1p32 * NV_0x1p32)
 
@@ -122,18 +124,22 @@ overflow(pTHX_ const char *msg) {
         Perl_croak(aTHX_ "Math::Int64 overflow: %s", msg);
 }
 
-static char *out_of_bounds_error_s  = "Number is out of bounds for int64_t conversion";
-static char *out_of_bounds_error_u  = "Number is out of bounds for uint64_t conversion";
-static char *mul_error              = "Multiplication overflows";
-static char *add_error              = "Addition overflows";
-static char *sub_error              = "Subtraction overflows";
-static char *inc_error              = "Increment operation wraps";
-static char *dec_error              = "Decrement operation wraps";
-static char *div_by_0_error         = "Illegal division by zero";
-static char *pow_error              = "Exponentiation overflows";
-static char *invalid_length_error_s = "Invalid length for int64";
-static char *invalid_length_error_u = "Invalid length for uint64";
-static char *invalid_BER_error      = "Invalid BER encoding";
+static const char *out_of_bounds_error_s  = "Number is out of bounds for int64_t conversion";
+static const char *out_of_bounds_error_u  = "Number is out of bounds for uint64_t conversion";
+static const char *mul_error              = "Multiplication overflows";
+static const char *add_error              = "Addition overflows";
+static const char *sub_error              = "Subtraction overflows";
+static const char *inc_error              = "Increment operation wraps";
+static const char *dec_error              = "Decrement operation wraps";
+static const char *div_by_0_error         = "Illegal division by zero";
+static const char *pow_error              = "Exponentiation overflows";
+static const char *invalid_length_error_s = "Invalid length for int64";
+static const char *invalid_length_error_u = "Invalid length for uint64";
+static const char *invalid_BER_error      = "Invalid BER encoding";
+
+static void croak_string(pTHX_ const char *str) {
+    Perl_croak(aTHX_ "%s", str);
+}
 
 #include "strtoint64.h"
 #include "isaac64.h"
@@ -212,7 +218,7 @@ SvSI64(pTHX_ SV *sv) {
         if (si64 && (SvTYPE(si64) >= SVt_I64))
             return si64;
     }
-    Perl_croak(aTHX_ "internal error: reference to NV expected");
+    croak_string(aTHX_ "internal error: reference to NV expected");
     return NULL; /* this dead code is a workaround for OpenWatcom */
 }
 
@@ -223,7 +229,7 @@ SvSU64(pTHX_ SV *sv) {
         if (su64 && (SvTYPE(su64) >= SVt_I64))
             return su64;
     }
-    Perl_croak(aTHX_ "internal error: reference to NV expected");
+    croak_string(aTHX_ "internal error: reference to NV expected");
     return NULL; /* this dead code is a workaround for OpenWatcom */
 }
 
@@ -543,11 +549,11 @@ BER_to_uint64(pTHX_ SV *sv) {
             overflow(aTHX_ out_of_bounds_error_u);
         a = (a << 7) | (pv[i] & 0x7f);
         if ((pv[i] & 0x80) == 0) {
-            if (i + 1 != len) Perl_croak(aTHX_ invalid_BER_error);
+            if (i + 1 != len) croak_string(aTHX_ invalid_BER_error);
             return a;
         }
     }
-    Perl_croak(aTHX_ invalid_BER_error);
+    croak_string(aTHX_ invalid_BER_error);
     return 0; /* this dead code is a workaround for OpenWatcom */
 }
 
@@ -646,7 +652,7 @@ PREINIT:
     unsigned char *pv = (unsigned char *)SvPVbyte(net, len);
     int64_t i64;
 CODE:
-    if (len != 8) Perl_croak(aTHX_ invalid_length_error_s);
+    if (len != 8) croak_string(aTHX_ invalid_length_error_s);
     i64 = (((((((((((((((int64_t)pv[0]) << 8)
                       + (int64_t)pv[1]) << 8)
                     + (int64_t)pv[2]) << 8)
@@ -670,7 +676,7 @@ PREINIT:
     uint64_t u64;
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ invalid_length_error_u);
+        croak_string(aTHX_ invalid_length_error_u);
     u64 = (((((((((((((((uint64_t)pv[0]) << 8)
                       + (uint64_t)pv[1]) << 8)
                     + (uint64_t)pv[2]) << 8)
@@ -761,7 +767,7 @@ PREINIT:
     char *pv = SvPVbyte(native, len);
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ invalid_length_error_s);
+        croak_string(aTHX_ invalid_length_error_s);
     if (use_native) {
         RETVAL = newSViv(0);
         Copy(pv, &(SvIVX(RETVAL)), 8, char);
@@ -792,7 +798,7 @@ PREINIT:
     char *pv = SvPVbyte(native, len);
 CODE:
     if (len != 8)
-        Perl_croak(aTHX_ invalid_length_error_u);
+        croak_string(aTHX_ invalid_length_error_u);
     if (use_native) {
         RETVAL = newSVuv(0);
         Copy(pv, &(SvUVX(RETVAL)), 8, char);
@@ -1098,13 +1104,13 @@ CODE:
             down = SvI64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = newSVi64(aTHX_ up/down);
     }
     else {
         down = SvI64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvI64x(self) /= down;
@@ -1131,13 +1137,13 @@ CODE:
             down = SvI64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = newSVi64(aTHX_ up % down);
     }
     else {
         down = SvI64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvI64x(self) %= down;
@@ -1222,7 +1228,7 @@ CODE:
     }
     else sign = 1;
     if (b < 0) {
-        if      (a == 0) Perl_croak(aTHX_ div_by_0_error);
+        if      (a == 0) croak_string(aTHX_ div_by_0_error);
         else if (a == 1) r = sign;
         else             r = 0;
     }
@@ -1469,7 +1475,7 @@ CODE:
         SvREADONLY_on(target);
     }
     else
-        Perl_croak(aTHX_ "Bad object for Math::Int64::STORABLE_thaw call");
+        croak_string(aTHX_ "Bad object for Math::Int64::STORABLE_thaw call");
 
 SV *
 mi64STORABLE_freeze(self, cloning = NULL)
@@ -1592,13 +1598,13 @@ CODE:
             down = SvU64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = newSVu64(aTHX_ up/down);
     }
     else {
         down = SvU64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvU64x(self) /= down;
@@ -1625,13 +1631,13 @@ CODE:
             down = SvU64(aTHX_ other);
         }
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = newSVu64(aTHX_ up % down);
     }
     else {
         down = SvU64(aTHX_ other);
         if (!down)
-            Perl_croak(aTHX_ div_by_0_error);
+            croak_string(aTHX_ div_by_0_error);
         RETVAL = self;
         SvREFCNT_inc(RETVAL);
         SvU64x(self) %= down;
@@ -1946,7 +1952,7 @@ CODE:
         SvREADONLY_on(target);
     }
     else
-        Perl_croak(aTHX_ "Bad object for Math::UInt64::STORABLE_thaw call");
+        croak_string(aTHX_ "Bad object for Math::UInt64::STORABLE_thaw call");
 
 SV *
 mu64STORABLE_freeze(self, cloning = NULL)
