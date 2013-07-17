@@ -122,18 +122,18 @@ overflow(pTHX_ const char *msg) {
         Perl_croak(aTHX_ "Math::Int64 overflow: %s", msg);
 }
 
-static char *out_of_bounds_error_s  = "Number is out of bounds for int64_t conversion";
-static char *out_of_bounds_error_u  = "Number is out of bounds for uint64_t conversion";
-static char *mul_error              = "Multiplication overflows";
-static char *add_error              = "Addition overflows";
-static char *sub_error              = "Subtraction overflows";
-static char *inc_error              = "Increment operation wraps";
-static char *dec_error              = "Decrement operation wraps";
-static char *div_by_0_error         = "Illegal division by zero";
-static char *pow_error              = "Exponentiation overflows";
-static char *invalid_length_error_s = "Invalid length for int64";
-static char *invalid_length_error_u = "Invalid length for uint64";
-static char *invalid_BER_error      = "Invalid BER encoding";
+static const char *out_of_bounds_error_s  = "Number is out of bounds for int64_t conversion";
+static const char *out_of_bounds_error_u  = "Number is out of bounds for uint64_t conversion";
+static const char *mul_error              = "Multiplication overflows";
+static const char *add_error              = "Addition overflows";
+static const char *sub_error              = "Subtraction overflows";
+static const char *inc_error              = "Increment operation wraps";
+static const char *dec_error              = "Decrement operation wraps";
+static const char *div_by_0_error         = "Illegal division by zero";
+static const char *pow_error              = "Exponentiation overflows";
+static const char *invalid_length_error_s = "Invalid length for int64";
+static const char *invalid_length_error_u = "Invalid length for uint64";
+static const char *invalid_BER_error      = "Invalid BER encoding";
 
 #include "strtoint64.h"
 #include "isaac64.h"
