@@ -38,7 +38,12 @@ WriteMakefile( NAME           => 'Math::Int64',
                LIBS           => [''], # e.g., '-lm'
                # OPTIMIZE       => '-O0 -g',
                DEFINE         => $define,
-               INC            => '-I.', # e.g., '-I. -I/usr/include/other'
+               INC            => '-I.', # e.g., '-I. -I/usr/include/other',
+               META_MERGE     => {
+                   resources => {
+                       repository  =>  'https://github.com/salva/p5-Math-Int64',
+                   },
+               },
     );
 
 
