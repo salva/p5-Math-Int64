@@ -262,7 +262,7 @@ rule:
 
 That way, positive and negative integers are interleaved as 0, -1, 1,
 2, -2, .... The format is similar to that used by Google protocol
-buffers to encode signed varints but with the most significant groups
+buffers to encode signed variants but with the most significant groups
 first (protocol buffers uses the least significant groups first
 variant).
 
@@ -280,7 +280,7 @@ There must not be any extra bytes on the string after the encoded number.
 Given a string with a BER encoded number at the beginning, this
 function returns the number of bytes it uses.
 
-The rigth way to shift a BER encoded number from the beginning of some
+The right way to shift a BER encoded number from the beginning of some
 string is as follows:
 
    $i64 = BER_to_int64(substr($str, 0, BER_length($str), ''));
@@ -362,7 +362,7 @@ C<die_on_overflow> pragma is global and can not be deactivated.
 
 If the lexical pragma C<Math::Int64::native_if_available> is used in
 your program and the version of perl in use has native support for
-64bit intgers, the functions imported from the module that create
+64bit integers, the functions imported from the module that create
 64bit integers (i.e. C<uint64>, C<int64>, C<string_to_int64>,
 C<native_to_int64>, etc.) will return regular perl scalars.
 
@@ -380,7 +380,7 @@ This feature is not enabled by default because the semantics for perl
 scalars and for 64 bit integers as implemented in this module are not
 identical.
 
-Perl is prone to coerze integers into floats while this module keeps
+Perl is prone to coerce integers into floats while this module keeps
 then always as 64bit integers. Specifically, the division operation
 and overflows are the most problematic cases.
 
