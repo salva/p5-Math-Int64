@@ -5,7 +5,7 @@ use warnings;
 
 use Math::Int64 qw(int64 uint64 string_to_int64 string_to_uint64);
 
-use Test::More tests => 51;
+use Test::More 0.88;
 
 my $zero = int64(0);
 my $one = int64(1);
@@ -79,3 +79,4 @@ ok(int64(12) ** 2 == 144);
 ok(int64(12) ** 3 == 1728);
 ok(int64(256) ** 5 == 2 ** (8 * 5));
 
+done_testing();
