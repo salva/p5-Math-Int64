@@ -27,7 +27,7 @@ package main;
 
 
 
-use Test::More tests => 4;
+use Test::More 0.88;
 
 my $t = Thing->new(4);
 
@@ -41,3 +41,5 @@ $t = Thing->new($u);
 
 ok($u * $t == 12);
 ok($i * $t == 8);
+
+done_testing();

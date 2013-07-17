@@ -12,7 +12,6 @@ unless (eval { require Storable; 1}) {
     exit;
 }
 
-plan tests => 200;
 
 use Math::Int64 qw(int64_rand uint64_rand);
 
@@ -29,3 +28,5 @@ $b = Storable::thaw(Storable::freeze($a));
 for (0..$#$a) {
     ok ($a->[$_] == $b->[$_]);
 }
+
+done_testing();

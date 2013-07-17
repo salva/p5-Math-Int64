@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 595;
+use Test::More 0.88;
 
 use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
@@ -144,3 +144,5 @@ for (1..50) {
     is("$n", net_to_int64(int64_to_net($n)));
     is("$n", BER_to_int64(int64_to_BER($n)));
 }
+
+done_testing();

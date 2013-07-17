@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 50;
+use Test::More 0.88;
 
 use Math::Int64 qw(:native_if_available
 		   int64 int64_to_number
@@ -132,3 +132,4 @@ SKIP: {
                           native_to_int64(int64_to_native(-12343)));
 }
 
+done_testing();

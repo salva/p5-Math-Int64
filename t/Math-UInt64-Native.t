@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 37;
+use Test::More 0.88;
 
 use Math::Int64 qw(:native_if_available
 		   uint64 uint64_to_number
@@ -106,3 +106,4 @@ SKIP: {
     ok(ref $_ eq '') for ($i, $j, $k);
 }
 
+done_testing();
