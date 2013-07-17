@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+use strict;
+use warnings;
+
 use Test::More tests => 37;
 
 use Math::Int64 qw(:native_if_available
@@ -7,7 +10,7 @@ use Math::Int64 qw(:native_if_available
                    net_to_uint64 uint64_to_net
                    native_to_uint64 uint64_to_native);
 
-my $iv_backend = (Math::Int64::backend eq 'IV');
+my $iv_backend = (Math::Int64::_backend() eq 'IV');
 
 my $i = uint64('1234567890123456789');
 my $j = $i + 1;
@@ -99,7 +102,7 @@ ok (int(log(uint64(1)<<50)/log(2)+0.001) == 50);
 # 35
 
 SKIP: {
-    skip "backend != IV", 3 unless Math::Int64::backend eq 'IV';
-    ok(ref $_ == '') for ($i, $j, $k);
+    skip "backend != IV", 3 unless Math::Int64::_backend() eq 'IV';
+    ok(ref $_ eq '') for ($i, $j, $k);
 }
 
