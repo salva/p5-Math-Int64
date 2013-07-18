@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 78;
+use Test::More 0.88;
 
 use Math::Int64 qw(int64 uint64 string_to_int64 string_to_uint64);
 use Math::Int64::die_on_overflow;
@@ -132,3 +132,5 @@ SKIP: {
     test_no_overflow { $s2_0 << 64 } 'no overflow - left shift 1 << 64, signed';
     test_no_overflow { $s2_0 << 63 } 'no overflow - left shift 1 << 63, signed';
 }
+
+done_testing();
