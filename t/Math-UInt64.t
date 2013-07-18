@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 
-use Test::More tests => 597;
+use strict;
+use warnings;
+
+use Test::More 0.88;
 
 use Math::Int64 qw(uint64 uint64_to_number
                    net_to_uint64 uint64_to_net
@@ -126,7 +129,6 @@ ok (net_to_uint64(uint64_to_net($j)) == $j);
 
 ok (net_to_uint64(uint64_to_net($i)) == $i);
 
-
 for (1..50) {
     my $n = uint64_rand;
     # $n = uint64("8420970171052099265");
@@ -143,3 +145,32 @@ for (1..50) {
     is("$n", net_to_uint64(uint64_to_net($n)));
     is("$n", BER_to_uint64(uint64_to_BER($n)));
 }
+
+my $two  = uint64(2);
+my $four = uint64(4);
+is ($two  ** -1, 0, "signed pow 2**-1");
+is ($four ** -1, 0, "signed pow 4**-1");
+
+for my $j (0..63) {
+    my $one = uint64(1);
+
+    is($two  ** $j, $one <<     $j, "signed pow 2**$j");
+    is($four ** $j, $one << 2 * $j, "signed pow 4**$j") if $j < 32;
+
+    is($one << $j, $two ** $j, "$one << $j");
+
+    $one <<= $j;
+    is($one, $two ** $j, "$one <<= $j");
+
+    next unless $j;
+
+    my $max = (((uint64(2)**63)-1)*2)+1;
+    is($max >> $j, $max / ( 2**$j ), "max uint64 >> $j");
+
+    my $copy = uint64($max);
+    $copy >>= $j;
+    is($copy, $max / ( 2**$j ), "max uint64 >>= $j");
+}
+
+
+done_testing();

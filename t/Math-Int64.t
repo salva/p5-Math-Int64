@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 595;
+use Test::More 0.88;
 
 use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
@@ -144,3 +144,32 @@ for (1..50) {
     is("$n", net_to_int64(int64_to_net($n)));
     is("$n", BER_to_int64(int64_to_BER($n)));
 }
+
+my $two  = int64(2);
+my $four = int64(4);
+is ($two  ** -1, 0, "signed pow 2**-1");
+is ($four ** -1, 0, "signed pow 4**-1");
+
+for my $j (0..63) {
+    my $one = int64(1);
+
+    is($two  ** $j, $one <<     $j, "signed pow 2**$j");
+    is($four ** $j, $one << 2 * $j, "signed pow 4**$j") if $j < 32;
+
+    is($one << $j, $two ** $j, "$one << $j");
+
+    $one <<= $j;
+    is($one, $two ** $j, "$one <<= $j");
+
+    next unless $j;
+
+    my $max = (((int64(2)**62)-1)*2)+1;
+    is($max >> $j, $max / ( 2**$j ), "max int64 >> $j");
+
+    my $copy = int64($max);
+    $copy >>= $j;
+    is($copy, $max / ( 2**$j ), "max int64 >>= $j");
+
+}
+
+done_testing();

@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 
-use Test::More tests => 48;
+use strict;
+use warnings;
+
+use Test::More 0.88;
 
 use Math::Int64 qw(:native_if_available
 		   int64 int64_to_number
@@ -119,7 +122,7 @@ ok ((($i | $j) & 1) != 0);
 ok ((($i & $j) & 1) == 0);
 
 SKIP: {
-    skip "backend != IV", 6 unless Math::Int64::backend eq 'IV';
+    skip "backend != IV", 8 unless Math::Int64::_backend() eq 'IV';
 
     ok(ref $_ eq '') for ($i, $j, $k,
                           net_to_int64(pack(NN => 0x01020304, 0x05060708)),
@@ -129,3 +132,4 @@ SKIP: {
                           native_to_int64(int64_to_native(-12343)));
 }
 
+done_testing();
