@@ -1,8 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
-0.31
+0.31  Jul 17, 2013
         - fix spelling errors (bug report by dsteinbrunner@pobox.com)
         - add automatic spelling test
+        - more and better tests (patch contributed by Dave Rolsky)
 
 0.30  Jun 3, 2013
         - fix compilation error/warning when compiling with GCC
