@@ -17,7 +17,8 @@ DEPENDENCIES
 This module requires a C compiler with 64 bit integer support (gcc for
 instance).
 
-Module::CAPIMaker is required to generate the c_api files
+If building from github Module::CAPIMaker is required to generate the c_api
+files
 
 COPYRIGHT AND LICENCE
 
