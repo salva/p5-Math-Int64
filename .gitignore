@@ -1,0 +1,15 @@
+/Int64.bs
+/Int64.c
+/Int64.o
+/MYMETA.json
+/MYMETA.yml
+/Makefile
+/Makefile.old
+/blib/
+/c_api.h
+/c_api_client/perl_math_int64.c
+/c_api_client/perl_math_int64.h
+/c_api_client/sample.xs
+/config.log
+/perl_math_int64.o
+/pm_to_blib
