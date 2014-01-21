@@ -54,11 +54,11 @@ sub postamble {
     my $author = $self->{AUTHOR};
     $author = join(', ', @$author) if ref $author;
     $author =~ s/'/'\''/g;
-
+    my $q = $^O =~ /MSWin32/i ? '"' : "'";
     return <<MAKE_FRAG
 
 c_api.h: c_api.decl
-	make_perl_module_c_api module_name=\$(NAME) module_version=\$(VERSION) author='$author'
+	make_perl_module_c_api module_name=\$(NAME) module_version=\$(VERSION) author=$q$author$q
 MAKE_FRAG
 
 }
