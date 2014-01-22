@@ -68,14 +68,17 @@ nv2u64(NV nv) {
 }
 #define NV2U64(nv) nv2u64(nv)
 
+#  if defined(_MSC_VER) && _MSC_VER >= 1300
+#    define U642NV(u64) ((NV)(u64))
+#  else
 static NV
 u642nv(uint64_t u64) {
     unsigned long h = u64 >> 32;
     unsigned long l = u64 & 0xffffffff;
     return (NV_0x1p32 * h) + (NV)l;
 }
-# define U642NV(nv) u642nv(nv)
-
+#    define U642NV(nv) u642nv(nv)
+#  endif
 #else
 #define NV2U64(nv) ((uint64_t)(nv))
 #define U642NV(u64) ((NV)(u64))
