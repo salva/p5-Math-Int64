@@ -9,7 +9,7 @@ use Math::Int64 qw(int64 int64_to_number
                    net_to_int64 int64_to_net
                    string_to_int64 int64_to_string
                    native_to_int64 int64_to_native
-                   int64_to_BER BER_to_int64 uint64_to_BER
+                   int64_to_BER BER_to_int64 uint64_to_BER BER_length
                    int64_rand
                    int64_to_hex hex_to_int64
                  );
@@ -128,10 +128,13 @@ is(BER_to_int64(int64_to_BER($l)). "", "1271310319617");
 
 is(int64_to_BER($nu), uint64_to_BER($nu << 1));
 
-for (1..50) {
-    my $n = int64_rand;
-    # $n = int64("8420970171052099265");
-    my $hex = int64_to_hex($n);
+for ( int64('1271310319617'),
+      int64('8420970171052099265'),
+      int64(0xdeadbeef),
+      map int64_rand, 1..50 )
+{
+    my $n = $_;
+     my $hex = int64_to_hex($n);
     ok($n == int64("$n"));
     ok($n == string_to_int64(int64_to_string($n)), "int64->string->int64 n: $n hex: $hex");
     ok(int64_to_hex($n) eq int64_to_hex(string_to_int64(int64_to_string($n))));
@@ -142,7 +145,12 @@ for (1..50) {
     is("$n", string_to_int64(int64_to_string($n, 2), 2));
     is("$n", native_to_int64(int64_to_native($n)));
     is("$n", net_to_int64(int64_to_net($n)));
+    my $ber = int64_to_BER($n);
+    my $ber_length = length($ber);
     is("$n", BER_to_int64(int64_to_BER($n)));
+    is("$n", BER_to_int64($ber));
+    is($ber_length, BER_length($ber));
+    is($ber_length, BER_length($ber . pack ("C*", map rand(256), 0..rand(10))));
 }
 
 my $two  = int64(2);
