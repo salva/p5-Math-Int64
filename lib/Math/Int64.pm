@@ -549,7 +549,7 @@ L<Math::BigInt::GMP>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright E<copy> 2007, 2009, 2011-2013 by Salvador FandiE<ntilde>o
+Copyright E<copy> 2007, 2009, 2011-2014 by Salvador FandiE<ntilde>o
 (sfandino@yahoo.com)
 
 This library is free software; you can redistribute it and/or modify

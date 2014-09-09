@@ -1,8 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
-0.3?  ??? ??, 2014
+0.32  Sep 9, 2014
+        - BER_length was broken (bug report and solution by Mark Donovan)
         - add native U64 to NV conversion support for some versions of MS
-          Visual C
+          Visual C (patch by bulk88)
 
 0.31  Jul 17, 2013
         - fix spelling errors (bug report by dsteinbrunner@pobox.com)
