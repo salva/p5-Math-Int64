@@ -573,7 +573,7 @@ BER_length(pTHX_ SV *sv) {
     unsigned char *pv = SvPVbyte(sv, len);
     IV i;
     for (i = 0; i < len; i++) {
-        if (pv[i] & 0x80 == 0) return i + 1;
+      if ((pv[i] & 0x80) == 0) return i + 1;
     }
     return -1;
 }
