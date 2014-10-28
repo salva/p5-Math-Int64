@@ -146,6 +146,14 @@ for (1..50) {
     is("$n", BER_to_uint64(uint64_to_BER($n)));
 }
 
+# pow (**) precision sometimes is not good enough!
+sub ipow {
+    my ($base, $exp) = @_;
+    my $r = 1;
+    $r *= $base for (1..$exp);
+    $r;
+}
+
 my $two  = uint64(2);
 my $four = uint64(4);
 is ($two  ** -1, 0, "signed pow 2**-1");
@@ -165,11 +173,11 @@ for my $j (0..63) {
     next unless $j;
 
     my $max = (((uint64(2)**63)-1)*2)+1;
-    is($max >> $j, $max / ( 2**$j ), "max uint64 >> $j");
+    is($max >> $j, $max / ipow(2, $j), "max uint64 >> $j");
 
     my $copy = uint64($max);
     $copy >>= $j;
-    is($copy, $max / ( 2**$j ), "max uint64 >>= $j");
+    is($copy, $max / ipow(2, $j), "max uint64 >>= $j");
 }
 
 

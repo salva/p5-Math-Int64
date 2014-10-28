@@ -153,6 +153,14 @@ for ( int64('1271310319617'),
     is($ber_length, BER_length($ber . pack ("C*", map rand(256), 0..rand(10))));
 }
 
+# pow (**) precision sometimes is not good enough!
+sub ipow {
+    my ($base, $exp) = @_;
+    my $r = 1;
+    $r *= $base for (1..$exp);
+    $r;
+}
+
 my $two  = int64(2);
 my $four = int64(4);
 is ($two  ** -1, 0, "signed pow 2**-1");
@@ -172,12 +180,11 @@ for my $j (0..63) {
     next unless $j;
 
     my $max = (((int64(2)**62)-1)*2)+1;
-    is($max >> $j, $max / ( 2**$j ), "max int64 >> $j");
+    is($max >> $j, $max / ipow(2, $j), "max int64 >> $j");
 
     my $copy = int64($max);
     $copy >>= $j;
-    is($copy, $max / ( 2**$j ), "max int64 >>= $j");
-
+    is($copy, $max / ipow(2, $j), "max int64 >>= $j");
 }
 
 done_testing();
