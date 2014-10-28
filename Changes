@@ -1,6 +1,6 @@
 Revision history for Perl extension Math::Int64.
 
-0.33
+0.33  Oct 28, 2014
         - fix test failures caused by operator ** sometimes not being
           precise enough (reported by John David Anglin, Gregor
           Herrmann and Sisyphus)
