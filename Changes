@@ -1,5 +1,10 @@
 Revision history for Perl extension Math::Int64.
 
+0.33
+        - fix test failures caused by operator ** sometimes not being
+          precise enough (reported by John David Anglin, Gregor
+          Herrmann and Sisyphus)
+
 0.32  Sep 9, 2014
         - BER_length was broken (bug report and solution by Mark Donovan)
         - add native U64 to NV conversion support for some versions of MS
