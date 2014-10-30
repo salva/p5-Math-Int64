@@ -803,8 +803,9 @@ CODE:
     if (len != 8)
         croak_string(aTHX_ invalid_length_error_u);
     if (use_native) {
-        RETVAL = newSVuv(0);
-        Copy(pv, &(SvUVX(RETVAL)), 8, char);
+        uint64_t tmp;
+        Copy(pv, &tmp, 8, char);
+        RETVAL = newSVuv(tmp);
     }
     else {
         RETVAL = newSVu64(aTHX_ 0);
