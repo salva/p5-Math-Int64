@@ -382,7 +382,8 @@ identical.
 
 Perl is prone to coerce integers into floats while this module keeps
 then always as 64bit integers. Specifically, the division operation
-and overflows are the most problematic cases.
+and overflows are the most problematic cases. Also, when using native
+integers, the signed/unsigned division blurs.
 
 Besides that, in most situations it is safe to use the native fallback.
 
@@ -512,6 +513,14 @@ Returns true is the given SV contains a valid uint64_t value.
 =item uint64_t randU64(void)
 
 Returns a random 64 bits unsigned integer.
+
+=item SV sv_seti64(SV *sv, uint64_t i64)
+
+Sets the value of the perl scalar to the given int64_t value.
+
+=item SV sv_setu64(SV *sv, uint64_t i64)
+
+Sets the value of the perl scalar to the given uint64_t value.
 
 =back
 

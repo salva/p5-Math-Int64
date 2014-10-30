@@ -1,7 +1,7 @@
 /*
  * <% $module_h_filename %> - This file is in the public domain
  * Author: <% $author %>
- * Version: 2.0
+ * Version: 2.1
  *
  * Generated on: <% $now %>
  * <% $module_name %> version: <% $module_version %>
@@ -51,6 +51,14 @@ extern int math_int64_c_api_max_version;
 #define newSVi64 newSViv
 #undef newSVu64
 #define newSVu64 newSVuv
+
+#define sv_seti64 sv_setiv_mg
+#define sv_setu64 sv_setuv_mg
+
+#else
+
+#define sv_seti64(target, i64) (sv_setsv_mg(target, sv_2mortal(newSVi64(i64))))
+#define sv_setu64(target, u64) (sv_setsv_mg(target, sv_2mortal(newSVu64(u64))))
 
 #endif
 
