@@ -1,5 +1,11 @@
 Revision history for Perl extension Math::Int64.
 
+0.34  Oct 30, 2014
+        - native_to_uint64 was broken when using native integers (bug
+          report by Aleksey Mashanov)
+        - add sv_seti64 and sv_setu64 macros (feature request by
+          Graham Ollis)
+
 0.33  Oct 28, 2014
         - fix test failures caused by operator ** sometimes not being
           precise enough (reported by John David Anglin, Gregor
