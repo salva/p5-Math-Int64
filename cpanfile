@@ -1,4 +1,3 @@
-requires "Carp" => "0";
 requires "Exporter" => "0";
 requires "XSLoader" => "0";
 requires "constant" => "0";

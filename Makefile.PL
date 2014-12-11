@@ -23,7 +23,6 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.006",
   "NAME" => "Math::Int64",
   "PREREQ_PM" => {
-    "Carp" => 0,
     "Exporter" => 0,
     "XSLoader" => 0,
     "constant" => 0,
@@ -47,7 +46,6 @@ my %WriteMakefileArgs = (
 $WriteMakefileArgs{DEFINE} = _backend_define();
 
 my %FallbackPrereqs = (
-  "Carp" => 0,
   "Exporter" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,

@@ -4,10 +4,9 @@ use strict;
 use warnings;
 
 BEGIN {
-    our $VERSION = '0.35';
-
-    require XSLoader;
-    XSLoader::load('Math::Int64', $VERSION);
+our $VERSION = '0.49_01';
+require XSLoader;
+XSLoader::load('Math::Int64', $VERSION);
 }
 
 use constant MAX_INT64  => string_to_int64 ( '0x7fff_ffff_ffff_ffff');
