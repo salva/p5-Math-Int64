@@ -4,7 +4,7 @@ Math::Int64 - Manipulate 64 bits integers in Perl
 
 # VERSION
 
-version 0.34
+version 0.35
 
 # SYNOPSIS
 
@@ -175,6 +175,10 @@ Perl.
 
     Decodes from the given string an unsigned number in BER format.
 
+- uint64\_rand
+
+    Generates a 64 bit random unsigned number using ISAAC-64 algorithm.
+
 ## Die on overflow
 
 The lexical pragma `Math::Int64::die_on_overflow` configures the
@@ -284,22 +288,22 @@ For instance:
      #include "perl.h"
      #include "XSUB.h"
      #include "ppport.h"
-     
+
      /* #define MATH_INT64_NATIVE_IF_AVAILABLE */
      #include "math_int64.h"
-     
+
      MODULE = Foo64                PACKAGE = Foo64
      BOOT:
          PERL_MATH_INT64_LOAD_OR_CROAK;
-     
+
      int64_t
      some_int64()
      CODE:
          RETVAL = -42;
      OUTPUT:
          RETVAL
-     
-     
+
+
      --- Makefile.PL -----
 
      use ExtUtils::MakeMaker;
@@ -362,7 +366,7 @@ The C API feature is experimental.
 This module requires int64 support from the C compiler.
 
 In order to report bugs you can send me and email to the address that
-appears below or use the CPAN RT bugtracking system available at
+appears below or use the CPAN RT bug tracking system available at
 [http://rt.cpan.org](http://rt.cpan.org).
 
 The source for the development version of the module is hosted at
