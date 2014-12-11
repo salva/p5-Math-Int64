@@ -3,7 +3,7 @@ package Math::Int64::die_on_overflow;
 use strict;
 use warnings;
 
-our $VERSION = '0.34';
+our $VERSION = '0.35';
 
 sub import {
     require Math::Int64;

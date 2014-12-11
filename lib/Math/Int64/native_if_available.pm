@@ -3,7 +3,7 @@ package Math::Int64::native_if_available;
 use strict;
 use warnings;
 
-our $VERSION = '0.34';
+our $VERSION = '0.35';
 
 sub import {
     if (Math::Int64::_backend() eq 'IV' and $] >= 5.008) {
