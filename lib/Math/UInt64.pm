@@ -1,7 +1,6 @@
 package Math::UInt64;
 
-require Math::Int64;
-require Carp;
+use Math::Int64;
 
 sub import { goto &Math::Int64::import }
 
