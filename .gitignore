@@ -13,3 +13,5 @@
 /config.log
 /perl_math_int64.o
 /pm_to_blib
+/Math-Int64-*
+/.build
