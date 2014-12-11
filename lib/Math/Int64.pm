@@ -143,6 +143,8 @@ use overload ( '+' => \&_add,
 
 __END__
 
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
   use Math::Int64 qw(int64 uint64);
