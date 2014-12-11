@@ -3,11 +3,12 @@ package Math::Int64;
 use strict;
 use warnings;
 
+# The "our $VERSION" bit needs to be at the beginning of the line for the
+# benefit of the RewriteVersion plugin.
 BEGIN {
-    our $VERSION = '0.34';
-
-    require XSLoader;
-    XSLoader::load('Math::Int64', $VERSION);
+our $VERSION = '0.35';
+require XSLoader;
+XSLoader::load('Math::Int64', $VERSION);
 }
 
 use constant MAX_INT64  => string_to_int64 ( '0x7fff_ffff_ffff_ffff');
