@@ -15,3 +15,22 @@ sub unimport {
 }
 
 1;
+
+# ABSTRACT: Use the native Perl 64-bit integer implementation when available
+
+__END__
+
+=encoding UTF-8
+
+=head1 SYNOPSIS
+
+  use Math::Int64 qw(uint64);
+  use Math::Int64::native_if_available;
+
+=head1 SEE ALSO
+
+L<Math::Int64>.
+
+=cut
+
+
