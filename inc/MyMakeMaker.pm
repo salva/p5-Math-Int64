@@ -22,8 +22,10 @@ override _build_MakeFile_PL_template => sub {
     my $self     = shift;
     my $template = super();
 
+    $template =~ s/^WriteMakefile/_check_int64_support();\n\nWriteMakefile/m;
+
     my $extra = do { local $/; <DATA> };
-    return "_check_int64_support();\n\n" . $template . $extra;
+    return $template . $extra;
 };
 
 __PACKAGE__->meta()->make_immutable();
