@@ -1,5 +1,8 @@
 package Math::Int64::die_on_overflow;
 
+use strict;
+use warnings;
+
 our $VERSION = '0.34';
 
 sub import {

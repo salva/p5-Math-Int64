@@ -1,5 +1,8 @@
 package Math::UInt64;
 
+use strict;
+use warnings;
+
 our $VERSION = '0.34';
 
 use Math::Int64;
