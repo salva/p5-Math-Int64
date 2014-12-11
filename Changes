@@ -1,5 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
+0.35
+        - add more tests
+
 0.34  Oct 30, 2014
         - native_to_uint64 was broken when using native integers (bug
           report by Aleksey Mashanov)

@@ -187,4 +187,7 @@ for my $j (0..63) {
     is($copy, $max / ipow(2, $j), "max int64 >>= $j");
 }
 
+# test for rt.cpan.org #100861:
+is(sprintf("%s", int64("-2251842763358208")), "-2251842763358208", "bug #100861");
+
 done_testing();
