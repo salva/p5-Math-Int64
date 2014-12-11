@@ -1,5 +1,7 @@
 package Math::UInt64;
 
+our $VERSION = '0.34';
+
 use Math::Int64;
 
 sub import { goto &Math::Int64::import }

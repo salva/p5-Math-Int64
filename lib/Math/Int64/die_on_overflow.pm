@@ -1,5 +1,7 @@
 package Math::Int64::die_on_overflow;
 
+our $VERSION = '0.34';
+
 sub import {
     require Math::Int64;
     Math::Int64::_set_may_die_on_overflow(1);
