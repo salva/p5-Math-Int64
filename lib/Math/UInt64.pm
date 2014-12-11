@@ -1,5 +1,8 @@
 package Math::UInt64;
 
+use strict;
+use warnings;
+
 use Math::Int64;
 
 sub import { goto &Math::Int64::import }

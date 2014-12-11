@@ -1,5 +1,8 @@
 package Math::Int64::die_on_overflow;
 
+use strict;
+use warnings;
+
 sub import {
     require Math::Int64;
     Math::Int64::_set_may_die_on_overflow(1);
