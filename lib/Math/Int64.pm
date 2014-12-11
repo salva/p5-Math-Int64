@@ -330,6 +330,10 @@ Encodes the given unsigned integer in BER format (see L<perlfunc/pack>).
 
 Decodes from the given string an unsigned number in BER format.
 
+=item uint64_rand
+
+Generates a 64 bit random unsigned number using ISAAC-64 algorithm.
+
 =back
 
 =head2 Die on overflow
@@ -538,7 +542,7 @@ The C API feature is experimental.
 This module requires int64 support from the C compiler.
 
 In order to report bugs you can send me and email to the address that
-appears below or use the CPAN RT bugtracking system available at
+appears below or use the CPAN RT bug tracking system available at
 L<http://rt.cpan.org>.
 
 The source for the development version of the module is hosted at

@@ -22,6 +22,8 @@ sub unimport {
 
 __END__
 
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
   use Math::Int64 qw(uint64);
