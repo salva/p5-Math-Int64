@@ -453,22 +453,22 @@ For instance:
   #include "perl.h"
   #include "XSUB.h"
   #include "ppport.h"
-  
+
   /* #define MATH_INT64_NATIVE_IF_AVAILABLE */
   #include "math_int64.h"
-  
+
   MODULE = Foo64		PACKAGE = Foo64
   BOOT:
       PERL_MATH_INT64_LOAD_OR_CROAK;
-  
+
   int64_t
   some_int64()
   CODE:
       RETVAL = -42;
   OUTPUT:
       RETVAL
-  
-  
+
+
   --- Makefile.PL -----
 
   use ExtUtils::MakeMaker;
