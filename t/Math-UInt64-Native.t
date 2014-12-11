@@ -6,7 +6,7 @@ use warnings;
 use Test::More 0.88;
 
 use Math::Int64 qw(:native_if_available
-		   uint64 uint64_to_number
+                   uint64 uint64_to_number
                    net_to_uint64 uint64_to_net
                    native_to_uint64 uint64_to_native);
 
