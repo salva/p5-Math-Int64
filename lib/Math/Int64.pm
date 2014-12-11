@@ -100,7 +100,8 @@ use overload ( '+' => \&_add,
                '=' => \&_clone,
                fallback => 1 );
 
-package Math::UInt64;
+package # hide from PAUSE since it also has its own .pm file
+    Math::UInt64;
 use overload ( '+' => \&_add,
                '+=' => \&_add,
                '-' => \&_sub,
