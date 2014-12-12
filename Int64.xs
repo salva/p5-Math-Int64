@@ -26,8 +26,6 @@ static int may_use_native;
 
 #ifdef _MSC_VER
 #include <stdlib.h>
-typedef __int64 int64_t;
-typedef unsigned __int64 uint64_t;
 
 #ifndef INT64_MAX
 #define INT64_MAX _I64_MAX
@@ -42,6 +40,26 @@ typedef unsigned __int64 uint64_t;
 #define UINT32_MAX _UI32_MAX
 #endif
 
+#endif
+
+#ifdef INT64_T
+#define HAVE_INT64
+#endif
+
+#ifdef __INT64
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
+#define HAVE_INT64
+#endif
+
+#ifdef INT64_DI
+typedef int int64_t __attribute__ ((__mode__ (DI)));
+typedef unsigned int uint64_t __attribute__ ((__mode__ (DTI)));
+#define HAVE_INT64
+#endif
+
+#ifndef HAVE_INT64
+#error "No int64 type define was passed to the compiler!"
 #endif
 
 #if ((defined _MSC_VER) || (defined INT64_MY_NV2U64))

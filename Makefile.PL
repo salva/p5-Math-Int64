@@ -41,7 +41,7 @@ my %WriteMakefileArgs = (
     "TESTS" => "t/*.t"
   }
 );
-$WriteMakefileArgs{DEFINE} = _backend_define();
+$WriteMakefileArgs{DEFINE} = _backend_define() . q{ } . _int64_define();
 
 my %FallbackPrereqs = (
   "Exporter" => 0,
@@ -67,20 +67,19 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
-_check_int64_support();
-
 WriteMakefile(%WriteMakefileArgs);
 
 use lib 'inc';
 use Config::AutoConf;
 
-sub _check_int64_support {
+sub _int64_define {
     my $autoconf = Config::AutoConf->new;
 
-    return
-        if $autoconf->check_default_headers()
-        && ( $autoconf->check_type('int64_t')
-        || $autoconf->check_type('__int64') );
+    return unless $autoconf->check_default_headers();
+    return '-DINT64_T' if $autoconf->check_type('int64_t');
+    return '-D__INT64' if $autoconf->check_type('__int64');
+    return '-DINT64_DI'
+        if $autoconf->check_type('int __attribute__ ((__mode__ (DI)))');
 
     warn <<'EOF';
 
