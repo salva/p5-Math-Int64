@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
-0.35
+{{$NEXT}}
+        - Removed compiler detection in favor of compiler feature checking
+          with Config::AutoConf (Dave Rolsky)
         - add more tests
 
 0.34     2014-10-30
