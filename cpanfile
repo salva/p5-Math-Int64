@@ -24,6 +24,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Module::CAPIMaker" => "0";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::EOL" => "0";
