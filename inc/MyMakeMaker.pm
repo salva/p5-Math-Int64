@@ -12,7 +12,7 @@ override _build_WriteMakefile_dump => sub {
 
     my $dump = super();
     $dump .= <<'EOF';
-$WriteMakefileArgs{DEFINE} = _backend_define();
+$WriteMakefileArgs{DEFINE} = _backend_define() . q{ } . _int64_define();
 EOF
 
     return $dump;
@@ -21,8 +21,6 @@ EOF
 override _build_MakeFile_PL_template => sub {
     my $self     = shift;
     my $template = super();
-
-    $template =~ s/^WriteMakefile/_check_int64_support();\n\nWriteMakefile/m;
 
     my $extra = do { local $/; <DATA> };
     return $template . $extra;
@@ -37,13 +35,14 @@ __DATA__
 use lib 'inc';
 use Config::AutoConf;
 
-sub _check_int64_support {
+sub _int64_define {
     my $autoconf = Config::AutoConf->new;
 
-    return
-        if $autoconf->check_default_headers()
-        && ( $autoconf->check_type('int64_t')
-        || $autoconf->check_type('__int64') );
+    return unless $autoconf->check_default_headers();
+    return '-DINT64_T' if $autoconf->check_type('int64_t');
+    return '-D__INT64' if $autoconf->check_type('__int64');
+    return '-DINT64_DI'
+        if $autoconf->check_type('int __attribute__ ((__mode__ (DI)))');
 
     warn <<'EOF';
 
