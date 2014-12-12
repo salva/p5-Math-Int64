@@ -1,5 +1,9 @@
 Revision history for Perl extension Math::Int64.
 
+{{$NEXT}}
+        - Removed compiler detection in favor of compiler feature checking
+          with Config::AutoConf. (Dave Rolsky)
+
 0.34     2014-10-30
         - native_to_uint64 was broken when using native integers (bug
           report by Aleksey Mashanov)
