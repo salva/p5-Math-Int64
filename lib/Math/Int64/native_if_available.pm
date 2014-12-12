@@ -22,6 +22,10 @@ __END__
 
 =encoding UTF-8
 
+=head1 NAME
+
+Math::Int64::native_if_available - Use the native Perl 64-bit integer implementation when available
+
 =head1 SYNOPSIS
 
   use Math::Int64 qw(uint64);

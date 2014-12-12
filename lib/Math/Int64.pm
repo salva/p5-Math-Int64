@@ -144,6 +144,10 @@ __END__
 
 =encoding UTF-8
 
+=head1 NAME
+
+Math::Int64 - Manipulate 64 bits integers in Perl
+
 =head1 SYNOPSIS
 
   use Math::Int64 qw(int64 uint64);
@@ -559,3 +563,16 @@ Other modules providing support for larger integers or numbers are
 L<Math::BigInt>, L<Math::BigRat> and L<Math::Big>,
 L<Math::BigInt::BitVect>, L<Math::BigInt::Pari> and
 L<Math::BigInt::GMP>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright E<copy> 2007, 2009, 2011-2014 by Salvador Fandiño
+(sfandino@yahoo.com)
+
+Copyright E<copy> 2014 by Dave Rolsky (autarch@urth.org)
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut

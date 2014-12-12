@@ -22,6 +22,10 @@ __END__
 
 =encoding UTF-8
 
+=head1 NAME
+
+Math::Int64::die_on_overflow - catch overflows when using Math::Int64
+
 =head1 SYNOPSIS
 
   use Math::Int64 qw(uint64);

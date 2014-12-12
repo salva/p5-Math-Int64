@@ -15,6 +15,10 @@ __END__
 
 =encoding UTF-8
 
+=head1 NAME
+
+Math::UInt64 - Manipulate 64 bit unsigned integers from Perl
+
 =head1 DESCRIPTION
 
 Math::UInt64 is just an alias for Math::Int64, the only reason it
