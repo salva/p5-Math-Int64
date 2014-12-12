@@ -2,10 +2,6 @@
 
 Math::Int64 - Manipulate 64 bits integers in Perl
 
-# VERSION
-
-version 0.49\_01
-
 # SYNOPSIS
 
     use Math::Int64 qw(int64 uint64);
@@ -386,20 +382,13 @@ Other modules providing support for larger integers or numbers are
 [Math::BigInt::BitVect](https://metacpan.org/pod/Math::BigInt::BitVect), [Math::BigInt::Pari](https://metacpan.org/pod/Math::BigInt::Pari) and
 [Math::BigInt::GMP](https://metacpan.org/pod/Math::BigInt::GMP).
 
-# AUTHORS
-
-- Salvador Fandiño <sfandino@yahoo.com>
-- Dave Rolsky <autarch@urth.org>
-
-# CONTRIBUTORS
-
-- bulk88 <bulk88@hotmail.com>
-- David Steinbrunner <dsteinbrunner@pobox.com>
-- Dylan Cali <calid1984@gmail.com>
-
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Salvador Fandiño.
+Copyright © 2007, 2009, 2011-2014 by Salvador Fandiño
+(sfandino@yahoo.com)
 
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
+Copyright © 2014 by Dave Rolsky (autarch@urth.org)
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
