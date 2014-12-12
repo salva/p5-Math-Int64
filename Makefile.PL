@@ -67,10 +67,27 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
+_check_for_capi_maker();
+
 WriteMakefile(%WriteMakefileArgs);
 
 use lib 'inc';
 use Config::AutoConf;
+
+sub _check_for_capi_maker {
+    return unless -d '.git';
+
+    unless ( eval { require Module::CAPIMaker; 1; } ) {
+        warn <<'EOF';
+
+  It looks like you're trying to build Math::Int64 from the git repo. You'll
+  need to install Module::CAPIMaker from CPAN in order to do this.
+
+EOF
+
+        exit 1;
+    }
+}
 
 sub _int64_define {
     my $autoconf = Config::AutoConf->new;
@@ -108,6 +125,19 @@ EOF
 }
 
 package MY;
+
+sub postamble {
+    my $self = shift;
+
+    my $author = $self->{AUTHOR};
+    $author = join( ', ', @$author ) if ref $author;
+    $author =~ s/'/'\''/g;
+
+    return <<"MAKE_FRAG";
+c_api.h: c_api.decl
+	perl -MModule::CAPIMaker -emake_c_api module_name=\$(NAME) module_version=\$(VERSION) author='$author'
+MAKE_FRAG
+}
 
 sub init_dirscan {
     my $self = shift;
