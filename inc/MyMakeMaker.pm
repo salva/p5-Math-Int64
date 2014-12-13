@@ -7,6 +7,17 @@ use Moose;
 
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
 
+override _build_WriteMakefile_args => sub {
+    my $self = shift;
+
+    my $args = super();
+
+    delete $args->{VERSION};
+    $args->{VERSION_FROM} = 'lib/Math/Int64.pm';
+
+    return $args;
+};
+
 override _build_WriteMakefile_dump => sub {
     my $self = shift;
 

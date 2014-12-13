@@ -36,7 +36,7 @@ my %WriteMakefileArgs = (
     "Storable" => 0,
     "Test::More" => "0.88"
   },
-  "VERSION" => "0.49_01",
+  "VERSION_FROM" => "lib/Math/Int64.pm",
   "test" => {
     "TESTS" => "t/*.t"
   }
