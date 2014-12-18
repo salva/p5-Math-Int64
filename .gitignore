@@ -1,3 +1,4 @@
+/.build
 /Int64.bs
 /Int64.c
 /Int64.o
@@ -5,6 +6,7 @@
 /MYMETA.yml
 /Makefile
 /Makefile.old
+/Math-Int64-*
 /blib/
 /c_api.h
 /c_api_client/perl_math_int64.c
@@ -13,5 +15,3 @@
 /config.log
 /perl_math_int64.o
 /pm_to_blib
-/Math-Int64-*
-/.build
