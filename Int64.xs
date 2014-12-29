@@ -1487,7 +1487,7 @@ OUTPUT:
 void
 mi64STORABLE_thaw(self, cloning, serialized, ...)
     SV *self
-    SV *clonning = NO_INIT
+    SV *cloning = NO_INIT
     SV *serialized
 CODE:
     if (SvROK(self) && sv_isa(self, "Math::Int64")) {
@@ -1964,7 +1964,7 @@ OUTPUT:
 void
 mu64STORABLE_thaw(self, cloning, serialized, ...)
     SV *self
-    SV *clonning = NO_INIT
+    SV *cloning = NO_INIT
     SV *serialized
 CODE:
     if (SvROK(self) && sv_isa(self, "Math::UInt64")) {
