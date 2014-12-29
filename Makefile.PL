@@ -42,6 +42,7 @@ my %WriteMakefileArgs = (
   }
 );
 $WriteMakefileArgs{DEFINE} = _backend_define() . q{ } . _int64_define();
+$WriteMakefileArgs{CCFLAGS} = _ccflags( $WriteMakefileArgs{CCFLAGS} );
 
 my %FallbackPrereqs = (
   "Exporter" => 0,
@@ -122,6 +123,15 @@ EOF
     print "Using $backend backend\n";
 
     return '-DINT64_BACKEND_' . $backend;
+}
+
+sub _ccflags {
+    my $flags = shift;
+
+    return $flags unless -d '.git';
+
+    return join q{ }, ( $flags || q{} ),
+        qw( -Wall -Wdeclaration-after-statement );
 }
 
 package MY;
