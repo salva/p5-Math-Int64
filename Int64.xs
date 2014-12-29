@@ -540,9 +540,9 @@ powU64(pTHX_ uint64_t a, uint64_t b) {
 
 static SV *
 uint64_to_BER(pTHX_ uint64_t a) {
-    unsigned char buffer[10];
-    unsigned char *top = buffer + sizeof(buffer);
-    unsigned char *p = top;
+    char buffer[10];
+    char *top = buffer + sizeof(buffer);
+    char *p = top;
     *(--p) = (a & 0x7f);
     while ((a >>= 7)) {
         *(--p) = (a & 0x7f) | 0x80;
@@ -562,7 +562,7 @@ int64_to_BER(pTHX_ int64_t a) {
 static uint64_t
 BER_to_uint64(pTHX_ SV *sv) {
     STRLEN len;
-    unsigned char *pv = SvPVbyte(sv, len);
+    char *pv = SvPVbyte(sv, len);
     uint64_t a;
     IV i;
     for (i = 0, a = 0; i < len; i++) {
@@ -588,7 +588,7 @@ BER_to_int64(pTHX_ SV *sv) {
 static IV
 BER_length(pTHX_ SV *sv) {
     STRLEN len;
-    unsigned char *pv = SvPVbyte(sv, len);
+    char *pv = SvPVbyte(sv, len);
     IV i;
     for (i = 0; i < len; i++) {
       if ((pv[i] & 0x80) == 0) return i + 1;
