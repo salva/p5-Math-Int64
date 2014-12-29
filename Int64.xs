@@ -1079,7 +1079,7 @@ PREINIT:
 CODE:
     if (may_die_on_overflow) {
         int neg = 0;
-        uint64_t a, b, rl, rh;
+        uint64_t a, b;
         if (a1 < 0) {
             a = -a1;
             neg ^= 1;
@@ -1697,7 +1697,6 @@ mu64_pow(self, other, rev = &PL_sv_no)
     SV *other
     SV *rev
 PREINIT:
-    int sign;
     uint64_t r;
     int64_t a, b;
 CODE:
