@@ -104,7 +104,7 @@ sub _ccflags {
 
     return $flags unless -d '.git';
 
-    return join q{ }, ( $flags || q{} ),
+    return join q{ }, ( $flags || $Config::Config{ccflags} ),
         qw( -Wall -Wdeclaration-after-statement );
 }
 
