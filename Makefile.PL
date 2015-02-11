@@ -8,6 +8,7 @@ use warnings;
 
 use 5.006;
 use ExtUtils::MakeMaker;
+use Config ();
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Manipulate 64 bits integers in Perl",
@@ -130,7 +131,7 @@ sub _ccflags {
 
     return $flags unless -d '.git';
 
-    return join q{ }, ( $flags || q{} ),
+    return join q{ }, ( $flags || $Config::Config{ccflags} ),
         qw( -Wall -Wdeclaration-after-statement );
 }
 
