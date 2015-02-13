@@ -24,7 +24,6 @@ override _build_WriteMakefile_dump => sub {
     my $dump = super();
     $dump .= <<'EOF';
 $WriteMakefileArgs{DEFINE}  = _backend_define() . q{ } . _int64_define();
-$WriteMakefileArgs{CCFLAGS} = _ccflags( $WriteMakefileArgs{CCFLAGS} );
 EOF
 
     return $dump;
@@ -97,15 +96,6 @@ EOF
     print "Using $backend backend\n";
 
     return '-DINT64_BACKEND_' . $backend;
-}
-
-sub _ccflags {
-    my $flags = shift;
-
-    return $flags unless -d '.git';
-
-    return join q{ }, ( $flags || $Config::Config{ccflags} ),
-        qw( -Wall -Wdeclaration-after-statement );
 }
 
 package MY;
