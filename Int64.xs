@@ -208,10 +208,10 @@ newSVi64(pTHX_ int64_t i64) {
     SV *sv;
     SV *si64 = newSV(0);
     SvUPGRADE(si64, SVt_I64);
-    *(int64_t*)(&(SvI64Y(si64))) = i64;
     SvI64_onY(si64);
     sv = newRV_noinc(si64);
     sv_bless(sv, gv_stashpvs("Math::Int64", TRUE));
+    *(int64_t*)(&(SvI64Y(si64))) = i64;
     SvREADONLY_on(si64);
     return sv;
 }
@@ -221,10 +221,10 @@ newSVu64(pTHX_ uint64_t u64) {
     SV *sv;
     SV *su64 = newSV(0);
     SvUPGRADE(su64, SVt_I64);
-    *(int64_t*)(&(SvI64Y(su64))) = u64;
     SvI64_onY(su64);
     sv = newRV_noinc(su64);
     sv_bless(sv, gv_stashpvs("Math::UInt64", TRUE));
+    *(int64_t*)(&(SvI64Y(su64))) = u64;
     SvREADONLY_on(su64);
     return sv;
 }
