@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+
+0.51     2015-03-09
         - when building the wrapper object, sv_bless may copy the NV
           slot as a float and mess its bits (bug report and analysis
           by Aleksey Mashanov, #RT100861)
