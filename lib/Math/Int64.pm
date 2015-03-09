@@ -566,10 +566,10 @@ L<Math::BigInt::GMP>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright E<copy> 2007, 2009, 2011-2014 by Salvador Fandiño
+Copyright E<copy> 2007, 2009, 2011-2015 by Salvador Fandiño
 (sfandino@yahoo.com)
 
-Copyright E<copy> 2014 by Dave Rolsky (autarch@urth.org)
+Copyright E<copy> 2014-2015 by Dave Rolsky (autarch@urth.org)
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
