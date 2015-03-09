@@ -5,6 +5,7 @@ Revision history for Perl extension Math::Int64.
         - NO_INIT optimizations reapplied
         - remove gcc-isms breaking compilation with Solaris Studio
         - Solaris make doesn't like unicode
+        - Fix Dist::Zilla issues (Dave Rolsky)
 
 0.49_01  2014-12-12
         - Bad release
