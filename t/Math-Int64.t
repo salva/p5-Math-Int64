@@ -166,7 +166,8 @@ my $four = int64(4);
 is ($two  ** -1, 0, "signed pow 2**-1");
 is ($four ** -1, 0, "signed pow 4**-1");
 
-for my $j (0..63) {
+my $max = (((int64(2)**62)-1)*2)+1;
+for my $j (0..62) {
     my $one = int64(1);
 
     is($two  ** $j, $one <<     $j, "signed pow 2**$j");
@@ -179,13 +180,14 @@ for my $j (0..63) {
 
     next unless $j;
 
-    my $max = (((int64(2)**62)-1)*2)+1;
     is($max >> $j, $max / ipow(2, $j), "max int64 >> $j");
 
     my $copy = int64($max);
     $copy >>= $j;
     is($copy, $max / ipow(2, $j), "max int64 >>= $j");
 }
+
+is ($max >> 63, 0, "max int64 >> 63");
 
 # test for rt.cpan.org #100861:
 is(sprintf("%s", int64("-2251842763358208")), "-2251842763358208", "bug #100861");
