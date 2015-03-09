@@ -1,10 +1,19 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
-        - Removed compiler detection in favor of compiler feature checking
-          with Config::AutoConf (Dave Rolsky)
-        - add more tests
         - fix test failing in s390 (bug report by David Dick)
+        - NO_INIT optimizations reapplied
+        - remove gcc-isms breaking compilation with Solaris Studio
+        - Solaris make doesn't like unicode
+
+0.49_01  2014-12-12
+        - Bad release
+
+0.34_01  2014-12-29
+        - Removed compiler detection in favor of compiler feature checking
+           with Config::AutoConf (Dave Rolsky)
+        - Add more tests
+        - Fixed some compiler warnings
 
 0.34     2014-10-30
         - native_to_uint64 was broken when using native integers (bug
