@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+
+0.50     2015-03-09
         - fix test failing in s390 (bug report by David Dick)
         - NO_INIT optimizations reapplied
         - remove gcc-isms breaking compilation with Solaris Studio
