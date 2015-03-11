@@ -133,9 +133,11 @@ sub postamble {
     $author = join( ', ', @$author ) if ref $author;
     $author =~ s/'/'\''/g;
 
+    $author = ($^O eq 'MSWin32') ? qq{"$author"} : qq{'$author'};
+
     return <<"MAKE_FRAG";
 c_api.h: c_api.decl
-	perl -MModule::CAPIMaker -emake_c_api module_name=\$(NAME) module_version=\$(VERSION) author='$author'
+	perl -MModule::CAPIMaker -emake_c_api module_name=\$(NAME) module_version=\$(VERSION) author=$author
 MAKE_FRAG
 }
 
