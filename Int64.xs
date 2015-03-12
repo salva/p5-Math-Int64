@@ -13,7 +13,7 @@
 static int may_die_on_overflow;
 static int may_use_native;
 
-#ifdef __MINGW32__
+#ifdef HAS_STDINT_H
 #include <stdint.h>
 #endif
 

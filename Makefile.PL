@@ -41,7 +41,10 @@ my %WriteMakefileArgs = (
     "TESTS" => "t/*.t"
   }
 );
-$WriteMakefileArgs{DEFINE}  = _backend_define() . q{ } . _int64_define();
+$WriteMakefileArgs{DEFINE} = join ' ',
+                               grep defined, _backend_define(),
+                                             _int64_define(),
+                                             _has_stdint_h_define();
 
 my %FallbackPrereqs = (
   "Exporter" => 0,
@@ -89,14 +92,23 @@ EOF
     }
 }
 
-sub _int64_define {
-    my $autoconf = Config::AutoConf->new;
+my $autoconf;
+sub autoconf {
+    unless (defined $autoconf) {
+        $autoconf = Config::AutoConf->new;
+        unless ($autoconf->check_default_headers()) {
+            warn 'Config::AutoConf check for default headers failed!';
+            exit 1;
+        }
+    }
+    $autoconf;
+}
 
-    return unless $autoconf->check_default_headers();
-    return '-DINT64_T' if $autoconf->check_type('int64_t');
-    return '-D__INT64' if $autoconf->check_type('__int64');
+sub _int64_define {
+    return '-DINT64_T' if autoconf->check_type('int64_t');
+    return '-D__INT64' if autoconf->check_type('__int64');
     return '-DINT64_DI'
-        if $autoconf->check_type('int __attribute__ ((__mode__ (DI)))');
+        if autoconf->check_type('int __attribute__ ((__mode__ (DI)))');
 
     warn <<'EOF';
 
@@ -107,6 +119,11 @@ sub _int64_define {
 EOF
 
     exit 1;
+}
+
+sub _has_stdint_h_define {
+    return '-DHAS_STDINT_H' if autoconf->check_header('stdint.h');
+    undef
 }
 
 sub _backend_define {
