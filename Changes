@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
-{{$NEXT}}        
+{{$NEXT}}
+
+0.52     2015-03-12        
         - include stdint.h when compiling with recent MS compilers
           (bug report by A. Sinan Unur)
         - fix C API generation on Windows (bug report by A. Sinan
