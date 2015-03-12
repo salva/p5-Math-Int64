@@ -15,7 +15,7 @@ installed with the usual sequence of commands:
 
 ## Development version
 
-The source code is for the development version of **Math::Int64** is
+The source code for the development version of **Math::Int64** is
 available from [GitHub](https://github.com/salva/p5-Math-Int64).
 
 It is managed with [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla).
