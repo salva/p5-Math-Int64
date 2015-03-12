@@ -165,7 +165,7 @@ Perl.
 
 - uint64\_to\_BER($u64)
 
-    Encodes the given unsigned integer in BER format (see ["pack" in perlfunc](https://metacpan.org/pod/perlfunc#pack)).
+    Encodes the given unsigned integer in BER format (see ["pack" in perlfunc](https://metacpan.org/pod/perlfunc#pack-TEMPLATE-LIST)).
 
 - BER\_to\_uint64($str)
 
