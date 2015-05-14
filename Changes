@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+
+0.53     2015-05-14
         - warn when both native_if_available and die_on_overflow are
           enabled (bug report by David Wheeler).
 

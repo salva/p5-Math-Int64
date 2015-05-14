@@ -4,6 +4,7 @@ requires "constant" => "0";
 requires "overload" => "0";
 requires "strict" => "0";
 requires "warnings" => "0";
+requires "warnings::register" => "0";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";

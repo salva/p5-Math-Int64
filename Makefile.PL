@@ -26,7 +26,8 @@ my %WriteMakefileArgs = (
     "constant" => 0,
     "overload" => 0,
     "strict" => 0,
-    "warnings" => 0
+    "warnings" => 0,
+    "warnings::register" => 0
   },
   "TEST_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0,
@@ -58,7 +59,8 @@ my %FallbackPrereqs = (
   "constant" => 0,
   "overload" => 0,
   "strict" => 0,
-  "warnings" => 0
+  "warnings" => 0,
+  "warnings::register" => 0
 );
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
