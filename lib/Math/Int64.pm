@@ -9,6 +9,8 @@ require XSLoader;
 XSLoader::load('Math::Int64', $VERSION);
 }
 
+use warnings::register;
+
 use constant MAX_INT64  => string_to_int64 ( '0x7fff_ffff_ffff_ffff');
 use constant MIN_INT64  => string_to_int64 ('-0x8000_0000_0000_0000');
 use constant MAX_UINT64 => string_to_uint64( '0xffff_ffff_ffff_ffff');
@@ -62,6 +64,15 @@ sub import {
     }
 
     Math::Int64->export_to_level(1, $pkg, @subs);
+}
+
+sub _check_pragma_compatibility {
+    if ($^H{'Math::Int64::native_if_available'} and
+        $^H{'Math::Int64::die_on_overflow'} and
+        warnings::enabled()) {
+        warnings::warn("Math::Int64::die_on_overflow pragma is useless when Math::Int64::native_if_available is also active");
+    }
+    1;
 }
 
 use overload ( '+' => \&_add,

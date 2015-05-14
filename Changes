@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+        - warn when both native_if_available and die_on_overflow are
+          enabled (bug report by David Wheeler).
 
 0.52     2015-03-12        
         - include stdint.h when compiling with recent MS compilers

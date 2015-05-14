@@ -3,10 +3,13 @@ package Math::Int64::native_if_available;
 use strict;
 use warnings;
 
+use Math::Int64 ();
+
 sub import {
     if (Math::Int64::_backend() eq 'IV' and $] >= 5.008) {
         Math::Int64::_set_may_use_native(1);
         $^H{'Math::Int64::native_if_available'} = 1;
+        goto &Math::Int64::_check_pragma_compatibility;
     }
 }
 
