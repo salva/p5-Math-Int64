@@ -47,9 +47,11 @@ static int may_use_native;
 #endif
 
 #ifdef __INT64
+#ifndef __CYGWIN__
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #define HAVE_INT64
+#endif
 #endif
 
 #ifdef INT64_DI
