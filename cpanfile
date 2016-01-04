@@ -13,6 +13,7 @@ on 'test' => sub {
   requires "IPC::Open3" => "0";
   requires "Storable" => "0";
   requires "Test::More" => "0.96";
+  requires "blib" => "1.01";
   requires "perl" => "5.006";
 };
 

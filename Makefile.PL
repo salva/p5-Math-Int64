@@ -35,7 +35,8 @@ my %WriteMakefileArgs = (
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
     "Storable" => 0,
-    "Test::More" => "0.96"
+    "Test::More" => "0.96",
+    "blib" => "1.01"
   },
   "VERSION_FROM" => "lib/Math/Int64.pm",
   "test" => {
@@ -56,6 +57,7 @@ my %FallbackPrereqs = (
   "Storable" => 0,
   "Test::More" => "0.96",
   "XSLoader" => 0,
+  "blib" => "1.01",
   "constant" => 0,
   "overload" => 0,
   "strict" => 0,

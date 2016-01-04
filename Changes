@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+
+0.54     2016-01-04
         - don't use the reserved preprocessor macro __INT64 which was
           causing a conflict in Cygwin (bug report by Graham Ollis)
 
