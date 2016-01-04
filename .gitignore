@@ -2,6 +2,9 @@
 /Int64.bs
 /Int64.c
 /Int64.o
+/Int64.def
+/dll.base
+/dll.exp
 /MYMETA.json
 /MYMETA.yml
 /Makefile
@@ -19,3 +22,4 @@
 /perlcriticrc
 /perltidyrc
 *~
+.#*
