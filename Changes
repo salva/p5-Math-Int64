@@ -1,6 +1,8 @@
 Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
+        - don't use the reserved preprocessor macro __INT64 which was
+          causing a conflict in Cygwin (bug report by Graham Ollis)
 
 0.53     2015-05-14
         - warn when both native_if_available and die_on_overflow are

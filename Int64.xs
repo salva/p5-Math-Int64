@@ -42,23 +42,18 @@ static int may_use_native;
 
 #endif
 
-#ifdef INT64_T
-#define HAVE_INT64
-#endif
+#ifdef USE_INT64_T
+/* do nothing */
 
-#ifdef __INT64
+#elif defined(USE___INT64)
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-#define HAVE_INT64
-#endif
 
-#ifdef INT64_DI
+#elif defined(USE_INT64_DI)
 typedef int int64_t __attribute__ ((__mode__ (DI)));
 typedef unsigned int uint64_t __attribute__ ((__mode__ (DTI)));
-#define HAVE_INT64
-#endif
 
-#ifndef HAVE_INT64
+#else
 #error "No int64 type define was passed to the compiler!"
 #endif
 

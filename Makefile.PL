@@ -107,9 +107,9 @@ sub autoconf {
 }
 
 sub _int64_define {
-    return '-DINT64_T' if autoconf->check_type('int64_t');
-    return '-D__INT64' if autoconf->check_type('__int64');
-    return '-DINT64_DI'
+    return '-DUSE_INT64_T' if autoconf->check_type('int64_t');
+    return '-DUSE___INT64' if autoconf->check_type('__int64');
+    return '-DUSE_INT64_DI'
         if autoconf->check_type('int __attribute__ ((__mode__ (DI)))');
 
     warn <<'EOF';
