@@ -27,6 +27,10 @@ static int may_use_native;
 #ifdef _MSC_VER
 #include <stdlib.h>
 
+#if _MSC_VER >= 1600
+#include <stdint.h>
+#endif
+
 #ifndef INT64_MAX
 #define INT64_MAX _I64_MAX
 #endif

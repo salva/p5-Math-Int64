@@ -161,6 +161,8 @@ sub postamble {
         $author = qq{'$author'};
     }
 
+    $author = ($^O eq 'MSWin32') ? qq{"$author"} : qq{'$author'};
+
     return <<"MAKE_FRAG";
 c_api.h: c_api.decl
 	perl -MModule::CAPIMaker -emake_c_api module_name=\$(NAME) module_version=\$(VERSION) author=$author
