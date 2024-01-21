@@ -707,7 +707,7 @@ CODE:
 OUTPUT:
     RETVAL
 
- SV *
+SV *
 miu64_le_to_int64(net)
     SV *net;
 PREINIT:
