@@ -2,7 +2,10 @@ Revision history for Perl extension Math::Int64.
 
 {{$NEXT}}
 
-0.55    2024-01-21
+0.57    2024-01-21
+        - Fix missmatch between version in Changes and module
+
+0.56    2024-01-21
         - Add support for int64_to_le, uint64_to_le, le_to_int64 and
           le_to_uint64 functions (feature request and patch by jon).
 
